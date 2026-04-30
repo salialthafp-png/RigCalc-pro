@@ -281,25 +281,56 @@ body,html{height:100%;font-family:var(--font-body);background:var(--bg-app);colo
 }
 
 /* TOPBAR */
-.topbar{height:52px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;
-  background:linear-gradient(180deg,#1a1a1a 0%,#141414 100%);
-  border-bottom:1px solid var(--border-orange);
-  box-shadow:0 1px 0 rgba(249,115,22,0.08),0 4px 20px rgba(0,0,0,0.5);
-  z-index:100;animation:slideDownFade 500ms ease-out both}
-.topbar-logo{font-family:var(--font-display);font-weight:800;font-size:20px;
-  letter-spacing:0.1em;color:var(--text-primary);display:flex;align-items:center;gap:8px}
-.topbar-logo span{color:var(--orange-500)}
-.topbar-logo small{font-size:11px;color:var(--text-muted);font-weight:400;letter-spacing:0.05em;margin-left:4px}
-.banner{padding:6px 16px;border-radius:var(--radius-md);font-family:var(--font-display);
-  font-weight:700;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+.topbar{height:68px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:linear-gradient(180deg,#181818 0%,#101010 100%);
+  border-bottom:2px solid transparent;
+  border-image:linear-gradient(90deg,#f97316 0%,#ea580c 40%,#1e1e1e 100%) 1;
+  box-shadow:0 2px 24px rgba(0,0,0,0.7),0 1px 0 rgba(249,115,22,0.12);
+  z-index:100;animation:slideDownFade 500ms ease-out both;position:relative}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;
+  background:linear-gradient(90deg,rgba(249,115,22,0.6),rgba(249,115,22,0.1) 60%,transparent)}
+
+.topbar-brand{display:flex;align-items:center;gap:14px}
+
+/* Logo mark */
+.logo-mark{width:44px;height:44px;flex-shrink:0;position:relative}
+.logo-mark svg{display:block}
+
+/* Logo text block */
+.logo-text-block{display:flex;flex-direction:column;justify-content:center;gap:2px}
+.logo-wordmark{font-family:var(--font-display);font-weight:900;font-size:22px;
+  letter-spacing:0.06em;line-height:1;
+  background:linear-gradient(135deg,#ffffff 0%,#e0e0e0 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-wordmark em{font-style:normal;
+  background:linear-gradient(135deg,#f97316 0%,#fb923c 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-tagline{font-family:var(--font-mono);font-size:9.5px;font-weight:500;
+  color:#525252;letter-spacing:0.14em;text-transform:uppercase;line-height:1}
+
+/* Divider between wordmark and author */
+.logo-divider{width:1px;height:32px;background:linear-gradient(180deg,transparent,#333 30%,#333 70%,transparent);flex-shrink:0;margin:0 4px}
+
+/* Author block */
+.topbar-author-block{display:flex;flex-direction:column;justify-content:center;gap:3px}
+.topbar-author-name{font-family:var(--font-display);font-size:12px;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:#c8a97a;line-height:1}
+.topbar-author-email{font-family:var(--font-mono);font-size:10px;font-weight:400;
+  color:#3a3a3a;letter-spacing:0.02em;text-decoration:none;line-height:1;
+  transition:color 200ms ease}
+.topbar-author-email:hover{color:#f97316}
+
+.banner{padding:7px 18px;border-radius:4px;font-family:var(--font-display);
+  font-weight:700;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
   display:flex;align-items:center;gap:8px}
-.banner-idle{background:rgba(80,80,80,0.2);border:1px solid var(--border-default);color:var(--text-muted)}
-.banner-pass{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-400);
+.banner-idle{background:rgba(40,40,40,0.8);border:1px solid #2a2a2a;color:#404040}
+.banner-pass{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);color:#22c55e;
   animation:passGlow 3s ease-in-out infinite}
-.banner-warn{background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber-400);
+.banner-warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);color:#f59e0b;
   animation:warningBreathe 2.5s ease-in-out infinite}
-.banner-fail{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red-400);
+.banner-fail{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#ef4444;
   animation:failPulse 1.8s ease-in-out infinite}
 
 /* APP BODY */
@@ -4583,30 +4614,74 @@ const ModulePlaceholder = ({id}) => (
 const COMPS = [ProjectInfo,WeightCalc,CraneSelection,GBP,RiggingCalc,WindLoad,COGCalc,Dashboard,RiggingEquipRef,DiscardCriteria,ProofLoad,CraneConfig,Weather,HumanFactor,LiftSequence,ExclusionZone,DroppedObject,Redundancy,PythagoreanCalc,UnitConverter];
 
 // ── TOPBAR ─────────────────────────────────────────────────────────────────────
+// ── TOPBAR ─────────────────────────────────────────────────────────────────────
 const Topbar = ({liftStatus,hasUnsaved}) => {
   const {clearAll} = useContext(AppCtx);
   const bannerText = liftStatus==="pass"?"✅ ALL CHECKS PASS — LIFT APPROVED":liftStatus==="warn"?"⚠️ WARNING — REVIEW REQUIRED":liftStatus==="fail"?"❌ STOP — LIFT NOT APPROVED":"⏳ ENTER DATA TO BEGIN";
   return (
     <div className="topbar">
-      <div className="topbar-logo">
-        <span>Rig</span>Calc<span>Pro</span>
-        <small>Lifting & Rigging Engineering Suite | v1.2</small>
+
+      {/* ── LEFT: BRAND ── */}
+      <div className="topbar-brand">
+
+        {/* Logo Mark */}
+        <div className="logo-mark">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 4 L4 4 L4 40 L6 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            <path d="M38 4 L40 4 L40 40 L38 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            <rect x="8" y="7" width="28" height="4" rx="1" fill="#f97316" opacity="0.9"/>
+            <line x1="22" y1="11" x2="22" y2="20" stroke="#f97316" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M19 20 L25 20 L25 24 Q25 30 19 30 Q15 30 15 25.5 Q15 22 18 22" stroke="#f97316" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="18" cy="22" r="1.5" fill="#f97316"/>
+            <line x1="22" y1="30" x2="17" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.7"/>
+            <line x1="22" y1="30" x2="27" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.7"/>
+            <rect x="13" y="34" width="18" height="5" rx="1.5" fill="rgba(249,115,22,0.18)" stroke="#f97316" strokeWidth="1.2"/>
+            <circle cx="35" cy="9" r="2" fill="#f97316" opacity="0.5"/>
+          </svg>
+        </div>
+
+        {/* Wordmark + Tagline */}
+        <div className="logo-text-block">
+          <div className="logo-wordmark">
+            <em>Rig</em>Calc<em>Pro</em>
+          </div>
+          <div className="logo-tagline">Lifting &amp; Rigging Engineering Suite&nbsp;·&nbsp;v1.0</div>
+        </div>
+
+        {/* Vertical divider */}
+        <div className="logo-divider"/>
+
+        {/* Author credit */}
+        <div className="topbar-author-block">
+          <div className="topbar-author-name">Althaf Sali</div>
+          <a href="mailto:Althafsali.p@gmail.com" className="topbar-author-email" title="Send email">
+            Althafsali.p@gmail.com
+          </a>
+        </div>
+
       </div>
+
+      {/* ── CENTRE: STATUS BANNER ── */}
       <span className={`banner banner-${liftStatus||"idle"}`}>{bannerText}</span>
+
+      {/* ── RIGHT: ACTIONS ── */}
       <div style={{display:"flex",gap:10,alignItems:"center"}}>
         {hasUnsaved && (
           <div style={{display:"flex",alignItems:"center",gap:5}}>
-            <div className="unsaved-dot" />
+            <div className="unsaved-dot"/>
             <span className="unsaved-label">Unsaved Session</span>
           </div>
         )}
         <button className="btn btn-ghost btn-sm" onClick={clearAll} title="Clear all session data">🗑️ Clear All</button>
-        <span className="std-tag" style={{padding:"4px 8px",background:"var(--bg-section)",borderRadius:3,border:"1px solid var(--border-subtle)"}}>ISO 12480-1 | BS 7121 | ASME B30</span>
+        <div style={{height:24,width:1,background:"#222"}}/>
+        <span style={{fontFamily:"var(--font-mono)",fontSize:9,color:"#404040",letterSpacing:"0.1em",textTransform:"uppercase"}}>
+          ISO 12480-1 · BS 7121 · ASME B30
+        </span>
       </div>
+
     </div>
   );
 };
-
 // ── SIDEBAR ────────────────────────────────────────────────────────────────────
 const Sidebar = ({active,setActive,g}) => {
   const getStatus = (id) => {
@@ -4696,6 +4771,19 @@ export default function RigCalcPro() {
             {activeModule<COMPS.length ? <Comp /> : <ModulePlaceholder id={activeModule} />}
             <RefPanel moduleId={activeModule} />
             <ModuleNavBar activeModule={activeModule} setActiveModule={setActiveModule} />
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 20px",borderTop:"1px solid #1e1e1e",marginTop:16,background:"#0d0d0d"}}>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <svg width="22" height="22" viewBox="0 0 44 44" fill="none"><path d="M6 4L4 4L4 40L6 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round"/><path d="M38 4L40 4L40 40L38 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round"/><rect x="8" y="7" width="28" height="4" rx="1" fill="#f97316" opacity="0.8"/><line x1="22" y1="11" x2="22" y2="20" stroke="#f97316" strokeWidth="2" strokeLinecap="round"/><path d="M19 20L25 20L25 24Q25 30 19 30Q15 30 15 25.5Q15 22 18 22" stroke="#f97316" strokeWidth="2" fill="none" strokeLinecap="round"/><circle cx="18" cy="22" r="1.5" fill="#f97316"/><line x1="22" y1="30" x2="17" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.6"/><line x1="22" y1="30" x2="27" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.6"/><rect x="13" y="34" width="18" height="5" rx="1.5" fill="rgba(249,115,22,0.15)" stroke="#f97316" strokeWidth="1.2"/></svg>
+                <div>
+                  <div style={{fontFamily:"var(--font-display)",fontSize:11,fontWeight:900,letterSpacing:"0.06em",background:"linear-gradient(135deg,#fff,#aaa)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>RigCalc<span style={{background:"linear-gradient(135deg,#f97316,#fb923c)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Pro</span></div>
+                  <div style={{fontFamily:"var(--font-mono)",fontSize:9,color:"#333",letterSpacing:"0.1em",textTransform:"uppercase"}}>v1.0 · Lifting &amp; Rigging Engineering Suite</div>
+                </div>
+              </div>
+              <div style={{textAlign:"right"}}>
+                <div style={{fontFamily:"var(--font-display)",fontSize:11,fontWeight:700,color:"#c8a97a",letterSpacing:"0.08em",textTransform:"uppercase"}}>Althaf Sali</div>
+                <a href="mailto:Althafsali.p@gmail.com" style={{fontFamily:"var(--font-mono)",fontSize:10,color:"#333",textDecoration:"none",letterSpacing:"0.02em"}} onMouseOver={e=>e.target.style.color='#f97316'} onMouseOut={e=>e.target.style.color='#333'}>Althafsali.p@gmail.com</a>
+              </div>
+            </div>
           </div>
         </div>
         <button className={`btn-back-top ${showBackTop?"visible":""}`}
