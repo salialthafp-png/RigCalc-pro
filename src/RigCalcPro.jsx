@@ -589,9 +589,23 @@ textarea.input-user{resize:vertical;min-height:60px;border-radius:var(--radius-s
 
 /* ── PRINT ── */
 @media print{
-  .sidebar,.topbar,.module-nav,.ref-toggle,.btn{display:none!important}
-  .content{padding:0;overflow:visible}
-  .module-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  .sidebar,.topbar,.module-nav,.ref-toggle,.ref-panel,
+  .btn-back-top,.about-overlay,.btn-ghost,.about-btn-info{display:none!important}
+  .app-body{display:block}
+  .content{padding:8px;overflow:visible;height:auto}
+  .app-root{height:auto;overflow:visible}
+  body{background:#fff!important;color:#000!important;font-size:11pt}
+  .module-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc;margin-bottom:12px}
+  .card-header{background:#f5f5f5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .module-title{color:#000!important;font-size:13pt!important}
+  .input-user,.input-calc{border:1px solid #ccc!important;background:#fff!important;color:#000!important}
+  .data-table th{background:#f0f0f0!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .data-table td{color:#000!important}
+  .stat-card{border:1px solid #ccc!important;box-shadow:none!important}
+  .stat-val{color:#000!important}
+  .info-box{border:1px solid #ccc!important}
+  .section-heading{color:#c00000!important;border-bottom:1px solid #ccc!important}
+  @page{margin:1.5cm;size:A4}
 }
 `;
 
@@ -1322,7 +1336,13 @@ const STANDARDS = [
 
 const ProjectInfo = () => {
   const {g,updateG} = useContext(AppCtx);
-  const fi = (k) => <input className="input-user no-unit" value={g[k]||""} onChange={e=>updateG({[k]:e.target.value})} />;
+  const fi = (k,type="text",ph="") => {
+    const [local,setLocal] = useState(g[k]||"");
+    useEffect(()=>setLocal(g[k]||""),[g[k]]);
+    return <input className="input-user no-unit" type={type} value={local} placeholder={ph}
+      onChange={e=>setLocal(e.target.value)}
+      onBlur={e=>updateG({[k]:e.target.value})} />;
+  };
   const liftClass = g.liftClass||"Routine";
   const statusBadge = g.craneUtil>90||g.gbpUtil>100||g.riggingUtil>90 ? "badge-fail" :
     g.craneUtil>75||g.gbpUtil>75||g.riggingUtil>75 ? "badge-warn" :
@@ -2184,9 +2204,7 @@ const GBP = () => {
   const [crawlMatL,setCrawlMatL]=useState(""); const [crawlMatLU,setCrawlMatLU]=useState("m");
   const [crawlMatW,setCrawlMatW]=useState(""); const [crawlMatWU,setCrawlMatWU]=useState("m");
   const [crawlMatsPerTrack,setCrawlMatsPerTrack]=useState("1");
-  const [buriedServices,setBuriedServices]=useState("NO");
-  const [pipeDepth,setPipeDepth]=useState(""); const [pipeDepthU,setPipeDepthU]=useState("m");
-  const [pipeAllowGBP,setPipeAllowGBP]=useState("");
+
 
   const glw = g.glw||0;
 
@@ -2223,13 +2241,7 @@ const GBP = () => {
   const minSideC = Math.sqrt(Math.max(minAreaC,0));
 
   // Buried services
-  const hDepth = toM(pipeDepth,pipeDepthU);
-  const B = toM(crawlMatW,crawlMatWU)||toM(trackW,trackWU);
-  const Lm = toM(crawlMatL,crawlMatLU)||toM(trackL,trackLU);
-  const pDepthCalc = B>0&&Lm>0&&hDepth>0
-    ? pDynamic / ((B+2*hDepth)*(Lm+2*hDepth))
-    : 0;
-  const pipeAllow = parseFloat(pipeAllowGBP)||0;
+
 
   // Pass to global state
   const calcGBP = isCrawler ? calcGBP_C : calcGBP_O;
@@ -2465,35 +2477,7 @@ const GBP = () => {
                 <URow label="🔵 Effective Contact Area (m²)" val={f3(effAreaC)} />
               </div>
 
-              <div className="section-heading">Section C — Buried Services / Pipeline Check</div>
-              <div className="form-grid">
-                <div className="form-row">
-                  <label className="label-input">🟨 Buried Services / Pipeline Present?</label>
-                  <select className="input-user no-unit" value={buriedServices} onChange={e=>setBuriedServices(e.target.value)}><option>NO</option><option>YES</option></select>
-                </div>
-                {buriedServices==="YES" && <>
-                  <DimRow label="🟨 Depth to Crown of Pipe h" val={pipeDepth} setVal={setPipeDepth} unit={pipeDepthU} setUnit={setPipeDepthU}/>
-                  <div className="form-row">
-                    <label className="label-input">🟨 Allowable Pressure on Pipe (kPa)</label>
-                    <input className="input-user no-unit" type="number" value={pipeAllowGBP} onChange={e=>setPipeAllowGBP(e.target.value)} placeholder="From pipeline authority document"/>
-                  </div>
-                  <URow label="🔵 Pressure at Depth (kPa)" val={pipeDepthU&&pDepthCalc>0?f2(pDepthCalc):"—"} />
-                  {pipeAllowGBP&&pDepthCalc>0 && (
-                    <div className="form-row" style={{gridColumn:"1/-1"}}>
-                      <div className={`info-box ${pDepthCalc<=parseFloat(pipeAllowGBP)?"info-box-green":"info-box-red"}`}>
-                        {pDepthCalc<=parseFloat(pipeAllowGBP)
-                          ? `✅ Pipeline OK — Pressure at depth ${f2(pDepthCalc)} kPa ≤ allowable ${pipeAllowGBP} kPa`
-                          : `❌ EXCEEDS PIPELINE LIMIT — ${f2(pDepthCalc)} kPa > ${pipeAllowGBP} kPa — increase mat size or re-route crane path`}
-                      </div>
-                      <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:4}}>
-                        P_depth = P_dynamic ÷ [(B+2h·tan45°)(L+2h·tan45°)] | Reference: CIRIA C580 / BS EN 1997-1
-                      </div>
-                    </div>
-                  )}
-                </>}
-              </div>
-
-              <div className="section-heading">Section C2 — Soil / Site Conditions</div>
+              <div className="section-heading">Section C — Soil / Site Conditions</div>
               <div className="table-wrap" style={{marginBottom:10}}>
                 <table className="data-table">
                   <thead><tr><th>Soil Type</th><th>Allowable GBP (kPa)</th><th>Notes</th></tr></thead>
@@ -4683,6 +4667,7 @@ const Topbar = ({liftStatus,hasUnsaved,onAbout}) => {
           <span className="unsaved-label">Unsaved</span>
         </div>}
         <button className="btn btn-ghost btn-sm" onClick={clearAll}>🗑 Clear</button>
+        <button className="btn btn-ghost btn-sm" onClick={()=>window.print()} title="Print current page">🖨 Print</button>
         <div style={{height:20,width:1,background:"#e5e7eb"}}/>
         <span style={{fontFamily:"Arial,monospace",fontSize:9,color:"#374151",letterSpacing:"0.06em"}}>
           ISO 12480 · BS 7121 · ASME B30
@@ -4751,9 +4736,12 @@ export default function App() {
 
   const updateG = useCallback((patch)=>setG(p=>({...p,...patch})),[]);
 
-  // Persist to localStorage on every change (debounced)
+  // Auto-save to localStorage on every change (debounced 800ms)
   useEffect(()=>{
-    const timer = setTimeout(()=>{ saveStore({g,modInputs}); setHasUnsaved(true); },300);
+    const timer = setTimeout(()=>{
+      saveStore({g,modInputs});
+      setHasUnsaved(false); // auto-saved — no "unsaved" warning needed
+    },800);
     return ()=>clearTimeout(timer);
   },[g,modInputs]);
 
