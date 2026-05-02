@@ -233,418 +233,366 @@ const interpChart = (chart, radius) => {
 
 // ── CSS ────────────────────────────────────────────────────────────────────────
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --bg-app:#0d0d0d;--bg-primary:#111111;--bg-secondary:#171717;
-  --bg-card:#1e1e1e;--bg-card-hover:#242424;--bg-section:#222222;
-  --bg-input:#2a2a2a;--bg-input-focus:#323232;--bg-readonly:#1a1f1a;
-  --bg-table-row:#1c1c1c;--bg-table-alt:#202020;--bg-table-head:#111111;
+  /* Backgrounds */
+  --bg-app:#f0f2f5;--bg-primary:#ffffff;--bg-secondary:#f8f9fa;
+  --bg-card:#ffffff;--bg-section:#f4f6f8;--bg-input:#ffffff;
+  --bg-table-row:#ffffff;--bg-table-alt:#f8f9fa;--bg-table-head:#f0f2f5;
+  /* Brand */
   --orange-500:#f97316;--orange-600:#ea6c00;--orange-700:#c2570a;
-  --orange-glow:rgba(249,115,22,0.20);
-  --green-500:#22c55e;--green-400:#4ade80;
-  --green-bg:rgba(34,197,94,0.08);--green-border:rgba(34,197,94,0.30);
-  --amber-500:#f59e0b;--amber-400:#fbbf24;
-  --amber-bg:rgba(245,158,11,0.08);--amber-border:rgba(245,158,11,0.30);
-  --red-500:#ef4444;--red-400:#f87171;
-  --red-bg:rgba(239,68,68,0.08);--red-border:rgba(239,68,68,0.30);
-  --blue-400:#60a5fa;--blue-500:#3b82f6;
-  --blue-bg:rgba(59,130,246,0.08);--blue-border:rgba(59,130,246,0.25);
-  --input-bg:rgba(245,158,11,0.06);--input-border:rgba(245,158,11,0.35);
-  --input-label-fg:#f59e0b;--calc-bg:rgba(59,130,246,0.06);
-  --calc-border:rgba(59,130,246,0.25);--calc-label-fg:#60a5fa;
-  --text-primary:#f0f0f0;--text-secondary:#a3a3a3;--text-muted:#525252;
-  --text-orange:#f97316;--text-green:#22c55e;--text-amber:#f59e0b;
-  --text-red:#ef4444;--text-blue:#60a5fa;--text-mono:#d4d4d4;
-  --border-subtle:#222222;--border-default:#2e2e2e;--border-strong:#404040;
-  --border-orange:rgba(249,115,22,0.40);--border-focus:#f97316;
-  --font-display:'Barlow Condensed',sans-serif;
-  --font-body:'Barlow',sans-serif;
-  --font-mono:'JetBrains Mono',monospace;
-  --shadow-card:0 2px 8px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.03);
-  --shadow-orange:0 0 20px rgba(249,115,22,0.15);
-  --t-base:200ms ease;--t-slow:350ms ease;
-  --t-spring:400ms cubic-bezier(0.34,1.56,0.64,1);
-  --radius-sm:4px;--radius-md:8px;--radius-lg:12px;
+  --red-brand:#c00000;
+  /* Status */
+  --green-500:#16a34a;--green-400:#15803d;
+  --green-bg:#f0fdf4;--green-border:#86efac;
+  --amber-500:#d97706;--amber-400:#b45309;
+  --amber-bg:#fffbeb;--amber-border:#fde68a;
+  --red-500:#dc2626;--red-400:#b91c1c;
+  --red-bg:#fef2f2;--red-border:#fecaca;
+  --blue-400:#2563eb;--blue-500:#1d4ed8;
+  --blue-bg:#eff6ff;--blue-border:#bfdbfe;
+  /* Text */
+  --text-primary:#111827;--text-secondary:#374151;--text-muted:#6b7280;
+  --text-orange:#ea6c00;--text-green:#15803d;--text-amber:#92400e;
+  --text-red:#991b1b;--text-blue:#1d4ed8;
+  /* Borders */
+  --border-subtle:#f3f4f6;--border-default:#e5e7eb;--border-strong:#d1d5db;
+  --border-orange:rgba(249,115,22,0.30);
+  /* Inputs */
+  --input-bg:#ffffff;--input-border:#d1d5db;
+  --input-label-fg:#ea6c00;--calc-bg:#eff6ff;
+  --calc-border:#bfdbfe;--calc-label-fg:#1d4ed8;
+  /* Fonts */
+  --font-display:'Arial',sans-serif;
+  --font-body:'Arial',sans-serif;
+  --font-mono:'Arial',monospace;
+  /* Shadows */
+  --shadow-card:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.05);
+  --shadow-card-hover:0 4px 12px rgba(0,0,0,0.10),0 1px 4px rgba(0,0,0,0.06);
+  /* Misc */
+  --t-base:180ms ease;--t-slow:300ms ease;
+  --t-spring:350ms cubic-bezier(0.34,1.56,0.64,1);
+  --radius-sm:4px;--radius-md:8px;--radius-lg:10px;
 }
 
-body,html{height:100%;font-family:var(--font-body);background:var(--bg-app);color:var(--text-primary)}
+html,body{height:100%;font-family:var(--font-body);background:var(--bg-app);color:var(--text-primary);font-size:14px;line-height:1.5}
 
-.app-root{display:flex;flex-direction:column;height:100vh;overflow:hidden;
-  background-image:
-    linear-gradient(rgba(249,115,22,0.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(249,115,22,0.025) 1px,transparent 1px),
-    radial-gradient(ellipse 60% 40% at 0% 0%,rgba(249,115,22,0.05) 0%,transparent 70%);
-  background-size:40px 40px,40px 40px,100% 100%;
-}
+/* ── APP SHELL ── */
+.app-root{display:flex;flex-direction:column;height:100vh;overflow:hidden;background:var(--bg-app)}
 
-/* TOPBAR */
-.topbar{height:68px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-  background:linear-gradient(180deg,#181818 0%,#101010 100%);
-  border-bottom:2px solid transparent;
-  border-image:linear-gradient(90deg,#f97316 0%,#ea580c 40%,#1e1e1e 100%) 1;
-  box-shadow:0 2px 24px rgba(0,0,0,0.7),0 1px 0 rgba(249,115,22,0.12);
-  z-index:100;animation:slideDownFade 500ms ease-out both;position:relative}
-.topbar::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;
-  background:linear-gradient(90deg,rgba(249,115,22,0.6),rgba(249,115,22,0.1) 60%,transparent)}
+/* ── TOPBAR ── */
+.topbar{height:92px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;background:#ffffff;
+  border-bottom:3px solid #c00000;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  z-index:100;position:relative}
+.topbar-brand{display:flex;align-items:center;gap:12px}
+.logo-divider{width:1px;height:36px;background:linear-gradient(180deg,transparent,#e5e7eb 25%,#e5e7eb 75%,transparent);flex-shrink:0;margin:0 4px}
+.topbar-author-block{display:flex;flex-direction:column;gap:2px}
+.topbar-author-name{font-family:'Arial Black',Arial,sans-serif;font-size:11px;font-weight:900;
+  color:#b8864e;letter-spacing:0.1em;text-transform:uppercase;line-height:1}
+.topbar-author-email{font-family:monospace;font-size:10px;color:#9ca3af;
+  text-decoration:none;transition:color var(--t-base)}
+.topbar-author-email:hover{color:#c00000}
+.unsaved-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;animation:pulse 2s infinite}
+.unsaved-label{font-size:10px;color:#6b7280;font-family:monospace}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 
-.topbar-brand{display:flex;align-items:center;gap:14px}
+/* ── STATUS BANNERS ── */
+.banner{padding:6px 14px;border-radius:var(--radius-md);font-family:var(--font-display);
+  font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+  display:flex;align-items:center;gap:6px;white-space:nowrap}
+.banner-idle{background:#f3f4f6;border:1px solid #d1d5db;color:#374151}
+.banner-pass{background:#f0fdf4;border:1px solid #86efac;color:#15803d;animation:passGlow 3s ease-in-out infinite}
+.banner-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e;animation:warningBreathe 2.5s ease-in-out infinite}
+.banner-fail{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;animation:failPulse 1.8s ease-in-out infinite}
+@keyframes passGlow{0%,100%{box-shadow:0 0 8px rgba(22,163,74,0.15)}50%{box-shadow:0 0 18px rgba(22,163,74,0.30)}}
+@keyframes warningBreathe{0%,100%{opacity:0.9}50%{opacity:1}}
+@keyframes failPulse{0%,100%{opacity:0.9}50%{opacity:1}}
 
-/* Logo mark */
-.logo-mark{width:44px;height:44px;flex-shrink:0;position:relative}
-.logo-mark svg{display:block}
-
-/* Logo text block */
-.logo-text-block{display:flex;flex-direction:column;justify-content:center;gap:2px}
-.logo-wordmark{font-family:var(--font-display);font-weight:900;font-size:22px;
-  letter-spacing:0.06em;line-height:1;
-  background:linear-gradient(135deg,#ffffff 0%,#e0e0e0 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-wordmark em{font-style:normal;
-  background:linear-gradient(135deg,#f97316 0%,#fb923c 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-tagline{font-family:var(--font-mono);font-size:9.5px;font-weight:500;
-  color:#525252;letter-spacing:0.14em;text-transform:uppercase;line-height:1}
-
-/* Divider between wordmark and author */
-.logo-divider{width:1px;height:32px;background:linear-gradient(180deg,transparent,#333 30%,#333 70%,transparent);flex-shrink:0;margin:0 4px}
-
-/* Author block */
-.topbar-author-block{display:flex;flex-direction:column;justify-content:center;gap:3px}
-.topbar-author-name{font-family:var(--font-display);font-size:12px;font-weight:700;
-  letter-spacing:0.08em;text-transform:uppercase;
-  color:#c8a97a;line-height:1}
-.topbar-author-email{font-family:var(--font-mono);font-size:10px;font-weight:400;
-  color:#3a3a3a;letter-spacing:0.02em;text-decoration:none;line-height:1;
-  transition:color 200ms ease}
-.topbar-author-email:hover{color:#f97316}
-
-.banner{padding:7px 18px;border-radius:4px;font-family:var(--font-display);
-  font-weight:700;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
-  display:flex;align-items:center;gap:8px}
-.banner-idle{background:rgba(40,40,40,0.8);border:1px solid #2a2a2a;color:#404040}
-.banner-pass{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);color:#22c55e;
-  animation:passGlow 3s ease-in-out infinite}
-.banner-warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);color:#f59e0b;
-  animation:warningBreathe 2.5s ease-in-out infinite}
-.banner-fail{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#ef4444;
-  animation:failPulse 1.8s ease-in-out infinite}
-
-/* APP BODY */
-.app-body{display:flex;flex:1;overflow:hidden}
-
-/* SIDEBAR */
+/* ── SIDEBAR ── */
 .sidebar{width:240px;flex-shrink:0;overflow-y:auto;
-  background:linear-gradient(180deg,#161616 0%,#111111 100%);
-  border-right:1px solid var(--border-default);
-  box-shadow:inset -1px 0 0 rgba(249,115,22,0.06)}
+  background:#1e2329;border-right:1px solid #2d3748}
 .sidebar::-webkit-scrollbar{width:4px}
-.sidebar::-webkit-scrollbar-track{background:transparent}
-.sidebar::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
-.sidebar-header{padding:12px 16px 8px;font-family:var(--font-display);font-size:9px;
-  letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted)}
-.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;
-  transition:background var(--t-base),border-color var(--t-base);
-  border-left:3px solid transparent;font-size:13px;color:var(--text-secondary);
-  animation:fadeSlideUp 400ms cubic-bezier(0.16,1,0.3,1) both}
-.sidebar-item:hover{background:rgba(249,115,22,0.06);color:var(--text-primary)}
-.sidebar-item.active{background:linear-gradient(90deg,rgba(249,115,22,0.15) 0%,rgba(249,115,22,0.04) 100%);
-  border-left-color:var(--orange-500);color:var(--text-primary);
-  box-shadow:inset 0 0 20px rgba(249,115,22,0.05)}
+.sidebar::-webkit-scrollbar-thumb{background:#374151;border-radius:2px}
+.sidebar-header{padding:14px 16px 8px;font-family:var(--font-display);font-size:9px;
+  letter-spacing:0.15em;text-transform:uppercase;color:#9ca3af}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;
+  border-left:3px solid transparent;font-size:13px;color:#9ca3af;
+  transition:all var(--t-base)}
+.sidebar-item:hover{background:rgba(249,115,22,0.08);color:#f3f4f6;border-left-color:rgba(249,115,22,0.4)}
+.sidebar-item.active{background:linear-gradient(90deg,rgba(249,115,22,0.18) 0%,rgba(249,115,22,0.05) 100%);
+  border-left-color:#f97316;color:#ffffff}
 .sidebar-icon{font-size:14px;width:18px;text-align:center}
 .sidebar-label{flex:1;font-size:12px;line-height:1.3}
 .sidebar-badge{font-size:10px;width:16px;height:16px;border-radius:50%;
   display:flex;align-items:center;justify-content:center}
-.sidebar-badge.pass{background:var(--green-bg);color:var(--green-400);animation:checkBounce 400ms var(--t-spring) both}
-.sidebar-badge.warn{background:var(--amber-bg);color:var(--amber-400)}
-.sidebar-badge.fail{background:var(--red-bg);color:var(--red-400)}
+.sidebar-badge.pass{background:rgba(22,163,74,0.15);color:#4ade80}
+.sidebar-badge.warn{background:rgba(217,119,6,0.15);color:#fbbf24}
+.sidebar-badge.fail{background:rgba(220,38,38,0.15);color:#f87171}
 
-/* CONTENT */
-.content{flex:1;overflow-y:auto;padding:20px 24px;max-width:1400px;margin:0 auto;width:100%}
-.content::-webkit-scrollbar{width:6px}
-.content::-webkit-scrollbar-track{background:transparent}
-.content::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
+/* ── CONTENT AREA ── */
+.app-body{display:flex;flex:1;overflow:hidden}
+.content{flex:1;overflow-y:auto;padding:24px 28px;background:var(--bg-app)}
+.content::-webkit-scrollbar{width:5px}
+.content::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 
-/* MODULE CARD */
-.module-card{background:var(--bg-card);border:1px solid var(--border-default);
-  border-radius:var(--radius-lg);box-shadow:var(--shadow-card);margin-bottom:16px;
-  animation:scaleIn 400ms cubic-bezier(0.16,1,0.3,1) both}
-.card-header{background:linear-gradient(90deg,rgba(249,115,22,0.12) 0%,rgba(249,115,22,0.04) 60%,transparent 100%);
-  border-bottom:1px solid rgba(249,115,22,0.20);border-radius:var(--radius-lg) var(--radius-lg) 0 0;
-  padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
-.module-title{font-family:var(--font-display);font-weight:800;font-size:16px;
-  letter-spacing:0.08em;text-transform:uppercase;color:var(--text-primary)}
-.card-body{padding:16px}
+/* ── MODULE CARDS ── */
+.module-card{background:#ffffff;border:1px solid #e5e7eb;
+  border-radius:var(--radius-lg);box-shadow:var(--shadow-card);margin-bottom:18px;
+  animation:scaleIn 350ms cubic-bezier(0.16,1,0.3,1) both}
+.card-header{background:linear-gradient(90deg,#fff7ed 0%,#ffffff 100%);
+  border-bottom:2px solid #fed7aa;border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.module-title{font-family:var(--font-display);font-weight:800;font-size:15px;
+  letter-spacing:0.08em;text-transform:uppercase;color:#1a1a1a}
+.card-body{padding:18px 18px 14px}
+
+/* ── SECTION HEADING ── */
 .section-heading{font-family:var(--font-display);font-weight:700;font-size:11px;
-  letter-spacing:0.12em;text-transform:uppercase;color:var(--text-orange);
-  padding:12px 0 8px;border-bottom:1px solid var(--border-subtle);margin-bottom:12px}
+  letter-spacing:0.14em;text-transform:uppercase;color:#ea6c00;
+  padding:14px 0 8px;border-bottom:2px solid #fde8cc;margin-bottom:14px}
 
-/* FORM GRID */
-.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
-.form-row{display:flex;flex-direction:column;gap:4px}
-.label-input{font-family:var(--font-body);font-size:11px;font-weight:600;
-  color:var(--input-label-fg);letter-spacing:0.04em;text-transform:uppercase}
-.label-calc{font-family:var(--font-body);font-size:11px;font-weight:600;
-  color:var(--calc-label-fg);letter-spacing:0.04em;text-transform:uppercase}
+/* ── FORM GRID ── */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.form-row{display:flex;flex-direction:column;gap:5px}
+.label-input{font-family:var(--font-display);font-size:10px;font-weight:700;
+  color:#ea6c00;letter-spacing:0.08em;text-transform:uppercase}
+.label-calc{font-family:var(--font-display);font-size:10px;font-weight:700;
+  color:#1d4ed8;letter-spacing:0.08em;text-transform:uppercase}
 .input-wrap{display:flex;align-items:stretch}
-.input-user{background:var(--input-bg);border:1px solid var(--input-border);
-  color:var(--text-primary);padding:7px 10px;border-radius:var(--radius-sm) 0 0 var(--radius-sm);
+.input-user{background:#ffffff;border:1.5px solid #d1d5db;
+  color:#111827;padding:8px 11px;border-radius:var(--radius-sm) 0 0 var(--radius-sm);
   font-size:13px;font-family:var(--font-body);flex:1;min-width:0;
   transition:border-color var(--t-base),box-shadow var(--t-base)}
-.input-user:focus{outline:none;background:rgba(245,158,11,0.10);
-  border-color:var(--amber-500);box-shadow:0 0 0 3px rgba(245,158,11,0.12)}
+.input-user:focus{outline:none;border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,0.10)}
 .input-user.no-unit{border-radius:var(--radius-sm)}
-.input-calc{background:var(--calc-bg);border:1px solid var(--calc-border);
-  color:var(--blue-400);padding:7px 10px;border-radius:var(--radius-sm);
-  font-size:13px;font-family:var(--font-mono);width:100%;cursor:not-allowed}
-.unit-sel{background:#1a1a1a;border:1px solid var(--border-strong);border-left:none;
-  color:var(--text-secondary);font-size:11px;font-family:var(--font-mono);
+.input-calc{background:#eff6ff;border:1.5px solid #bfdbfe;
+  color:#1d4ed8;padding:8px 11px;border-radius:var(--radius-sm);
+  font-size:13px;font-family:var(--font-mono);width:100%;cursor:default}
+.unit-sel{background:#f9fafb;border:1.5px solid #d1d5db;border-left:none;
+  color:#374151;font-size:11px;font-family:var(--font-mono);
   padding:0 8px;cursor:pointer;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-  transition:color var(--t-base)}
-.unit-sel:hover{color:var(--orange-400)}
+  transition:all var(--t-base)}
+.unit-sel:hover{border-color:#f97316;color:#f97316}
 select.input-user{cursor:pointer}
 textarea.input-user{resize:vertical;min-height:60px;border-radius:var(--radius-sm)}
 
-/* RESULT LARGE */
-.result-large{font-family:var(--font-mono);font-size:28px;font-weight:600;
-  color:var(--blue-400);letter-spacing:-0.02em;line-height:1}
-.result-row{display:flex;align-items:center;gap:16px;padding:10px 12px;
-  background:var(--calc-bg);border:1px solid var(--calc-border);
-  border-radius:var(--radius-md);margin:8px 0}
-.result-glw{background:rgba(249,115,22,0.08);border-color:var(--border-orange);padding:12px 16px;
-  border-left:3px solid var(--orange-500)}
-.glw-val{font-family:var(--font-mono);font-size:32px;font-weight:600;color:var(--orange-500)}
+/* ── RESULTS ── */
+.result-large{font-family:var(--font-mono);font-size:26px;font-weight:600;color:#1d4ed8;line-height:1}
+.result-row{display:flex;align-items:center;gap:14px;padding:10px 14px;
+  background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:var(--radius-md);margin:8px 0}
+.result-glw{background:#fff7ed;border:1.5px solid #fed7aa;border-left:3px solid #f97316;padding:14px 18px}
+.glw-val{font-family:var(--font-mono);font-size:30px;font-weight:600;color:#ea6c00}
 
-/* UTIL BAR */
-.util-bar-wrap{background:rgba(0,0,0,0.3);border-radius:var(--radius-pill);height:8px;
-  overflow:hidden;margin:6px 0;position:relative}
-.util-bar-fill{height:100%;border-radius:var(--radius-pill);position:relative;overflow:hidden;
-  transition:width 600ms cubic-bezier(0.22,1,0.36,1),background-color var(--t-slow)}
-.util-bar-fill::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
-  background-size:200% 100%;animation:shimmer 2s linear infinite}
-.util-safe .util-bar-fill{background:var(--green-500)}
-.util-warning .util-bar-fill{background:var(--amber-500)}
-.util-critical .util-bar-fill{background:var(--red-500)}
-.util-overload .util-bar-fill{background:#ff0000}
+/* ── UTIL BAR ── */
+.util-bar-wrap{background:#e5e7eb;border-radius:20px;height:8px;overflow:hidden;margin:6px 0}
+.util-bar-fill{height:100%;border-radius:20px;transition:width 600ms cubic-bezier(0.22,1,0.36,1)}
+.util-safe .util-bar-fill{background:#16a34a}
+.util-warning .util-bar-fill{background:#d97706}
+.util-critical .util-bar-fill{background:#dc2626}
+.util-overload .util-bar-fill{background:#991b1b}
 
-/* STATUS BADGES */
-.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;
-  border-radius:var(--radius-md);font-size:11px;font-family:var(--font-display);
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;
+  border-radius:var(--radius-md);font-size:10px;font-family:var(--font-display);
   font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
-.badge-pass{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-400)}
-.badge-warn{background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber-400)}
-.badge-fail{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red-400)}
-.badge-info{background:var(--blue-bg);border:1px solid var(--blue-border);color:var(--blue-400)}
-.badge-idle{background:rgba(80,80,80,0.15);border:1px solid var(--border-default);color:var(--text-muted)}
+.badge-pass{background:#f0fdf4;border:1px solid #86efac;color:#15803d}
+.badge-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.badge-fail{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.badge-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8}
+.badge-idle{background:#f3f4f6;border:1px solid #e5e7eb;color:#6b7280}
 
-/* FORMULA PANEL */
-.formula-panel{background:#0f0f0f;border:1px solid var(--border-subtle);
-  border-left:3px solid var(--orange-700);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-  padding:8px 14px;font-family:var(--font-mono);font-size:11px;color:var(--text-mono);
-  margin-top:8px;line-height:1.8}
-.formula-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;
-  font-size:11px;color:var(--text-muted);padding:4px 0;
-  transition:color var(--t-base)}
-.formula-toggle:hover{color:var(--orange-400)}
+/* ── INFO BOXES ── */
+.info-box{padding:10px 14px;border-radius:var(--radius-md);font-size:13px;line-height:1.6;margin:8px 0}
+.info-box-orange{background:#fff7ed;border:1px solid #fed7aa;border-left:3px solid #f97316;color:#7c2d12}
+.info-box-red{background:#fef2f2;border:1px solid #fecaca;border-left:3px solid #dc2626;color:#7f1d1d}
+.info-box-green{background:#f0fdf4;border:1px solid #86efac;border-left:3px solid #16a34a;color:#14532d}
+.info-box-amber{background:#fffbeb;border:1px solid #fde68a;border-left:3px solid #d97706;color:#78350f}
+.info-box-blue{background:#eff6ff;border:1px solid #bfdbfe;border-left:3px solid #2563eb;color:#1e3a8a}
 
-/* TABLES */
+/* ── TABLES ── */
+.table-wrap{overflow-x:auto;border-radius:var(--radius-md);border:1px solid #e5e7eb}
 .data-table{width:100%;border-collapse:collapse;font-size:12px}
-.data-table th{background:var(--bg-table-head);color:var(--text-orange);
-  font-family:var(--font-display);font-size:10px;letter-spacing:0.1em;
-  text-transform:uppercase;border-bottom:2px solid var(--border-orange);
-  padding:8px 12px;text-align:left}
-.data-table td{padding:7px 12px;border-bottom:1px solid var(--border-subtle);
-  color:var(--text-secondary)}
-.data-table tr:nth-child(even) td{background:var(--bg-table-row)}
-.data-table tr:nth-child(odd) td{background:var(--bg-table-alt)}
-.data-table tr:hover td{background:rgba(249,115,22,0.06);
-  transition:background var(--t-base)}
-.data-table tr.highlight td{background:rgba(249,115,22,0.12);
-  color:var(--text-primary)}
-.table-wrap{overflow-x:auto;border-radius:var(--radius-md);
-  border:1px solid var(--border-default)}
+.data-table th{background:#f8f9fa;color:#ea6c00;font-family:var(--font-display);font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;border-bottom:2px solid #fed7aa;
+  padding:9px 12px;text-align:left;font-weight:700}
+.data-table td{padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#1f2937}
+.data-table tr:nth-child(even) td{background:#ffffff}
+.data-table tr:nth-child(odd) td{background:#fafafa}
+.data-table tr:hover td{background:#fff7ed;color:#111827;transition:background var(--t-base)}
+.data-table tr.highlight td{background:#fff3e0;color:#1a1a1a;font-weight:600}
 
-/* TABS */
-.tab-bar{display:flex;border-bottom:1px solid var(--border-default);margin-bottom:16px;
-  overflow-x:auto;flex-shrink:0}
-.tab-bar::-webkit-scrollbar{height:3px}
-.tab-bar::-webkit-scrollbar-thumb{background:var(--border-strong)}
-.tab-btn{padding:8px 16px;font-family:var(--font-display);font-size:12px;
-  font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
-  border:none;background:transparent;color:var(--text-muted);cursor:pointer;
-  border-bottom:2px solid transparent;transition:all var(--t-base);white-space:nowrap}
-.tab-btn:hover{color:var(--text-primary)}
-.tab-btn.active{color:var(--orange-500);border-bottom-color:var(--orange-500)}
+/* ── TABS ── */
+.tab-bar{display:flex;border-bottom:2px solid #e5e7eb;margin-bottom:16px;overflow-x:auto}
+.tab-btn{padding:8px 16px;font-family:var(--font-display);font-size:12px;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;border:none;background:transparent;
+  color:#9ca3af;cursor:pointer;border-bottom:2px solid transparent;
+  margin-bottom:-2px;transition:all var(--t-base);white-space:nowrap}
+.tab-btn:hover{color:#111827}
+.tab-btn.active{color:#f97316;border-bottom-color:#f97316}
 
-/* TOGGLE */
+/* ── TOGGLE ── */
 .toggle-wrap{display:flex;align-items:center;gap:8px}
 .toggle{position:relative;width:40px;height:22px;cursor:pointer}
 .toggle input{opacity:0;width:0;height:0}
-.toggle-track{position:absolute;inset:0;border-radius:11px;
-  background:#333;transition:background var(--t-base)}
-.toggle input:checked ~ .toggle-track{background:rgba(249,115,22,0.20)}
+.toggle-track{position:absolute;inset:0;border-radius:11px;background:#d1d5db;transition:background var(--t-base)}
+.toggle input:checked~.toggle-track{background:rgba(249,115,22,0.20)}
 .toggle-thumb{position:absolute;width:16px;height:16px;top:3px;left:3px;
-  border-radius:50%;background:var(--text-muted);
-  transition:transform var(--t-spring),background var(--t-base)}
-.toggle input:checked ~ .toggle-thumb{transform:translateX(18px);background:var(--orange-500)}
+  border-radius:50%;background:#9ca3af;transition:transform var(--t-spring),background var(--t-base)}
+.toggle input:checked~.toggle-thumb{transform:translateX(18px);background:#f97316}
 
-/* BUTTONS */
+/* ── BUTTONS ── */
 .btn{padding:8px 16px;border-radius:var(--radius-md);font-family:var(--font-display);
   font-weight:700;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
   cursor:pointer;transition:all var(--t-base);border:none}
-.btn-primary{background:linear-gradient(135deg,var(--orange-500),var(--orange-600));
-  color:white;box-shadow:0 4px 14px rgba(249,115,22,0.30)}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(249,115,22,0.45)}
-.btn-ghost{background:transparent;border:1px solid var(--border-strong);color:var(--text-secondary)}
-.btn-ghost:hover{border-color:var(--orange-500);color:var(--orange-500)}
+.btn-primary{background:linear-gradient(135deg,#f97316,#ea6c00);color:#fff;
+  box-shadow:0 2px 8px rgba(249,115,22,0.30)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(249,115,22,0.40)}
+.btn-ghost{background:#ffffff;border:1.5px solid #d1d5db;color:#374151}
+.btn-ghost:hover{border-color:#f97316;color:#f97316}
 .btn-sm{padding:5px 10px;font-size:11px}
 
-/* GAUGE */
-.gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
-.gauge-val{font-family:var(--font-mono);font-size:28px;font-weight:600;line-height:1}
-.gauge-lbl{font-family:var(--font-display);font-size:10px;letter-spacing:0.1em;
-  text-transform:uppercase;color:var(--text-muted)}
+/* ── STAT CARDS ── */
+.stat-card{background:#ffffff;border:1px solid #e5e7eb;
+  border-radius:var(--radius-md);padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.stat-label{font-size:10px;font-family:var(--font-display);letter-spacing:0.1em;
+  text-transform:uppercase;color:#6b7280;margin-bottom:6px}
+.stat-val{font-family:var(--font-mono);font-size:22px;font-weight:600;color:#1d4ed8}
+.stat-unit{font-size:12px;color:#9ca3af;margin-left:4px;font-family:var(--font-body)}
 
-/* CHECKLIST */
-.check-item{display:flex;align-items:center;gap:10px;padding:8px 12px;
-  border-radius:var(--radius-sm);transition:background var(--t-base)}
-.check-item:hover{background:rgba(249,115,22,0.04)}
-.check-label{font-size:13px;color:var(--text-secondary);flex:1}
-.check-status{font-size:11px;font-weight:600;min-width:60px;text-align:right}
-.check-pass{color:var(--green-400)}
-.check-fail{color:var(--red-400)}
+/* ── STD TAG ── */
+.std-tag{font-size:11px;padding:0;border-radius:0;
+  background:none;border:none;
+  color:#374151;font-family:Arial,sans-serif;font-weight:600;letter-spacing:0}
 
-/* INFO BOX */
-.info-box{padding:10px 14px;border-radius:var(--radius-md);font-size:12px;
-  line-height:1.6;margin:8px 0}
-.info-box-orange{background:rgba(249,115,22,0.08);border:1px solid var(--border-orange);
-  color:var(--text-secondary)}
-.info-box-red{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red-400)}
-.info-box-green{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-400)}
-.info-box-amber{background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber-400)}
+/* ── FORMULA PANEL ── */
+.formula-panel{background:#f8f9fa;border:1px solid #e5e7eb;border-left:3px solid #f97316;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  padding:10px 14px;font-family:var(--font-mono);font-size:11px;color:#1f2937;
+  margin-top:8px;line-height:1.9}
+.formula-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;
+  font-size:11px;color:#9ca3af;padding:4px 0;transition:color var(--t-base)}
+.formula-toggle:hover{color:#f97316}
 
-/* GRID LAYOUTS */
+/* ── GRID LAYOUTS ── */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 @media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
 
-/* STAT CARDS */
-.stat-card{background:var(--bg-section);border:1px solid var(--border-default);
-  border-radius:var(--radius-md);padding:14px 16px}
-.stat-label{font-size:10px;font-family:var(--font-display);letter-spacing:0.1em;
-  text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
-.stat-val{font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--blue-400)}
-.stat-unit{font-size:12px;color:var(--text-muted);margin-left:4px;font-family:var(--font-body)}
+/* ── SVG DIAGRAM ── */
+.svg-diagram{background:#f8fafc;border:1px solid #e2e8f0;border-radius:var(--radius-md);overflow:hidden}
 
-/* ANIMATIONS */
-@keyframes slideDownFade{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes fadeSlideUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes scaleIn{from{transform:scale(0.97);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes passGlow{0%,100%{box-shadow:0 0 12px rgba(34,197,94,0.20)}50%{box-shadow:0 0 24px rgba(34,197,94,0.40)}}
-@keyframes warningBreathe{0%,100%{opacity:0.85}50%{opacity:1}}
-@keyframes failPulse{0%,100%{background:rgba(239,68,68,0.12)}50%{background:rgba(239,68,68,0.22)}}
-@keyframes shimmer{from{background-position:-200% 0}to{background-position:200% 0}}
-@keyframes checkBounce{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.3) rotate(4deg)}100%{transform:scale(1) rotate(0deg)}}
-@keyframes drawLine{from{stroke-dashoffset:1000;opacity:0}to{stroke-dashoffset:0;opacity:1}}
-@keyframes gaugeSpin{from{stroke-dashoffset:440}to{stroke-dashoffset:var(--target-offset)}}
-
-/* STANDARD TAG */
-.std-tag{font-family:var(--font-mono);font-size:9px;letter-spacing:0.06em;
-  color:var(--text-muted);text-transform:uppercase}
-.divider{border:none;border-top:1px solid var(--border-subtle);margin:12px 0}
-
-/* FIX 1 — DROPDOWN DARK THEME */
-select,select.input-user,.unit-sel{
-  background-color:#1e1e1e !important;
-  color:#f0f0f0 !important;
-  border:1px solid var(--input-border) !important;
-}
-select option{background-color:#1e1e1e !important;color:#f0f0f0 !important;}
-select option:checked,select option:hover{background-color:#2a2a2a !important;color:#f97316 !important;}
-.unit-sel{border:1px solid var(--border-strong) !important;border-left:none !important;color:var(--text-secondary) !important;}
-.unit-sel:hover{color:var(--orange-400) !important;}
-
-/* FIX 4 — MODULE NAV BAR */
-.module-nav{display:flex;align-items:center;justify-content:space-between;
-  padding:10px 20px;position:sticky;bottom:0;z-index:50;
-  background:linear-gradient(90deg,#1a1a1a,#1e1e1e);
-  border-top:1px solid var(--orange-500);margin-top:16px}
-.nav-counter{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);
-  letter-spacing:0.1em;text-transform:uppercase;text-align:center}
-.btn-nav-next{background:linear-gradient(135deg,var(--orange-500),var(--orange-600));
-  color:white;box-shadow:0 4px 14px rgba(249,115,22,0.30);padding:8px 18px;
-  font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:0.08em;
-  text-transform:uppercase;border:none;border-radius:var(--radius-md);cursor:pointer;
-  transition:transform var(--t-base),box-shadow var(--t-base)}
-.btn-nav-next:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(249,115,22,0.45)}
-.btn-nav-prev{background:transparent;border:1px solid var(--border-default);
-  color:var(--text-muted);padding:8px 18px;font-family:var(--font-display);font-weight:700;
-  font-size:12px;letter-spacing:0.08em;text-transform:uppercase;border-radius:var(--radius-md);
-  cursor:pointer;transition:all var(--t-base)}
-.btn-nav-prev:hover{border-color:var(--border-strong);color:var(--text-secondary)}
-
-/* FIX 3 — REFERENCE PANEL */
-.ref-panel{background:#111111;border-left:3px solid var(--orange-700);
-  border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:0;
-  font-size:11px;color:var(--text-muted)}
-.ref-panel-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px 14px}
-@media(max-width:700px){.ref-panel-cols{grid-template-columns:1fr}}
-.ref-col{background:#0f0f0f;border:1px solid #1e1e1e;padding:12px 14px;border-radius:4px}
-.ref-col-head{fontFamily:"var(--font-display)";font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-orange);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #1e1e1e}
-.ref-entry{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.04)}
-.ref-entry:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-.ref-term{color:#f97316;font-family:var(--font-mono);font-size:11px;font-weight:600;display:block;margin-bottom:2px}
-.ref-def{color:#a3a3a3;font-size:12px;line-height:1.6}
-.ref-expr{color:#60a5fa;font-family:var(--font-mono);font-size:12px;background:#141414;padding:4px 8px;border-radius:3px;display:block;margin:4px 0}
-.ref-std-code{color:#f97316;font-family:var(--font-mono);font-size:11px;font-weight:600}
-.ref-std-title{color:#a3a3a3;font-size:11px;display:block;margin-top:1px}
+/* ── REF PANEL ── */
 .ref-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 16px;
-  background:#111111;border:1px solid #2e2e2e;border-left:3px solid var(--orange-700);
-  border-radius:var(--radius-sm);
-  font-family:var(--font-display);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
-  color:var(--text-muted);transition:color var(--t-base);width:100%}
-.ref-toggle:hover{color:var(--orange-400)}
+  background:#f9fafb;border:1px solid #e5e7eb;border-left:3px solid #f97316;
+  border-radius:var(--radius-sm);font-family:var(--font-display);font-size:12px;
+  letter-spacing:0.06em;text-transform:uppercase;color:#6b7280;
+  transition:color var(--t-base);width:100%}
+.ref-toggle:hover{color:#ea6c00}
 .ref-chevron{transition:transform 200ms ease;font-size:10px;margin-left:auto}
 .ref-chevron.open{transform:rotate(180deg)}
-.ref-term-col .ref-std{color:var(--text-muted);font-size:9px;letter-spacing:0.06em}
+.ref-panel{background:#fafafa;border-left:3px solid #f97316;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:11px;color:#374151}
+.ref-panel-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px 14px}
+@media(max-width:700px){.ref-panel-cols{grid-template-columns:1fr}}
+.ref-col{background:#ffffff;border:1px solid #e5e7eb;padding:12px 14px;border-radius:4px}
+.ref-col-head{font-family:var(--font-display);font-size:9px;letter-spacing:0.12em;
+  text-transform:uppercase;color:#ea6c00;margin-bottom:10px;padding-bottom:6px;
+  border-bottom:1px solid #f3f4f6}
+.ref-entry{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f3f4f6}
+.ref-entry:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.ref-term{color:#ea6c00;font-family:var(--font-mono);font-size:11px;font-weight:600;display:block;margin-bottom:2px}
+.ref-def{color:#1f2937;font-size:12px;line-height:1.6}
+.ref-expr{color:#1d4ed8;font-family:var(--font-mono);font-size:11px;background:#eff6ff;
+  padding:4px 8px;border-radius:3px;display:block;margin:4px 0}
+.ref-std-code{color:#ea6c00;font-family:var(--font-mono);font-size:11px;font-weight:600}
+.ref-std-title{color:#374151;font-size:11px;display:block;margin-top:1px}
 
-/* FIX 8 — UNSAVED DOT */
-@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.8)}}
-.unsaved-dot{width:8px;height:8px;border-radius:50%;background:var(--amber-500);
-  animation:dotPulse 1.5s ease-in-out infinite;flex-shrink:0}
-.unsaved-label{font-family:var(--font-mono);font-size:10px;color:var(--amber-500);
-  letter-spacing:0.06em}
+/* ── MODULE NAV BAR ── */
+.module-nav{background:#1e2329;border-top:1px solid #2d3748;
+  padding:10px 20px;display:flex;justify-content:space-between;align-items:center;
+  flex-shrink:0}
+.nav-btn{background:#2d3748;border:1px solid #374151;color:#9ca3af;
+  font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;padding:8px 16px;border-radius:var(--radius-md);
+  cursor:pointer;transition:all var(--t-base)}
+.nav-btn:hover{border-color:#f97316;color:#f97316}
+.nav-btn-primary{background:linear-gradient(135deg,#f97316,#ea6c00);border-color:#f97316;color:#fff;
+  box-shadow:0 2px 8px rgba(249,115,22,0.30)}
+.nav-btn-primary:hover{box-shadow:0 4px 14px rgba(249,115,22,0.45);transform:translateY(-1px)}
+.nav-info{font-family:var(--font-display);font-size:11px;color:#374151;
+  letter-spacing:0.06em;text-transform:uppercase}
 
-/* PRINT STYLES */
-@media print{
-  body{background:white!important;color:black!important}
-  .sidebar,.topbar,.module-nav,.ref-toggle,.ref-panel,.btn{display:none!important}
-  .module-card{border:1px solid #ccc!important;box-shadow:none!important;break-inside:avoid}
-  .badge-pass{border:1px solid green!important;color:green!important;background:transparent!important}
-  .badge-fail{border:1px solid red!important;color:red!important;background:transparent!important}
-  .badge-warn{border:1px solid orange!important;color:orange!important;background:transparent!important}
-  .stat-val{color:black!important}
-  .input-calc,.input-user{background:white!important;color:black!important;border:1px solid #ccc!important}
-}
+/* ── CHECKLIST ── */
+.check-item{display:flex;align-items:center;gap:10px;padding:8px 12px;
+  border-radius:var(--radius-sm);transition:background var(--t-base)}
+.check-item:hover{background:#fff7ed}
+.check-label{font-size:13px;color:#111827;flex:1}
+.check-pass{color:#15803d;font-size:11px;font-weight:600}
+.check-fail{color:#b91c1c;font-size:11px;font-weight:600}
 
-/* SVG DIAGRAM */
-.svg-diagram{background:var(--bg-section);border:1px solid var(--border-default);
-  border-radius:var(--radius-md);overflow:hidden}
+/* ── ABOUT MODAL ── */
+.about-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);
+  display:flex;align-items:center;justify-content:center;z-index:9999;
+  animation:fadeIn 200ms ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.about-modal{background:#ffffff;border-radius:12px;width:480px;max-width:94vw;
+  box-shadow:0 24px 64px rgba(0,0,0,0.18),0 0 0 1px rgba(0,0,0,0.06);
+  animation:modalIn 250ms cubic-bezier(0.16,1,0.3,1)}
+@keyframes modalIn{from{transform:scale(0.95) translateY(8px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.about-header{background:linear-gradient(135deg,#1e2329,#2d3748);
+  padding:24px 28px 20px;border-radius:12px 12px 0 0;
+  display:flex;align-items:flex-start;justify-content:space-between}
+.about-close{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
+  color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:background 150ms ease;flex-shrink:0}
+.about-close:hover{background:rgba(192,0,0,0.6)}
+.about-body{padding:24px 28px 28px}
+.about-row{display:flex;align-items:center;gap:12px;padding:10px 0;
+  border-bottom:1px solid #f3f4f6}
+.about-row:last-child{border-bottom:none}
+.about-key{font-family:Arial,sans-serif;font-size:11px;font-weight:700;
+  color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;width:90px;flex-shrink:0}
+.about-val{font-family:Arial,sans-serif;font-size:13px;color:#111827;flex:1}
+.about-val a{color:#c00000;text-decoration:none}
+.about-val a:hover{text-decoration:underline}
+.about-std-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-top:4px}
+.about-std-item{font-family:Arial,monospace;font-size:11px;color:#374151;
+  display:flex;align-items:center;gap:5px}
+.about-std-item::before{content:"";width:4px;height:4px;border-radius:50%;
+  background:#c00000;flex-shrink:0}
+.about-btn-info{background:transparent;border:1.5px solid #d1d5db;color:#6b7280;
+  width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;transition:all 150ms ease;
+  font-family:Arial,sans-serif}
+.about-btn-info:hover{border-color:#c00000;color:#c00000;background:#fef2f2}
 
-/* FIX 7 — BACK TO TOP */
-.btn-back-top{position:fixed;bottom:80px;right:20px;width:48px;height:48px;
-  border-radius:50%;background:var(--orange-500);color:white;font-size:18px;
+/* ── BACK TO TOP ── */
+.btn-back-top{position:fixed;bottom:80px;right:20px;width:44px;height:44px;
+  border-radius:50%;background:#f97316;color:#fff;font-size:16px;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   opacity:0;transition:opacity 200ms ease;
-  box-shadow:0 4px 14px rgba(249,115,22,0.40);z-index:999;border:none;
-  pointer-events:none}
+  box-shadow:0 4px 14px rgba(249,115,22,0.35);z-index:999;border:none;pointer-events:none}
 .btn-back-top.visible{opacity:1;pointer-events:auto}
+
+/* ── ANIMATIONS ── */
+@keyframes slideDownFade{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeSlideUp{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes scaleIn{from{transform:scale(0.98);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes checkBounce{0%{transform:scale(0)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+
+/* ── PRINT ── */
+@media print{
+  .sidebar,.topbar,.module-nav,.ref-toggle,.btn{display:none!important}
+  .content{padding:0;overflow:visible}
+  .module-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+}
 `;
 
 // ── PER-MODULE PERSISTENCE (FIX 8) ────────────────────────────────────────────
@@ -693,10 +641,10 @@ const REF_DATA = {
       {n:"GLW",e:"GLW = W(T) × (1 + Rigging÷100) × (1 + Contingency÷100)"},
     ],
     stds:[
-      {c:"BS 7121-1 §6.3",t:"Weight calculation and allowances. Min 10% rigging recommended."},
-      {c:"ISO 12480-1 §7.2",t:"Gross lift weight determination method."},
+      {c:"BS 7121-1 Sec.6.3",t:"Weight calculation and allowances. Min 10% rigging recommended."},
+      {c:"ISO 12480-1 Sec.7.2",t:"Gross lift weight determination method."},
       {c:"DNVGL-ST-N001",t:"Weight control for offshore lifts — tighter tolerances required."},
-      {c:"ASME P30.1-2014 §4",t:"Weight determination methods and accuracy requirements for lift planning."},
+      {c:"ASME P30.1-2014 Sec.4",t:"Weight determination methods and accuracy requirements for lift planning."},
       {c:"LEEA COPSULE 2020",t:"Weight confirmation — certified weight preferred over calculated for critical lifts."},
     ]
   },
@@ -708,7 +656,7 @@ const REF_DATA = {
       {t:"Duty Class (ISO 4301-1)",d:"A1=Infrequent | A2=Light | A3=Moderate (default) | A4=Heavy | A5=Very heavy/continuous."},
       {t:"Boom Angle",d:"Boom centreline from horizontal. Min 30° per ASME B30.5. Derived: α = arccos(R ÷ L)."},
       {t:"Boom Tip Height",d:"Approx max hook height: L × sin(α). Deduct rigging and hook block depth."},
-      {t:"Tandem Lift",d:"Two or more cranes lifting one load. Each crane: share × 1.10 uplift. Separate lift plan per crane. BS 7121-3 §12."},
+      {t:"Tandem Lift",d:"Two or more cranes lifting one load. Each crane: share × 1.10 uplift. Separate lift plan per crane. BS 7121-3 Sec.12."},
     ],
     formulas:[
       {n:"Boom Angle",e:"α = arccos(R ÷ L)  [degrees]"},
@@ -719,13 +667,13 @@ const REF_DATA = {
       {n:"Crane Utilization",e:"U% = DL ÷ CE × 100  |  <75% Safe | 75-90% Warn | >90% Critical | >100% Prohibited"},
     ],
     stds:[
-      {c:"ASME B30.5",t:"Mobile cranes — load chart use, boom angle min 30° §5-1.3.2."},
-      {c:"BS 7121-3",t:"Mobile cranes — tandem lift §12, configuration."},
+      {c:"ASME B30.5",t:"Mobile cranes — load chart use, boom angle min 30° Sec.5-1.3.2."},
+      {c:"BS 7121-3",t:"Mobile cranes — tandem lift Sec.12, configuration."},
       {c:"ISO 9374-1",t:"Load chart format and application."},
       {c:"ISO 4301-1",t:"Duty class A1–A5 and duty factor."},
       {c:"ISO 12480-1",t:"DAF selection and dynamic load calculation."},
       {c:"DNVGL-ST-N001",t:"Offshore DAF for sea states, marine warranty."},
-      {c:"ASME P30.1-2014 §5",t:"Lift planning — crane selection criteria and capacity verification."},
+      {c:"ASME P30.1-2014 Sec.5",t:"Lift planning — crane selection criteria and capacity verification."},
       {c:"BS EN 13000:2010+A1",t:"Mobile cranes — general. Outrigger distribution factor Annex B Table B.1 (0.50–0.75)."},
       {c:"LEEA COPSULE 2020",t:"Lift category classification and planning requirements per category."},
       {c:"ISO 4306-1:2016",t:"Cranes — vocabulary and definitions used globally."},
@@ -735,8 +683,8 @@ const REF_DATA = {
     terms:[
       {t:"GBP",d:"Ground Bearing Pressure — force per unit area by outrigger pads or crawler tracks (kN/m²). Must not exceed allowable."},
       {t:"Allowable GBP",d:"Max pressure ground can sustain without shear failure or excessive settlement. From geotechnical report. Never estimate."},
-      {t:"Outrigger Reaction — Worst Case",d:"CIRIA C703 §4.3: one outrigger may carry 60–70% of total reaction. Design uses 65% worst-case single pad."},
-      {t:"Crawler Track — Worst Case",d:"CIRIA C703 §4.3: one track assumed to carry 55% of total reaction."},
+      {t:"Outrigger Reaction — Worst Case",d:"CIRIA C703 Sec.4.3: one outrigger may carry 60–70% of total reaction. Design uses 65% worst-case single pad."},
+      {t:"Crawler Track — Worst Case",d:"CIRIA C703 Sec.4.3: one track assumed to carry 55% of total reaction."},
       {t:"Min Required Area",d:"Area needed so GBP ≤ allowable: A_min = Reaction ÷ Allowable GBP."},
       {t:"Cribbing",d:"Timber/steel spreader under outrigger pad to increase contact area and reduce GBP."},
       {t:"Settlement",d:"Vertical deformation under load. Excessive settlement causes crane instability."},
@@ -750,14 +698,14 @@ const REF_DATA = {
       {n:"Min Dimension",e:"D_min(m) = √(A_min)"},
     ],
     stds:[
-      {c:"CIRIA C703",t:"Crane stability on site — outrigger/crawler GBP, worst-case single pad rule §4.3."},
+      {c:"CIRIA C703",t:"Crane stability on site — outrigger/crawler GBP, worst-case single pad rule Sec.4.3."},
       {c:"EN 1997-1",t:"Eurocode 7 Geotechnical Design — bearing capacity verification."},
       {c:"BS 8004:2015",t:"Foundations — allowable bearing values for standard soil types."},
       {c:"BS EN ISO 22476",t:"Site investigation — CPT and SPT test methods."},
-      {c:"ASME P30.1-2014 §6.6",t:"Ground conditions assessment and documentation requirements."},
+      {c:"ASME P30.1-2014 Sec.6.6",t:"Ground conditions assessment and documentation requirements."},
       {c:"BS EN 13000 Annex B",t:"Distribution factor values for outrigger loading: 0.50–0.75."},
       {c:"CIRIA C580",t:"Embedded retaining walls — load spread at depth for buried services check."},
-      {c:"ASME P30.1 §6.6.3",t:"DAF for crawler crane ground pressure — minimum 1.25 applied."},
+      {c:"ASME P30.1 Sec.6.6.3",t:"DAF for crawler crane ground pressure — minimum 1.25 applied."},
     ]
   },
   4:{
@@ -787,7 +735,7 @@ const REF_DATA = {
       {c:"BS EN 818-4",t:"Chain slings Grade 80 and 100."},
       {c:"BS EN 13889",t:"Forged steel shackles — bow and D-type."},
       {c:"ASME BTH-1",t:"Below-the-hook devices — padeyes, spreader beams."},
-      {c:"ASME P30.1-2014 §5.5",t:"Rigging plan requirements, sling selection, COG verification."},
+      {c:"ASME P30.1-2014 Sec.5.5",t:"Rigging plan requirements, sling selection, COG verification."},
       {c:"LEEA COPSULE 2020",t:"Rigging equipment selection, inspection before use requirements."},
       {c:"ISO 4306-2:2012",t:"Cranes — vocabulary for mobile cranes and rigging terminology."},
       {c:"OSHA 1926.251",t:"Rigging equipment for material handling — US regulatory requirements."},
@@ -840,7 +788,7 @@ const REF_DATA = {
       {c:"EN 13155",t:"Non-fixed lifting attachments — COG verification before lift."},
       {c:"BS 7121-1",t:"Lift plan must document COG position."},
       {c:"ASME BTH-1",t:"Below-the-hook device design accounts for COG offset."},
-      {c:"ASME P30.1-2014 §5",t:"Load COG determination — methods, accuracy, documentation requirements."},
+      {c:"ASME P30.1-2014 Sec.5",t:"Load COG determination — methods, accuracy, documentation requirements."},
       {c:"LEEA COPSULE 2020",t:"COG verification requirement before first lift of any engineered load."},
       {c:"ISO 4306-1:2016",t:"COG and stability definitions."},
     ]
@@ -956,7 +904,7 @@ const REF_DATA = {
       {n:"Overall",e:"PASS = ALL individual checks pass  |  FAIL = ANY single check fails"},
     ],
     stds:[
-      {c:"ASME B30.5",t:"Min boom angle 30° §5-1.3.2, ATB §5-1.9, LMI §5-1.26, outrigger §5-3.4."},
+      {c:"ASME B30.5",t:"Min boom angle 30° Sec.5-1.3.2, ATB Sec.5-1.9, LMI Sec.5-1.26, outrigger Sec.5-3.4."},
       {c:"BS 7121-3",t:"Mobile crane configuration checks, pre-use inspection."},
       {c:"LOLER 1998",t:"Pre-use inspection and periodic thorough examination."},
     ]
@@ -1089,7 +1037,7 @@ const REF_DATA = {
     stds:[
       {c:"ISO 80000-2:2019",t:"Mathematical quantities and units — right-angle relationships."},
       {c:"ASME B30.9",t:"Slings — K factor table for sling angles 15°–90°."},
-      {c:"ASME B30.5",t:"Boom angle minimum 30° from horizontal §5-1.3.2."},
+      {c:"ASME B30.5",t:"Boom angle minimum 30° from horizontal Sec.5-1.3.2."},
     ]
   },
   19:{
@@ -1182,13 +1130,31 @@ const RefPanel = ({moduleId}) => {
 // ── MODULE NAV BAR (FIX 4) ────────────────────────────────────────────────────
 const ModuleNavBar = ({activeModule,setActiveModule}) => {
   const mod = MODULES[activeModule];
-  const hasPrev = activeModule>0, hasNext = activeModule<MODULES.length-1;
-  const go = (idx) => { setActiveModule(idx); setTimeout(()=>{ const c=document.querySelector(".content"); if(c) c.scrollTop=0; },50); };
+  const hasPrev = activeModule>0;
+  const hasNext = activeModule<MODULES.length-1;
+  const go = (idx) => {
+    setActiveModule(idx);
+    setTimeout(()=>{ const c=document.querySelector(".content"); if(c) c.scrollTop=0; },50);
+  };
   return (
     <div className="module-nav">
-      <button className="btn-nav-prev" onClick={()=>hasPrev&&go(activeModule-1)} style={{opacity:hasPrev?1:0.3}}>← Previous</button>
-      <div className="nav-counter">Module {activeModule+1} of {MODULES.length} — {mod?.label}</div>
-      <button className="btn-nav-next" onClick={()=>hasNext&&go(activeModule+1)} style={{opacity:hasNext?1:0.3}}>Next Module →</button>
+      <button
+        className="nav-btn"
+        onClick={()=>hasPrev&&go(activeModule-1)}
+        disabled={!hasPrev}
+        style={{opacity:hasPrev?1:0.35,cursor:hasPrev?"pointer":"default"}}>
+        ← Previous
+      </button>
+      <div className="nav-info">
+        Module {activeModule+1} of {MODULES.length} — {mod?.label}
+      </div>
+      <button
+        className="nav-btn nav-btn-primary"
+        onClick={()=>hasNext&&go(activeModule+1)}
+        disabled={!hasNext}
+        style={{opacity:hasNext?1:0.35,cursor:hasNext?"pointer":"default"}}>
+        Next Module →
+      </button>
     </div>
   );
 };
@@ -1255,11 +1221,11 @@ const Gauge = ({value,label,max=100}) => {
         {pct>0 && <path d={`M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2}`}
           fill="none" stroke={color} strokeWidth="10" strokeLinecap="round" />}
         <text x={cx} y={cy-4} textAnchor="middle" fill={color}
-          fontFamily="'JetBrains Mono',monospace" fontSize="22" fontWeight="600">
+          fontFamily="'Arial',monospace" fontSize="22" fontWeight="600">
           {value>0?`${Math.round(value)}%`:"—"}
         </text>
         <text x={cx} y={cy+14} textAnchor="middle" fill="var(--text-muted)"
-          fontFamily="'Barlow Condensed',sans-serif" fontSize="10" letterSpacing="1">UTIL</text>
+          fontFamily="'Arial',sans-serif" fontSize="10" letterSpacing="1">UTIL</text>
       </svg>
       <div className="gauge-lbl">{label}</div>
     </div>
@@ -1294,7 +1260,7 @@ const ProjectActions = ({projectName}) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     const date = new Date().toISOString().slice(0,10).replace(/-/g,"");
-    a.href=url; a.download=`RigCalcPro_${(projectName||"session").replace(/\s/g,"_")}_${date}.json`;
+    a.href=url; a.download=`RigCalc Pro_${(projectName||"session").replace(/\s/g,"_")}_${date}.json`;
     a.click(); URL.revokeObjectURL(url);
     const ts = new Date().toLocaleTimeString();
     setLastSaved(ts); setHasUnsaved(false);
@@ -1332,9 +1298,9 @@ const ProjectActions = ({projectName}) => {
         <button className="btn" style={{background:"transparent",border:"1px solid var(--border-orange)",color:"var(--text-orange)",opacity:hasName?1:0.4}} disabled={!hasName} onClick={printSummary}>🖨️ Print Summary</button>
         <button className="btn" style={{background:"transparent",border:"1px solid var(--border-orange)",color:"var(--text-orange)",opacity:hasName?1:0.4}} disabled={!hasName} onClick={exportPDF}>📄 PDF</button>
       </div>
-      {lastSaved && <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)"}}>Last saved: {lastSaved}</div>}
+      {lastSaved && <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace"}}>Last saved: {lastSaved}</div>}
       {toast && (
-        <div style={{marginTop:8,padding:"6px 10px",background:"var(--green-bg)",border:"1px solid var(--green-border)",borderRadius:"var(--radius-sm)",fontSize:11,color:"var(--green-400)",fontFamily:"var(--font-mono)"}}>{toast}</div>
+        <div style={{marginTop:8,padding:"6px 10px",background:"var(--green-bg)",border:"1px solid var(--green-border)",borderRadius:"var(--radius-sm)",fontSize:11,color:"var(--green-400)",fontFamily:"Arial,monospace"}}>{toast}</div>
       )}
     </div>
   );
@@ -1446,7 +1412,7 @@ const ProjectInfo = () => {
           <div className="section-heading" style={{marginTop:16}}>Applicable Standards</div>
           <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
             {STANDARDS.map(s=>(
-              <span key={s} className="std-tag" style={{background:"var(--bg-section)",padding:"3px 8px",borderRadius:3,border:"1px solid var(--border-subtle)"}}>{s}</span>
+              <span key={s} className="std-tag">{s}</span>
             ))}
           </div>
         </div>
@@ -1500,7 +1466,7 @@ const WeightCalc = () => {
       <div className="module-card">
         <div className="card-header">
           <span className="module-title">⚖️ Weight Calculation</span>
-          <span className="std-tag">ISO 12480-1 §7 | BS 7121-1 §6</span>
+          <span className="std-tag">ISO 12480-1 Sec.7 | BS 7121-1 Sec.6</span>
         </div>
         <div className="card-body">
           <div style={{display:"flex",gap:8,marginBottom:16}}>
@@ -1590,7 +1556,7 @@ const WeightCalc = () => {
           )}
 
           <hr className="divider" />
-          <div className="section-heading">Engineering Allowances — BS 7121-1 §6.3 / ISO 12480-1 §7.2</div>
+          <div className="section-heading">Engineering Allowances — BS 7121-1 Sec.6.3 / ISO 12480-1 Sec.7.2</div>
           <div className="form-grid">
             <div className="form-row">
               <label className="label-input">Rigging & Accessories (%)</label>
@@ -1606,8 +1572,8 @@ const WeightCalc = () => {
               <div style={{fontFamily:"var(--font-display)",fontSize:11,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--text-orange)",marginBottom:4}}>★ GROSS LIFT WEIGHT (GLW)</div>
               <div style={{display:"flex",gap:16,alignItems:"baseline"}}>
                 <span className="glw-val">{f3(glw)} T</span>
-                <span style={{color:"var(--text-muted)",fontFamily:"var(--font-mono)",fontSize:14}}>{f2(glw*9.81)} kN</span>
-                <span style={{color:"var(--text-muted)",fontFamily:"var(--font-mono)",fontSize:14}}>{f2(glw*1000)} kg</span>
+                <span style={{color:"var(--text-muted)",fontFamily:"Arial,monospace",fontSize:14}}>{f2(glw*9.81)} kN</span>
+                <span style={{color:"var(--text-muted)",fontFamily:"Arial,monospace",fontSize:14}}>{f2(glw*1000)} kg</span>
               </div>
             </div>
           </div>
@@ -1714,8 +1680,8 @@ const TandemCraneCard = ({idx, crane, onChange, glw}) => {
         </div>
       </div>
       <UtilBar value={util} label={`Crane ${idx+1} Utilization`} />
-      <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:6}}>
-        Tandem Load = GLW({f2(glw)}T) × {share}% × 1.10 = {f2(tandemLoad)}T | Eff.Cap = {f2(chartCap)}T × {dutyFactor} = {f2(effCap)}T | Ref: BS 7121-3 §12
+      <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:6}}>
+        Tandem Load = GLW({f2(glw)}T) × {share}% × 1.10 = {f2(tandemLoad)}T | Eff.Cap = {f2(chartCap)}T × {dutyFactor} = {f2(effCap)}T | Ref: BS 7121-3 Sec.12
       </div>
     </div>
   );
@@ -1882,7 +1848,7 @@ const CraneSelection = () => {
           {/* MAN-RIDING warning — shown immediately */}
           {specialLift==="Man-Riding / Personnel" && (
             <div className="info-box info-box-red" style={{marginBottom:10}}>
-              ⛔ MAN-RIDING LIFT — LOLER 1998 Regulation 8 applies. Requires: LOLER §8 certificate, competent person supervising, 6-monthly inspection, rescue plan, two independent means of preventing free fall.
+              ⛔ MAN-RIDING LIFT — LOLER 1998 Regulation 8 applies. Requires: LOLER Sec.8 certificate, competent person supervising, 6-monthly inspection, rescue plan, two independent means of preventing free fall.
             </div>
           )}
 
@@ -1920,7 +1886,7 @@ const CraneSelection = () => {
                 <div className="form-row" style={{gridColumn:"1/-1"}}>
                   <label className="label-input" title="Read from manufacturer load chart at actual boom length and working radius. Do not use maximum rated capacity.">Chart Capacity at Working Radius (T) ⓘ</label>
                   <input className="input-user no-unit" type="number" value={manualChartCap} onChange={e=>setManualChartCap(e.target.value)} placeholder="From load chart at actual radius" />
-                  <div style={{fontSize:10,color:"var(--text-muted)",marginTop:3,fontFamily:"var(--font-mono)"}}>Critical: read from load chart at configured boom + radius. Never use maximum rated capacity.</div>
+                  <div style={{fontSize:10,color:"var(--text-muted)",marginTop:3,fontFamily:"Arial,monospace"}}>Critical: read from load chart at configured boom + radius. Never use maximum rated capacity.</div>
                 </div>
                 <div className="form-row" style={{gridColumn:"1/-1"}}>
                   <label className="label-input">Boom Configuration Notes</label>
@@ -1946,7 +1912,7 @@ const CraneSelection = () => {
           {boomLenN>0&&radiusN>0 && (
             <div style={{background:"var(--bg-section)",border:`1px solid ${boomAngleOk==="pass"?"var(--green-border)":boomAngleOk==="fail"?"var(--red-border)":"var(--amber-border)"}`,borderRadius:"var(--radius-md)",padding:"12px 16px",marginBottom:8}}>
               <div style={{fontFamily:"var(--font-display)",fontSize:11,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--text-orange)",marginBottom:10}}>
-                📐 Boom Geometry — Auto-Calculated (ASME B30.5 §5-1.3.2)
+                📐 Boom Geometry — Auto-Calculated (ASME B30.5 Sec.5-1.3.2)
               </div>
               {boomGeomError ? (
                 <div className="info-box info-box-red">❌ Working radius ({radiusN}m) cannot exceed boom length ({boomLenN}m). Check inputs.</div>
@@ -1972,15 +1938,15 @@ const CraneSelection = () => {
                   </div>
                 </div>
               )}
-              {!boomGeomError&&boomAngle!=null&&boomAngle<30 && <div className="info-box info-box-red" style={{marginTop:8,fontSize:11}}>❌ Boom angle {boomAngle.toFixed(2)}° is below 30° minimum — ASME B30.5 §5-1.3.2. Reduce working radius or increase boom length.</div>}
+              {!boomGeomError&&boomAngle!=null&&boomAngle<30 && <div className="info-box info-box-red" style={{marginTop:8,fontSize:11}}>❌ Boom angle {boomAngle.toFixed(2)}° is below 30° minimum — ASME B30.5 Sec.5-1.3.2. Reduce working radius or increase boom length.</div>}
               {!boomGeomError&&boomAngle!=null&&boomAngle>=30&&boomAngle<45 && <div className="info-box info-box-amber" style={{marginTop:8,fontSize:11}}>⚠️ Boom angle {boomAngle.toFixed(2)}° is below 45° — approaching operational limit. Verify with manufacturer load chart.</div>}
               {!boomGeomError&&boomAngle!=null&&boomAngle>78 && <div className="info-box info-box-amber" style={{marginTop:8,fontSize:11}}>⚠️ Boom angle {boomAngle.toFixed(2)}° is above 78° — boom may approach vertical limit. Check manufacturer specification.</div>}
-              {!boomGeomError&&boomTipH!=null && <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:6}}>Approximate hook height available ≈ {boomTipH.toFixed(2)} m (deduct hook block and rigging depth)</div>}
+              {!boomGeomError&&boomTipH!=null && <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:6}}>Approximate hook height available ≈ {boomTipH.toFixed(2)} m (deduct hook block and rigging depth)</div>}
               <div style={{marginTop:10}}>
                 <BoomGeomSVG boomLen={boomLenN} radius={radiusN} boomAngle={boomAngle} boomTipH={boomTipH||0}/>
               </div>
-              <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:6}}>
-                Formula: θ = arccos(R ÷ L) | Reference: ASME B30.5-2021 §5-1.3.2
+              <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:6}}>
+                Formula: θ = arccos(R ÷ L) | Reference: ASME B30.5-2021 Sec.5-1.3.2
               </div>
             </div>
           )}
@@ -2019,7 +1985,7 @@ const CraneSelection = () => {
               <tbody>{visibleDAF.map(row=>(
                 <tr key={row.label} className={row===dafRow?"highlight":""}>
                   <td>{row.label}</td>
-                  <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{row.daf}</td>
+                  <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{row.daf}</td>
                   <td>{row===dafRow?<span style={{color:"var(--orange-500)",fontWeight:600}}>◄ ACTIVE</span>:""}</td>
                 </tr>
               ))}</tbody>
@@ -2054,7 +2020,7 @@ const CraneSelection = () => {
           {specialLift==="Blind Lift" && (
             <>
               <div className="section-heading">Blind Lift — Signalling Controls</div>
-              <div className="info-box info-box-amber" style={{marginBottom:10}}>⚠️ Blind lift — dedicated signalman mandatory. All movement by signal only. BS 7121-1 §9.</div>
+              <div className="info-box info-box-amber" style={{marginBottom:10}}>⚠️ Blind lift — dedicated signalman mandatory. All movement by signal only. BS 7121-1 Sec.9.</div>
               <div className="form-grid">
                 <div className="form-row"><label className="label-input">Signalman Position / Location</label><input className="input-user no-unit" value={blindSignalman} onChange={e=>setBlindSignalman(e.target.value)} /></div>
                 <div className="form-row"><label className="label-input">Radio Channel</label><input className="input-user no-unit" value={blindChannel} onChange={e=>setBlindChannel(e.target.value)} /></div>
@@ -2169,9 +2135,9 @@ const CraneSelection = () => {
                 <thead><tr><th>Radius (m)</th><th>Boom (m)</th><th>Capacity (T)</th><th></th></tr></thead>
                 <tbody>{selCrane.chart.map((row,i)=>(
                   <tr key={i} className={parseFloat(radius)>=row.r&&(selCrane.chart[i+1]?parseFloat(radius)<selCrane.chart[i+1].r:true)?"highlight":""}>
-                    <td style={{fontFamily:"var(--font-mono)"}}>{row.r}</td>
-                    <td style={{fontFamily:"var(--font-mono)"}}>{row.b}</td>
-                    <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{row.cap}</td>
+                    <td style={{fontFamily:"Arial,monospace"}}>{row.r}</td>
+                    <td style={{fontFamily:"Arial,monospace"}}>{row.b}</td>
+                    <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{row.cap}</td>
                     <td>{i===0?<span className="badge badge-idle" style={{fontSize:9}}>MIN RADIUS</span>:""}</td>
                   </tr>
                 ))}</tbody>
@@ -2297,7 +2263,7 @@ const GBP = () => {
         <div style={{fontFamily:"var(--font-display)",fontSize:11,letterSpacing:"0.1em",textTransform:"uppercase",color:"var(--text-orange)",marginBottom:10}}>
           📐 Minimum {label} Requirements
         </div>
-        <div style={{fontFamily:"var(--font-mono)",fontSize:11,color:"var(--text-muted)",marginBottom:10,lineHeight:1.8,padding:"8px 10px",background:"var(--bg-card)",borderRadius:3}}>
+        <div style={{fontFamily:"Arial,monospace",fontSize:11,color:"var(--text-muted)",marginBottom:10,lineHeight:1.8,padding:"8px 10px",background:"var(--bg-card)",borderRadius:3}}>
           A_req = F_max ÷ Allowable GBP = {f2(fKN)} ÷ {allow} = <strong style={{color:"var(--blue-400)"}}>{f3(minA)} m²</strong><br/>
           Min dimension = √({f3(minA)}) = <strong style={{color:"var(--blue-400)"}}>{f3(minS)} m × {f3(minS)} m</strong> ({Math.round(minS*1000)} mm × {Math.round(minS*1000)} mm)
         </div>
@@ -2307,20 +2273,20 @@ const GBP = () => {
             <tbody>
               <tr>
                 <td>Min Contact Area</td>
-                <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{f3(minA)} m²</td>
-                <td style={{fontFamily:"var(--font-mono)"}}>{f3(effA)} m²</td>
+                <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{f3(minA)} m²</td>
+                <td style={{fontFamily:"Arial,monospace"}}>{f3(effA)} m²</td>
                 <td><span className={`badge ${effA>=minA?"badge-pass":"badge-fail"}`}>{effA>=minA?"✅ OK":"❌ UNDERSIZED"}</span></td>
               </tr>
               <tr>
                 <td>Min Dimension</td>
-                <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{f3(minS)} m</td>
-                <td style={{fontFamily:"var(--font-mono)"}}>{f3(Math.sqrt(effA))} m</td>
+                <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{f3(minS)} m</td>
+                <td style={{fontFamily:"Arial,monospace"}}>{f3(Math.sqrt(effA))} m</td>
                 <td><span className={`badge ${Math.sqrt(effA)>=minS?"badge-pass":"badge-fail"}`}>{Math.sqrt(effA)>=minS?"✅":"❌"}</span></td>
               </tr>
               <tr>
                 <td>Min Soil Bearing</td>
-                <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{effA>0?f2(fKN/effA):"—"} kPa</td>
-                <td style={{fontFamily:"var(--font-mono)"}}>{allow||"—"} kPa</td>
+                <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{effA>0?f2(fKN/effA):"—"} kPa</td>
+                <td style={{fontFamily:"Arial,monospace"}}>{allow||"—"} kPa</td>
                 <td><span className={`badge ${allow>=(effA>0?fKN/effA:0)?"badge-pass":"badge-fail"}`}>{allow>=(effA>0?fKN/effA:0)?"✅":"❌"}</span></td>
               </tr>
             </tbody>
@@ -2331,7 +2297,7 @@ const GBP = () => {
             ? `✅ ADEQUATE — ${f3(effA)} m² provided ≥ ${f3(minA)} m² required`
             : `❌ UNDERSIZED — Minimum: ${f3(minS)} m × ${f3(minS)} m. Increase by ${Math.max(0,Math.round((minS-Math.sqrt(effA))*1000))} mm each side.`}
         </div>
-        <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:6}}>
+        <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:6}}>
           References: ASME B30.5 | CIRIA C703 | BS 8004:2015 | BS EN 13000 Annex B
         </div>
       </div>
@@ -2375,7 +2341,7 @@ const GBP = () => {
                   <input className="input-user no-unit" type="number" step="0.01" min="1.10" max="1.50" value={dlf} onChange={e=>setDlf(e.target.value)} />
                 </div>
                 <div className="form-row">
-                  <label className="label-input" title="Fraction of total reaction on single worst-case outrigger. 0.65 per CIRIA C703 §4.3. Range 0.50–0.75 per BS EN 13000 Annex B.">🟨 Outrigger Distribution Factor ⓘ</label>
+                  <label className="label-input" title="Fraction of total reaction on single worst-case outrigger. 0.65 per CIRIA C703 Sec.4.3. Range 0.50–0.75 per BS EN 13000 Annex B.">🟨 Outrigger Distribution Factor ⓘ</label>
                   <input className="input-user no-unit" type="number" step="0.01" min="0.50" max="0.75" value={distF} onChange={e=>setDistF(e.target.value)} />
                 </div>
               </div>
@@ -2414,7 +2380,7 @@ const GBP = () => {
                   <tbody>{SOIL_TABLE.map(s=>(
                     <tr key={s.type} style={{cursor:"pointer"}} className={allowGBP===String(s.gbp)?"highlight":""} onClick={()=>setAllowGBP(String(s.gbp))}>
                       <td>{s.type}</td>
-                      <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{s.gbp}</td>
+                      <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{s.gbp}</td>
                       <td style={{fontSize:11,color:"var(--text-muted)"}}>{s.warn||""}</td>
                     </tr>
                   ))}</tbody>
@@ -2428,7 +2394,7 @@ const GBP = () => {
               </div>
 
               <div className="section-heading">Section D — Auto Calculations</div>
-              <div style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"12px 16px",marginBottom:12,fontFamily:"var(--font-mono)",fontSize:11,lineHeight:2.0,color:"var(--text-secondary)"}}>
+              <div style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"12px 16px",marginBottom:12,fontFamily:"Arial,monospace",fontSize:11,lineHeight:2.0,color:"var(--text-secondary)"}}>
                 <strong style={{color:"var(--text-orange)"}}>STEP 1 — Max Outrigger Reaction Force (F_max)</strong><br/>
                 F_max = (GVW + GLW + Rigging) × DLF × Distribution Factor<br/>
                 F_max = ({f2(gvwN)} + {f2(glw)} + {f2(riggWtN)}) × {dlfN} × {distFN}<br/>
@@ -2469,7 +2435,7 @@ const GBP = () => {
                   <input className="input-calc" value={f2(glw)} readOnly />
                 </div>
                 <div className="form-row">
-                  <label className="label-input" title="DAF ≥ 1.25 per ASME P30.1 §6.6.3">🟨 Dynamic Amplification Factor (DAF) ⓘ</label>
+                  <label className="label-input" title="DAF ≥ 1.25 per ASME P30.1 Sec.6.6.3">🟨 Dynamic Amplification Factor (DAF) ⓘ</label>
                   <input className="input-user no-unit" type="number" step="0.01" min="1.10" max="1.50" value={daf} onChange={e=>setDaf(e.target.value)} />
                 </div>
               </div>
@@ -2519,7 +2485,7 @@ const GBP = () => {
                           ? `✅ Pipeline OK — Pressure at depth ${f2(pDepthCalc)} kPa ≤ allowable ${pipeAllowGBP} kPa`
                           : `❌ EXCEEDS PIPELINE LIMIT — ${f2(pDepthCalc)} kPa > ${pipeAllowGBP} kPa — increase mat size or re-route crane path`}
                       </div>
-                      <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:4}}>
+                      <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:4}}>
                         P_depth = P_dynamic ÷ [(B+2h·tan45°)(L+2h·tan45°)] | Reference: CIRIA C580 / BS EN 1997-1
                       </div>
                     </div>
@@ -2534,7 +2500,7 @@ const GBP = () => {
                   <tbody>{SOIL_TABLE.map(s=>(
                     <tr key={s.type} style={{cursor:"pointer"}} className={allowGBP===String(s.gbp)?"highlight":""} onClick={()=>setAllowGBP(String(s.gbp))}>
                       <td>{s.type}</td>
-                      <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{s.gbp}</td>
+                      <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{s.gbp}</td>
                       <td style={{fontSize:11,color:"var(--text-muted)"}}>{s.warn||""}</td>
                     </tr>
                   ))}</tbody>
@@ -2548,14 +2514,14 @@ const GBP = () => {
               </div>
 
               <div className="section-heading">Section D — Auto Calculations</div>
-              <div style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"12px 16px",marginBottom:12,fontFamily:"var(--font-mono)",fontSize:11,lineHeight:2.0,color:"var(--text-secondary)"}}>
+              <div style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"12px 16px",marginBottom:12,fontFamily:"Arial,monospace",fontSize:11,lineHeight:2.0,color:"var(--text-secondary)"}}>
                 <strong style={{color:"var(--text-orange)"}}>STEP 1 — Average Ground Pressure Under Tracks</strong><br/>
                 P_avg = (Operating Wt + GLW) × 9.81 ÷ (2 × Track Area)<br/>
                 P_avg = ({f2(opWtN)}+{f2(glw)}) × 9.81 ÷ (2 × {f3(trackArea)})<br/>
                 P_avg = <strong style={{color:"var(--blue-400)"}}>{f2(pAvg)} kPa</strong><br/><br/>
-                <strong style={{color:"var(--text-orange)"}}>STEP 2 — Dynamic Amplification (ASME P30.1 §6.6.3)</strong><br/>
+                <strong style={{color:"var(--text-orange)"}}>STEP 2 — Dynamic Amplification (ASME P30.1 Sec.6.6.3)</strong><br/>
                 P_dynamic = P_avg × DAF = {f2(pAvg)} × {dafN} = <strong style={{color:"var(--blue-400)"}}>{f2(pDynamic)} kPa</strong><br/><br/>
-                <strong style={{color:"var(--text-orange)"}}>STEP 3 — Worst Single Track (CIRIA C703 §4.3)</strong><br/>
+                <strong style={{color:"var(--text-orange)"}}>STEP 3 — Worst Single Track (CIRIA C703 Sec.4.3)</strong><br/>
                 P_track = P_dynamic × 0.55 = {f2(pDynamic)} × 0.55 = <strong style={{color:"var(--blue-400)"}}>{f2(pSingleTrack)} kPa</strong><br/><br/>
                 <strong style={{color:"var(--text-orange)"}}>STEP 4 — Effective Mat GBP</strong><br/>
                 GBP = P_track ÷ Mat Area = {f2(pSingleTrack)} ÷ {f3(effAreaC)} = <strong style={{color:"var(--blue-400)"}}>{f2(calcGBP_C)} kPa</strong><br/><br/>
@@ -3019,7 +2985,7 @@ const RiggingCalc = () => {
               </div>
             </>
           )}
-          <div style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"12px 16px",marginTop:12,fontFamily:"var(--font-mono)",fontSize:11,lineHeight:1.9,color:"var(--text-secondary)"}}>
+          <div style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"12px 16px",marginTop:12,fontFamily:"Arial,monospace",fontSize:11,lineHeight:1.9,color:"var(--text-secondary)"}}>
             <strong style={{color:"var(--text-orange)"}}>DESIGN LOAD SUMMARY</strong><br/>
             Source: {glwLinked?"Module 2 Linked":"Manual Entry"}<br/>
             Design Load: <strong style={{color:"var(--blue-400)"}}>{f3(designLoad)} T  =  {f2(designLoad*9.81)} kN</strong><br/>
@@ -3047,7 +3013,7 @@ const RiggingCalc = () => {
               </div>
             </div>
             {hitch==="choker"&&<div className="info-box info-box-amber" style={{gridColumn:"1/-1",fontSize:11}}>⚠️ Choker hitch reduces WLL by 25%. Effective WLL = Rated WLL × 0.75. Minimum 120° choke angle required. Reference: ASME B30.9 Table N-1</div>}
-            {hitch==="direct"&&<div style={{gridColumn:"1/-1",fontSize:11,color:"var(--text-muted)",fontFamily:"var(--font-mono)"}}>Direct hitch — full rated WLL applies.</div>}
+            {hitch==="direct"&&<div style={{gridColumn:"1/-1",fontSize:11,color:"var(--text-muted)",fontFamily:"Arial,monospace"}}>Direct hitch — full rated WLL applies.</div>}
             <div className="form-row">
               <label className="label-input">🟨 Sling Type</label>
               <select className="input-user no-unit" value={slingType} onChange={e=>setSlingType(e.target.value)}>
@@ -3188,7 +3154,7 @@ const RiggingCalc = () => {
                         <select className="unit-sel" value={pts[i].yu} onChange={e=>setPoint(i,'yu',e.target.value)}>{["mm","cm","m"].map(u=><option key={u}>{u}</option>)}</select>
                       </div>
                     </div>
-                    {effPts[i]&&hookPos&&<div style={{fontSize:10,color:"var(--blue-400)",fontFamily:"var(--font-mono)",marginTop:6}}>
+                    {effPts[i]&&hookPos&&<div style={{fontSize:10,color:"var(--blue-400)",fontFamily:"Arial,monospace",marginTop:6}}>
                       d_plan = {f3(Math.sqrt(Math.pow(hookPos.x-effPts[i].x,2)+Math.pow(hookPos.y-effPts[i].y,2)))} m
                     </div>}
                   </div>
@@ -3203,18 +3169,18 @@ const RiggingCalc = () => {
                     <tbody>
                       {[["A","B",0,1],["B","C",1,2],["C","D",2,3],["D","A",3,0]].map(([la,lb,ia,ib])=>{
                         const d=effPts[ia]&&effPts[ib]?f3(Math.sqrt(Math.pow(effPts[ib].x-effPts[ia].x,2)+Math.pow(effPts[ib].y-effPts[ia].y,2))):"—";
-                        return <tr key={la+lb}><td style={{fontFamily:"var(--font-mono)",color:"var(--orange-500)"}}>{la}→{lb}</td><td style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)"}}>√[(x{lb}-x{la})²+(y{lb}-y{la})²]</td><td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{d} m</td><td></td></tr>;
+                        return <tr key={la+lb}><td style={{fontFamily:"Arial,monospace",color:"var(--orange-500)"}}>{la}→{lb}</td><td style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace"}}>√[(x{lb}-x{la})²+(y{lb}-y{la})²]</td><td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{d} m</td><td></td></tr>;
                       })}
                       {[["Diagonal A↔C",0,2],["Diagonal B↔D",1,3]].map(([lbl,ia,ib])=>{
                         const d=effPts[ia]&&effPts[ib]?Math.sqrt(Math.pow(effPts[ib].x-effPts[ia].x,2)+Math.pow(effPts[ib].y-effPts[ia].y,2)):0;
                         const dAC=effPts[0]&&effPts[2]?Math.sqrt(Math.pow(effPts[2].x-effPts[0].x,2)+Math.pow(effPts[2].y-effPts[0].y,2)):0;
                         const dBD=effPts[1]&&effPts[3]?Math.sqrt(Math.pow(effPts[3].x-effPts[1].x,2)+Math.pow(effPts[3].y-effPts[1].y,2)):0;
                         const isWorst=(ia===0&&d>=dBD)||(ia===1&&d>dAC);
-                        return <tr key={lbl} style={{background:isWorst?"rgba(249,115,22,0.08)":""}}><td style={{fontFamily:"var(--font-mono)",color:isWorst?"var(--orange-500)":"var(--text-muted)"}}>{lbl}</td><td style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)"}}>√[(Δx)²+(Δy)²]</td><td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{d>0?f3(d):"—"} m</td><td>{isWorst&&<span className="badge badge-warn" style={{fontSize:9}}>WORST</span>}</td></tr>;
+                        return <tr key={lbl} style={{background:isWorst?"rgba(249,115,22,0.08)":""}}><td style={{fontFamily:"Arial,monospace",color:isWorst?"var(--orange-500)":"var(--text-muted)"}}>{lbl}</td><td style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace"}}>√[(Δx)²+(Δy)²]</td><td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{d>0?f3(d):"—"} m</td><td>{isWorst&&<span className="badge badge-warn" style={{fontSize:9}}>WORST</span>}</td></tr>;
                       })}
                     </tbody>
                   </table>
-                  <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:4}}>Worst-case diagonal used for angle calculation. Reference: ASME B30.9</div>
+                  <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:4}}>Worst-case diagonal used for angle calculation. Reference: ASME B30.9</div>
                 </div>
               )}
             </>
@@ -3237,13 +3203,13 @@ const RiggingCalc = () => {
                     const thetaV=thetaH>0?90-thetaH:0;
                     return (
                       <tr key={leg} className={worstLeg&&leg===worstLeg.leg?"highlight":""}>
-                        <td style={{fontFamily:"var(--font-mono)",color:"var(--orange-500)",fontWeight:700}}>{leg}</td>
-                        <td style={{fontFamily:"var(--font-mono)"}}>{dPlan>=0?f3(dPlan):"—"}</td>
-                        <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{tooShort?"❌":H>0?f3(H):"—"}</td>
-                        <td style={{fontFamily:"var(--font-mono)"}}>{S>0?f3(S):"—"}</td>
-                        <td style={{fontFamily:"var(--font-mono)"}}>{thetaV>0?f2(thetaV):"—"}</td>
-                        <td style={{fontFamily:"var(--font-mono)",color:c,fontWeight:600}}>{thetaH>0?f2(thetaH):"—"}</td>
-                        <td style={{fontFamily:"var(--font-mono)",color:c}}>{K>0?f3(K):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace",color:"var(--orange-500)",fontWeight:700}}>{leg}</td>
+                        <td style={{fontFamily:"Arial,monospace"}}>{dPlan>=0?f3(dPlan):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{tooShort?"❌":H>0?f3(H):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace"}}>{S>0?f3(S):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace"}}>{thetaV>0?f2(thetaV):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace",color:c,fontWeight:600}}>{thetaH>0?f2(thetaH):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace",color:c}}>{K>0?f3(K):"—"}</td>
                         <td><span className={`badge ${isLB?(thetaH>=45?"badge-pass":thetaH>=30?"badge-warn":"badge-fail"):"badge-idle"}`}>{isLB?"LOAD":"BALANCE"}</span></td>
                       </tr>
                     );
@@ -3253,7 +3219,7 @@ const RiggingCalc = () => {
               {hasTooShort&&<div className="info-box info-box-red" style={{marginTop:6,fontSize:11}}>❌ SLING TOO SHORT — S must be greater than d_plan. Increase sling length or reduce horizontal spread.</div>}
               {worstTheta>0&&worstTheta<30&&<div className="info-box info-box-red" style={{marginTop:6,fontSize:11}}>❌ Sling angle {f2(worstTheta)}° critically low — DO NOT PROCEED. Leg tension is dangerously high. Reference: ASME B30.9</div>}
               {worstTheta>=30&&worstTheta<45&&<div className="info-box info-box-amber" style={{marginTop:6,fontSize:11}}>⚠️ Sling angle {f2(worstTheta)}° below 45° minimum — redesign rigging or increase hook height. Reference: ASME B30.9</div>}
-              {worstLeg&&<div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:8,lineHeight:1.8}}>
+              {worstLeg&&<div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:8,lineHeight:1.8}}>
                 Governing (worst-case) leg: <strong style={{color:"var(--orange-500)"}}>{worstLeg.leg}</strong> | θh={f2(worstTheta)}° | K={f3(bestK)}<br/>
                 Formula: d=√[(ΔX)²+(ΔY)²] | H=√(S²−d²) | θv=arctan(d÷H) | θh=90°−θv | K=sin(θh) | S²=d²+H²
               </div>}
@@ -3276,7 +3242,7 @@ const RiggingCalc = () => {
           {/* Results table */}
           {tension>0&&(
             <div style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"14px 16px",marginTop:12}}>
-              <div style={{fontFamily:"var(--font-mono)",fontSize:11,color:"var(--text-secondary)",lineHeight:1.9,marginBottom:10}}>
+              <div style={{fontFamily:"Arial,monospace",fontSize:11,color:"var(--text-secondary)",lineHeight:1.9,marginBottom:10}}>
                 <strong style={{color:"var(--text-orange)"}}>TENSION RESULTS</strong><br/>
                 Design Load: {f3(designLoad)} T = {f2(designLoad*9.81)} kN | Hitch: {hitch==="choker"?"Choker (×0.75)":"Direct (×1.00)"}<br/>
                 Load-bearing legs: {loadBearingN} of {n} | K factor (worst case): {f3(bestK)}
@@ -3291,18 +3257,18 @@ const RiggingCalc = () => {
                     const uc=u>90?"var(--red-400)":u>75?"var(--amber-400)":"var(--green-400)";
                     return(
                       <tr key={leg}>
-                        <td style={{fontFamily:"var(--font-mono)",color:"var(--orange-500)",fontWeight:700}}>{leg}</td>
+                        <td style={{fontFamily:"Arial,monospace",color:"var(--orange-500)",fontWeight:700}}>{leg}</td>
                         <td><span className={`badge ${isLB?"badge-pass":"badge-idle"}`}>{isLB?"LOAD":"BALANCE"}</span></td>
-                        <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{isLB?f3(T):"— (0)"}</td>
-                        <td style={{fontFamily:"var(--font-mono)"}}>{wllT>0?f3(wllT):"—"}</td>
-                        <td style={{fontFamily:"var(--font-mono)"}}>{wllT>0?f3(wllEff):"—"}</td>
-                        <td style={{fontFamily:"var(--font-mono)",color:isLB?uc:"var(--text-muted)"}}>{isLB?`${f2(u)}% ${u>90?"❌":u>75?"⚠️":"✅"}`:"N/A"}</td>
+                        <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{isLB?f3(T):"— (0)"}</td>
+                        <td style={{fontFamily:"Arial,monospace"}}>{wllT>0?f3(wllT):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace"}}>{wllT>0?f3(wllEff):"—"}</td>
+                        <td style={{fontFamily:"Arial,monospace",color:isLB?uc:"var(--text-muted)"}}>{isLB?`${f2(u)}% ${u>90?"❌":u>75?"⚠️":"✅"}`:"N/A"}</td>
                       </tr>
                     );
                   })}</tbody>
                 </table>
               </div>
-              <div style={{marginTop:10,fontFamily:"var(--font-mono)",fontSize:11,color:"var(--text-secondary)",lineHeight:1.9}}>
+              <div style={{marginTop:10,fontFamily:"Arial,monospace",fontSize:11,color:"var(--text-secondary)",lineHeight:1.9}}>
                 Max Tension = <strong style={{color:"var(--blue-400)"}}>{f3(tension)} T</strong><br/>
                 Required WLL ≥ <strong style={{color:"var(--blue-400)"}}>{f3(tension)} T</strong> per load-bearing leg<br/>
                 Your WLL_eff = <strong style={{color:wllEff>=tension?"var(--green-400)":"var(--red-400)"}}>{wllEff>0?f3(wllEff):"—"} T</strong><br/>
@@ -3313,7 +3279,7 @@ const RiggingCalc = () => {
 
           {/* Step-by-step breakdown */}
           {tension>0&&worstLeg&&(
-            <div style={{background:"#0a0a0a",border:"1px solid #1e1e1e",borderLeft:"3px solid var(--orange-700)",borderRadius:"var(--radius-sm)",padding:"14px 18px",marginTop:12,fontFamily:"var(--font-mono)",fontSize:11,lineHeight:2.0,color:"var(--text-secondary)"}}>
+            <div style={{background:"#0a0a0a",border:"1px solid #1e1e1e",borderLeft:"3px solid var(--orange-700)",borderRadius:"var(--radius-sm)",padding:"14px 18px",marginTop:12,fontFamily:"Arial,monospace",fontSize:11,lineHeight:2.0,color:"var(--text-secondary)"}}>
               <strong style={{color:"var(--text-orange)"}}>FULL CALCULATION BREAKDOWN</strong><br/>
               Step 1 — Design Load: W = {glwLinked?`GLW × DAF = ${f3(g.glw)} × ${f2(dafLinked)} = ${f3(designLoad)} T`:`Manual = ${f3(designLoad)} T`}<br/>
               Step 2 — Worst-case plan distance: d = {f3(worstLeg.dPlan)} m (Leg {worstLeg.leg} — largest d, smallest θh)<br/>
@@ -3339,7 +3305,7 @@ const RiggingCalc = () => {
             {/* Isometric */}
             <IsometricView pts={[...effPts.map(p=>({...p,objL:ObjL,objW:toM(objW,objWU)}))]} hookH={worstLeg?.H||0} tension={tension} wllEff={wllEff} designLoad={designLoad} legCount={n}/>
           </div>
-          <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:6}}>
+          <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:6}}>
             ━━━ Load-bearing leg ({loadBearingN} of {n})  &nbsp;  ╌╌╌ Balancing leg  &nbsp;  🟢 &lt;75% SAFE  🟡 75–90% WARN  🔴 &gt;90% CRITICAL
           </div>
 
@@ -3349,18 +3315,18 @@ const RiggingCalc = () => {
             <div className="stat-card" style={{background:worstTheta>=45?"var(--green-bg)":worstTheta>=30?"var(--amber-bg)":worstTheta>0?"var(--red-bg)":""}}>
               <div className="stat-label">Sling Angle Status</div>
               <div style={{fontSize:12,color:angleColor,marginTop:8,lineHeight:1.5}}>{angleStatus}</div>
-              <div style={{fontFamily:"var(--font-mono)",fontSize:13,color:angleColor,fontWeight:700,marginTop:4}}>{worstTheta>0?f2(worstTheta)+"°":"—"}</div>
+              <div style={{fontFamily:"Arial,monospace",fontSize:13,color:angleColor,fontWeight:700,marginTop:4}}>{worstTheta>0?f2(worstTheta)+"°":"—"}</div>
             </div>
             <div className="stat-card" style={{background:util>90?"var(--red-bg)":util>75?"var(--amber-bg)":util>0?"var(--green-bg)":""}}>
               <div className="stat-label">Utilization Status</div>
-              <div style={{fontSize:13,fontFamily:"var(--font-mono)",color:util>90?"var(--red-400)":util>75?"var(--amber-400)":util>0?"var(--green-400)":"var(--text-muted)",fontWeight:700,marginTop:8}}>{util>100?"⛔ OVERLOAD":util>90?"🔴 CRITICAL":util>75?"🟡 WARNING":util>0?"🟢 SAFE":"—"}</div>
+              <div style={{fontSize:13,fontFamily:"Arial,monospace",color:util>90?"var(--red-400)":util>75?"var(--amber-400)":util>0?"var(--green-400)":"var(--text-muted)",fontWeight:700,marginTop:8}}>{util>100?"⛔ OVERLOAD":util>90?"🔴 CRITICAL":util>75?"🟡 WARNING":util>0?"🟢 SAFE":"—"}</div>
             </div>
             <div className="stat-card" style={{background:wllT>0?(wllEff>=tension?"var(--green-bg)":"var(--red-bg)"):""}}> 
               <div className="stat-label">WLL Adequacy</div>
               <div style={{fontSize:12,color:wllT>0?(wllEff>=tension?"var(--green-400)":"var(--red-400)"):"var(--text-muted)",marginTop:8,lineHeight:1.5}}>
                 {wllT>0?(wllEff>=tension?"✅ WLL ADEQUATE":"❌ WLL EXCEEDED — Upgrade slings"):"Enter WLL"}
               </div>
-              {wllT>0&&tension>wllEff&&<div style={{fontFamily:"var(--font-mono)",fontSize:10,color:"var(--red-400)",marginTop:4}}>Required ≥ {f3(tension)} T</div>}
+              {wllT>0&&tension>wllEff&&<div style={{fontFamily:"Arial,monospace",fontSize:10,color:"var(--red-400)",marginTop:4}}>Required ≥ {f3(tension)} T</div>}
             </div>
           </div>
 
@@ -3371,15 +3337,15 @@ const RiggingCalc = () => {
               <thead><tr><th>Angle (θh)</th><th>From Vertical</th><th>K Factor</th><th>Status</th></tr></thead>
               <tbody>{SLING_ANGLE_REF.map(row=>(
                 <tr key={row.deg} className={worstTheta>0&&Math.abs(row.deg-worstTheta)<8?"highlight":""}>
-                  <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{row.deg}°</td>
-                  <td style={{fontFamily:"var(--font-mono)",color:"var(--text-muted)"}}>{row.fromVert}°</td>
-                  <td style={{fontFamily:"var(--font-mono)"}}>{row.k.toFixed(3)}</td>
+                  <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{row.deg}°</td>
+                  <td style={{fontFamily:"Arial,monospace",color:"var(--text-muted)"}}>{row.fromVert}°</td>
+                  <td style={{fontFamily:"Arial,monospace"}}>{row.k.toFixed(3)}</td>
                   <td style={{fontSize:12}}>{row.status}</td>
                 </tr>
               ))}</tbody>
             </table>
           </div>
-          <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginTop:4}}>Reference: ASME B30.9 Table N-1</div>
+          <div style={{fontSize:10,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginTop:4}}>Reference: ASME B30.9 Table N-1</div>
 
         </div>
       </div>
@@ -3570,7 +3536,7 @@ const WindLoad = () => {
                   </div>
                 </div>
                 <div className="form-row" style={{marginTop:4}}><label className="label-calc">Calculated Exposed Area (m²)</label><input className="input-calc" value={f3(calcArea)} readOnly /></div>
-                <div style={{fontSize:11,color:"var(--text-muted)",fontFamily:"var(--font-mono)",marginBottom:8}}>
+                <div style={{fontSize:11,color:"var(--text-muted)",fontFamily:"Arial,monospace",marginBottom:8}}>
                   Exposed Face Area = {
                     areaShape==="RECTANGLE"?`W × H`:areaShape==="CIRCLE"?`π × (D÷2)²`:areaShape==="HOLLOW_CIRCLE"?`π×[(OD÷2)²−(ID÷2)²]`:
                     areaShape==="TRIANGLE"?`0.5 × B × H`:areaShape==="TRAPEZOID"?`0.5 × (a+b) × H`:areaShape==="ELLIPSE"?`π × a × b`:
@@ -3749,7 +3715,7 @@ const Dashboard = () => {
                 ].map(([name,util,limit,action])=>(
                   <tr key={name}>
                     <td style={{color:"var(--text-primary)",fontWeight:500}}>{name}</td>
-                    <td style={{fontFamily:"var(--font-mono)",color:util>90?"var(--red-400)":util>75?"var(--amber-400)":"var(--green-400)"}}>{util>0?`${fN(util,1)}%`:"—"}</td>
+                    <td style={{fontFamily:"Arial,monospace",color:util>90?"var(--red-400)":util>75?"var(--amber-400)":"var(--green-400)"}}>{util>0?`${fN(util,1)}%`:"—"}</td>
                     <td><span className={`badge ${util>90?"badge-fail":util>75?"badge-warn":util>0?"badge-pass":"badge-idle"}`}>{util>90?"❌ FAIL":util>75?"⚠️ WARN":util>0?"✅ PASS":"—"}</span></td>
                     <td style={{color:"var(--text-muted)",fontSize:11}}>{limit}</td>
                     <td style={{fontSize:11,color:util>90?"var(--red-400)":util>75?"var(--amber-400)":"var(--text-muted)"}}>{action}</td>
@@ -3757,7 +3723,7 @@ const Dashboard = () => {
                 ))}
                 <tr>
                   <td style={{color:"var(--text-primary)",fontWeight:500}}>Wind Load</td>
-                  <td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{windForce>0?`${fN(windForce,2)} kN`:"—"}</td>
+                  <td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{windForce>0?`${fN(windForce,2)} kN`:"—"}</td>
                   <td><span className="badge badge-idle">INFO</span></td>
                   <td style={{color:"var(--text-muted)",fontSize:11}}>{"< 10 m/s"}</td>
                   <td style={{fontSize:11,color:"var(--text-muted)"}}>Monitor wind conditions</td>
@@ -3784,7 +3750,7 @@ const Dashboard = () => {
             ].map(([l,v])=>(
               <div className="stat-card" key={l}>
                 <div className="stat-label">{l}</div>
-                <div style={{fontFamily:"var(--font-mono)",fontSize:13,color:"var(--blue-400)",marginTop:4}}>{v}</div>
+                <div style={{fontFamily:"Arial,monospace",fontSize:13,color:"var(--blue-400)",marginTop:4}}>{v}</div>
               </div>
             ))}
           </div>
@@ -3864,7 +3830,7 @@ const RiggingEquipRef = () => {
           <div className="table-wrap"><table className="data-table">
             <thead><tr><th>WLL (T)</th><th>Legs</th><th>Rope Dia</th><th>Construction</th><th>End Fitting</th><th>FoS</th><th>Standard</th></tr></thead>
             <tbody>{WIRE_SLINGS.filter(r=>!filter||Object.values(r).some(v=>String(v).toLowerCase().includes(filter.toLowerCase()))).map((r,i)=>(
-              <tr key={i}><td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{r.wll}</td><td>{r.legs}</td><td>{r.dia}</td><td>{r.const}</td><td>{r.end}</td><td>{r.fos}</td><td className="std-tag">{r.std}</td></tr>
+              <tr key={i}><td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{r.wll}</td><td>{r.legs}</td><td>{r.dia}</td><td>{r.const}</td><td>{r.end}</td><td>{r.fos}</td><td className="std-tag">{r.std}</td></tr>
             ))}</tbody>
           </table></div>
         )}
@@ -3872,9 +3838,9 @@ const RiggingEquipRef = () => {
           <div className="table-wrap"><table className="data-table">
             <thead><tr><th>WLL (T)</th><th>Colour</th><th>Basket (T)</th><th>Circumference</th><th>FoS</th></tr></thead>
             <tbody>{ROUND_SLINGS.filter(r=>!filter||r.color.toLowerCase().includes(filter.toLowerCase())).map((r,i)=>(
-              <tr key={i}><td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{r.wll}</td>
+              <tr key={i}><td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{r.wll}</td>
                 <td><div style={{display:"flex",alignItems:"center",gap:8}}><div style={{width:12,height:12,borderRadius:"50%",background:colorMap[r.color]||"#999"}}/>{r.color}</div></td>
-                <td style={{fontFamily:"var(--font-mono)"}}>{r.basket}</td><td>{r.circ}</td><td>{r.fos}</td></tr>
+                <td style={{fontFamily:"Arial,monospace"}}>{r.basket}</td><td>{r.circ}</td><td>{r.fos}</td></tr>
             ))}</tbody>
           </table></div>
         )}
@@ -3882,7 +3848,7 @@ const RiggingEquipRef = () => {
           <div className="table-wrap"><table className="data-table">
             <thead><tr><th>WLL (T)</th><th>Type</th><th>Pin Dia</th><th>MBL (T)</th><th>FoS</th><th>Marking</th></tr></thead>
             <tbody>{SHACKLES.filter(r=>!filter||r.type.toLowerCase().includes(filter.toLowerCase())).map((r,i)=>(
-              <tr key={i}><td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{r.wll}</td><td>{r.type}</td><td>{r.pin}</td><td style={{fontFamily:"var(--font-mono)"}}>{r.mbl}</td><td>{r.fos}</td><td style={{fontSize:10,color:"var(--text-muted)"}}>{r.mark}</td></tr>
+              <tr key={i}><td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{r.wll}</td><td>{r.type}</td><td>{r.pin}</td><td style={{fontFamily:"Arial,monospace"}}>{r.mbl}</td><td>{r.fos}</td><td style={{fontSize:10,color:"var(--text-muted)"}}>{r.mark}</td></tr>
             ))}</tbody>
           </table></div>
         )}
@@ -3890,7 +3856,7 @@ const RiggingEquipRef = () => {
           <div className="table-wrap"><table className="data-table">
             <thead><tr><th>WLL (T)</th><th>Thread</th><th>Axial WLL</th><th>@ 30°</th><th>@ 45°</th><th>@ 60°</th><th>Material</th></tr></thead>
             <tbody>{EYEBOLTS.map((r,i)=>(
-              <tr key={i}><td style={{fontFamily:"var(--font-mono)",color:"var(--blue-400)"}}>{r.wll}</td><td>{r.thread}</td>
+              <tr key={i}><td style={{fontFamily:"Arial,monospace",color:"var(--blue-400)"}}>{r.wll}</td><td>{r.thread}</td>
                 <td style={{color:"var(--green-400)"}}>{r.axial}</td><td style={{color:"var(--amber-400)"}}>{r.a30}</td>
                 <td style={{color:"var(--amber-400)"}}>{r.a45}</td><td style={{color:"var(--red-400)"}}>{r.a60}</td><td>{r.mat}</td></tr>
             ))}</tbody>
@@ -4038,7 +4004,7 @@ const CraneConfig = () => {
     {k:"outriggers",l:"Outriggers Fully Extended",        hide:!isMobile},
     {k:"pads",l:"Outrigger Pads Installed",               hide:!isMobile},
     {k:"mats",l:"Ground Mats / Cribbing Installed",       hide:false},
-    {k:"boomAngle",l:"Boom Angle ≥ 30° (ASME B30.5 §5-1.3.2)"},
+    {k:"boomAngle",l:"Boom Angle ≥ 30° (ASME B30.5 Sec.5-1.3.2)"},
     {k:"antiBlock",l:"Anti-Two-Block Device Fitted & Functional"},
     {k:"lmi",l:"Load Moment Indicator (LMI) Functional"},
     {k:"anemometer",l:"Anemometer Fitted & Functional"},
@@ -4228,7 +4194,7 @@ const LiftSequence = () => {
         {steps.map((s,i)=>(
           <div key={i} style={{background:s.critical?"rgba(249,115,22,0.05)":"var(--bg-section)",border:`1px solid ${s.critical?"var(--border-orange)":"var(--border-subtle)"}`,borderRadius:"var(--radius-md)",padding:12,marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-              <span style={{fontFamily:"var(--font-mono)",color:"var(--orange-500)",fontSize:13,fontWeight:600,minWidth:24}}>#{i+1}</span>
+              <span style={{fontFamily:"Arial,monospace",color:"var(--orange-500)",fontSize:13,fontWeight:600,minWidth:24}}>#{i+1}</span>
               <input className="input-user no-unit" style={{flex:1}} value={s.desc} placeholder="Step description..." onChange={e=>up(i,"desc",e.target.value)} />
               {steps.length>1 && <button className="btn btn-ghost btn-sm" onClick={()=>rm(i)}>✕</button>}
             </div>
@@ -4399,7 +4365,7 @@ const Redundancy = () => {
 
 // ── MODULE 18: GLOSSARY ────────────────────────────────────────────────────────
 const GLOSSARY = [
-  {term:"GLW",def:"Gross Lift Weight — total mass applied to crane hook including rigging allowances and contingency",formula:"GLW = W × (1 + r/100) × (1 + c/100)",std:"ISO 12480-1 §7.2"},
+  {term:"GLW",def:"Gross Lift Weight — total mass applied to crane hook including rigging allowances and contingency",formula:"GLW = W × (1 + r/100) × (1 + c/100)",std:"ISO 12480-1 Sec.7.2"},
   {term:"WLL",def:"Working Load Limit — maximum load a lifting component is designed to handle in normal service conditions",std:"ASME B30.9"},
   {term:"SWL",def:"Safe Working Load — older terminology equivalent to WLL; still used in legacy standards",std:"BS 7121-1"},
   {term:"MBL",def:"Minimum Breaking Load — minimum force required to cause failure; typically 5× WLL for rigging",std:"EN 13889"},
@@ -4413,7 +4379,7 @@ const GLOSSARY = [
   {term:"LOLER",def:"Lifting Operations and Lifting Equipment Regulations 1998 — UK statutory regulation for safe lifting",std:"LOLER 1998"},
   {term:"PUWER",def:"Provision and Use of Work Equipment Regulations 1998 — requires equipment to be suitable and maintained",std:"PUWER 1998"},
   {term:"Critical Lift",def:"A lift requiring additional planning and controls due to elevated risk factors",std:"BS 7121-1 / ASME B30.5"},
-  {term:"Tandem Lift",def:"A lift where two or more cranes work together to lift a single load",std:"BS 7121-3 §12"},
+  {term:"Tandem Lift",def:"A lift where two or more cranes work together to lift a single load",std:"BS 7121-3 Sec.12"},
   {term:"Blind Lift",def:"A lift where the crane operator cannot see the load or landing area directly",std:"BS 7121-1"},
   {term:"Outrigger",def:"Extendable jacks on a mobile crane that distribute the crane's weight and reaction forces to the ground",std:"ASME B30.5"},
   {term:"Radius",def:"The horizontal distance from the crane's slew axis (centre pin) to the hook block",std:"ISO 9374-1"},
@@ -4432,11 +4398,11 @@ const Glossary = () => {
         {terms.map(t=>(
           <div key={t.term} style={{padding:"10px 14px",borderBottom:"1px solid var(--border-subtle)"}}>
             <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:4}}>
-              <span style={{fontFamily:"var(--font-mono)",color:"var(--orange-500)",fontWeight:600,fontSize:14,minWidth:120}}>{t.term}</span>
+              <span style={{fontFamily:"Arial,monospace",color:"var(--orange-500)",fontWeight:600,fontSize:14,minWidth:120}}>{t.term}</span>
               {t.std && <span className="std-tag">{t.std}</span>}
             </div>
             <div style={{fontSize:12,color:"var(--text-secondary)",lineHeight:1.6}}>{t.def}</div>
-            {t.formula && <div style={{fontFamily:"var(--font-mono)",fontSize:11,color:"var(--blue-400)",marginTop:4}}>{t.formula}</div>}
+            {t.formula && <div style={{fontFamily:"Arial,monospace",fontSize:11,color:"var(--blue-400)",marginTop:4}}>{t.formula}</div>}
           </div>
         ))}
       </div>
@@ -4508,7 +4474,7 @@ const PythagoreanCalc = () => {
 
           <div className="section-heading">Live Diagram</div>
           <div className="svg-diagram" style={{padding:8}}>
-            <svg width="100%" viewBox={`0 0 ${svgW} ${svgH}`} style={{fontFamily:"var(--font-mono)"}}>
+            <svg width="100%" viewBox={`0 0 ${svgW} ${svgH}`} style={{fontFamily:"Arial,monospace"}}>
               <line x1={0} y1={oy} x2={svgW} y2={oy} stroke="var(--border-strong)" strokeWidth="1.5"/>
               {A>0&&B>0&&C>0?<>
                 <line x1={ox} y1={oy} x2={bpX} y2={bpY} stroke="var(--orange-500)" strokeWidth="2" strokeLinecap="round"/>
@@ -4533,12 +4499,12 @@ const PythagoreanCalc = () => {
           <div className="section-heading">Practical Applications</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
             {[["Sling Geometry","A = horiz. distance\nB = hook height H\nC = sling length S\nθh = sling angle\nK = sin(θh)","ASME B30.9"],
-              ["Boom Geometry","A = working radius R\nB = boom tip height\nC = boom length L\nα = arccos(A÷C)","ASME B30.5 §5-1.3.2"],
+              ["Boom Geometry","A = working radius R\nB = boom tip height\nC = boom length L\nα = arccos(A÷C)","ASME B30.5 Sec.5-1.3.2"],
               ["Pipeline Slope","A = horizontal run\nB = vertical rise\nC = pipe length\nGradient = B÷A×100%","ISO 80000-2:2019"],
             ].map(([t,d,s])=>(
               <div key={t} style={{background:"var(--bg-section)",border:"1px solid var(--border-default)",borderRadius:"var(--radius-md)",padding:"12px 14px"}}>
                 <div style={{fontFamily:"var(--font-display)",fontSize:11,letterSpacing:"0.1em",textTransform:"uppercase",color:"var(--text-orange)",marginBottom:8}}>{t}</div>
-                <div style={{fontFamily:"var(--font-mono)",fontSize:11,color:"var(--text-secondary)",lineHeight:1.8,whiteSpace:"pre-line"}}>{d}</div>
+                <div style={{fontFamily:"Arial,monospace",fontSize:11,color:"var(--text-secondary)",lineHeight:1.8,whiteSpace:"pre-line"}}>{d}</div>
                 <div style={{fontSize:10,color:"var(--text-muted)",marginTop:6}}>Ref: {s}</div>
               </div>
             ))}
@@ -4613,76 +4579,122 @@ const ModulePlaceholder = ({id}) => (
 // ── MODULE RENDERER ────────────────────────────────────────────────────────────
 const COMPS = [ProjectInfo,WeightCalc,CraneSelection,GBP,RiggingCalc,WindLoad,COGCalc,Dashboard,RiggingEquipRef,DiscardCriteria,ProofLoad,CraneConfig,Weather,HumanFactor,LiftSequence,ExclusionZone,DroppedObject,Redundancy,PythagoreanCalc,UnitConverter];
 
+// ── ABOUT MODAL ───────────────────────────────────────────────────────────────
+const AboutModal = ({onClose}) => {
+  const handleOverlay = e => { if(e.target===e.currentTarget) onClose(); };
+  useEffect(()=>{
+    const handler = e => { if(e.key==="Escape") onClose(); };
+    document.addEventListener("keydown",handler);
+    return ()=>document.removeEventListener("keydown",handler);
+  },[]);
+  const standards = [
+    "ISO 12480-1","BS 7121-1/2/3","ASME B30.9","ASME B30.5",
+    "LOLER 1998","CIRIA C703","EN 1997-1 (EC7)","ASME P30.1",
+    "BS EN 1492-1/2","ISO 4309","ASME BTH-1","DNVGL-ST-N001",
+  ];
+  return (
+    <div className="about-overlay" onClick={handleOverlay}>
+      <div className="about-modal">
+        <div className="about-header">
+          <div>
+            <div style={{display:"flex",alignItems:"baseline",gap:5,marginBottom:4}}>
+              <span style={{fontFamily:"Arial Black,Arial,sans-serif",fontSize:22,fontWeight:900,color:"#ffffff"}}>RigCalc</span>
+              <span style={{fontFamily:"Arial Black,Arial,sans-serif",fontSize:22,fontWeight:900,color:"#c00000"}}>Pro</span>
+            </div>
+            <div style={{fontFamily:"Arial,sans-serif",fontSize:11,color:"#9ca3af",letterSpacing:"0.1em",textTransform:"uppercase"}}>
+              Lifting &amp; Rigging Engineering Suite
+            </div>
+            <div style={{display:"inline-flex",alignItems:"center",gap:6,marginTop:10,
+              background:"rgba(192,0,0,0.15)",border:"1px solid rgba(192,0,0,0.30)",
+              borderRadius:4,padding:"3px 10px"}}>
+              <span style={{width:6,height:6,borderRadius:"50%",background:"#c00000",display:"inline-block"}}/>
+              <span style={{fontFamily:"Arial,monospace",fontSize:11,color:"#fca5a5",letterSpacing:"0.06em"}}>Version 1.0</span>
+            </div>
+          </div>
+          <button className="about-close" onClick={onClose} title="Close (Esc)">✕</button>
+        </div>
+        <div className="about-body">
+          <div className="about-row">
+            <span className="about-key">Developer</span>
+            <span className="about-val" style={{fontWeight:700}}>Althaf Sali</span>
+          </div>
+          <div className="about-row">
+            <span className="about-key">Contact</span>
+            <span className="about-val">
+              <a href="mailto:Althafsali.p@gmail.com?subject=RigCalc Pro Enquiry">Althafsali.p@gmail.com</a>
+            </span>
+          </div>
+          <div className="about-row">
+            <span className="about-key">Modules</span>
+            <span className="about-val">20 engineering calculation modules</span>
+          </div>
+          <div className="about-row">
+            <span className="about-key">Purpose</span>
+            <span className="about-val">Precision lift planning and rigging calculation tool for Experts</span>
+          </div>
+          <div className="about-row" style={{alignItems:"flex-start"}}>
+            <span className="about-key" style={{paddingTop:2}}>Standards</span>
+            <div className="about-val">
+              <div className="about-std-grid">
+                {standards.map(s=>(<div key={s} className="about-std-item">{s}</div>))}
+              </div>
+            </div>
+          </div>
+          <div style={{marginTop:16,padding:"12px 14px",background:"#fffbeb",
+            border:"1px solid #fde68a",borderLeft:"3px solid #d97706",borderRadius:6,
+            fontFamily:"Arial,sans-serif",fontSize:11,color:"#78350f",lineHeight:1.7}}>
+            ⚠ This tool is for engineering guidance only. All lift plans must be reviewed
+            and approved by a competent person before execution. Refer to applicable
+            standards and site-specific requirements.
+          </div>
+          <div style={{textAlign:"center",marginTop:20}}>
+            <button className="btn btn-primary" style={{minWidth:120,fontFamily:"Arial,sans-serif"}} onClick={onClose}>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ── TOPBAR ─────────────────────────────────────────────────────────────────────
-// ── TOPBAR ─────────────────────────────────────────────────────────────────────
-const Topbar = ({liftStatus,hasUnsaved}) => {
+const Topbar = ({liftStatus,hasUnsaved,onAbout}) => {
   const {clearAll} = useContext(AppCtx);
-  const bannerText = liftStatus==="pass"?"✅ ALL CHECKS PASS — LIFT APPROVED":liftStatus==="warn"?"⚠️ WARNING — REVIEW REQUIRED":liftStatus==="fail"?"❌ STOP — LIFT NOT APPROVED":"⏳ ENTER DATA TO BEGIN";
+  const bannerText = liftStatus==="pass"?"✅ ALL CHECKS PASS — LIFT APPROVED"
+    :liftStatus==="warn"?"⚠️ WARNING — REVIEW REQUIRED"
+    :liftStatus==="fail"?"❌ STOP — LIFT NOT APPROVED"
+    :"⏳ ENTER DATA TO BEGIN";
   return (
     <div className="topbar">
 
-      {/* ── LEFT: BRAND ── */}
       <div className="topbar-brand">
+        {/* Actual logo image — resized to 62px height, 4KB JPEG */}
+        <img src="data:image/jpeg;base64,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" alt="RigCalc Pro" style={{height:"82px",width:"auto",objectFit:"contain",display:"block",flexShrink:0}}/>
 
-        {/* Logo Mark */}
-        <div className="logo-mark">
-          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 4 L4 4 L4 40 L6 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-            <path d="M38 4 L40 4 L40 40 L38 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-            <rect x="8" y="7" width="28" height="4" rx="1" fill="#f97316" opacity="0.9"/>
-            <line x1="22" y1="11" x2="22" y2="20" stroke="#f97316" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M19 20 L25 20 L25 24 Q25 30 19 30 Q15 30 15 25.5 Q15 22 18 22" stroke="#f97316" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="18" cy="22" r="1.5" fill="#f97316"/>
-            <line x1="22" y1="30" x2="17" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.7"/>
-            <line x1="22" y1="30" x2="27" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.7"/>
-            <rect x="13" y="34" width="18" height="5" rx="1.5" fill="rgba(249,115,22,0.18)" stroke="#f97316" strokeWidth="1.2"/>
-            <circle cx="35" cy="9" r="2" fill="#f97316" opacity="0.5"/>
-          </svg>
-        </div>
-
-        {/* Wordmark + Tagline */}
-        <div className="logo-text-block">
-          <div className="logo-wordmark">
-            <em>Rig</em>Calc<em>Pro</em>
-          </div>
-          <div className="logo-tagline">Lifting &amp; Rigging Engineering Suite&nbsp;·&nbsp;v1.0</div>
-        </div>
-
-        {/* Vertical divider */}
-        <div className="logo-divider"/>
-
-        {/* Author credit */}
-        <div className="topbar-author-block">
-          <div className="topbar-author-name">Althaf Sali</div>
-          <a href="mailto:Althafsali.p@gmail.com" className="topbar-author-email" title="Send email">
-            Althafsali.p@gmail.com
-          </a>
-        </div>
 
       </div>
 
-      {/* ── CENTRE: STATUS BANNER ── */}
       <span className={`banner banner-${liftStatus||"idle"}`}>{bannerText}</span>
 
-      {/* ── RIGHT: ACTIONS ── */}
-      <div style={{display:"flex",gap:10,alignItems:"center"}}>
-        {hasUnsaved && (
-          <div style={{display:"flex",alignItems:"center",gap:5}}>
-            <div className="unsaved-dot"/>
-            <span className="unsaved-label">Unsaved Session</span>
-          </div>
-        )}
-        <button className="btn btn-ghost btn-sm" onClick={clearAll} title="Clear all session data">🗑️ Clear All</button>
-        <div style={{height:24,width:1,background:"#222"}}/>
-        <span style={{fontFamily:"var(--font-mono)",fontSize:9,color:"#404040",letterSpacing:"0.1em",textTransform:"uppercase"}}>
-          ISO 12480-1 · BS 7121 · ASME B30
+      <div style={{display:"flex",gap:8,alignItems:"center"}}>
+        {hasUnsaved&&<div style={{display:"flex",alignItems:"center",gap:5}}>
+          <div className="unsaved-dot"/>
+          <span className="unsaved-label">Unsaved</span>
+        </div>}
+        <button className="btn btn-ghost btn-sm" onClick={clearAll}>🗑 Clear</button>
+        <div style={{height:20,width:1,background:"#e5e7eb"}}/>
+        <span style={{fontFamily:"Arial,monospace",fontSize:9,color:"#374151",letterSpacing:"0.06em"}}>
+          ISO 12480 · BS 7121 · ASME B30
         </span>
+        <div style={{height:20,width:1,background:"#e5e7eb"}}/>
+        <button className="about-btn-info" onClick={onAbout} title="About RigCalc Pro">ℹ</button>
       </div>
 
     </div>
   );
 };
-// ── SIDEBAR ────────────────────────────────────────────────────────────────────
+
 const Sidebar = ({active,setActive,g}) => {
   const getStatus = (id) => {
     if(id===1&&g?.glw>0) return "pass";
@@ -4713,12 +4725,13 @@ const Sidebar = ({active,setActive,g}) => {
 };
 
 // ── ROOT APP ───────────────────────────────────────────────────────────────────
-export default function RigCalcPro() {
+export default function App() {
   const [activeModule,setActiveModule]=useState(0);
   const [g,setG]=useState(()=>{ const s=loadStore(); return s.g||{}; });
   const [modInputs,setModInputs]=useState(()=>{ const s=loadStore(); return s.modInputs||{}; });
   const [hasUnsaved,setHasUnsaved]=useState(false);
   const [showBackTop,setShowBackTop]=useState(false);
+  const [showAbout,setShowAbout]=useState(false);
 
   // FIX 7: Scroll to top on every module change
   useEffect(()=>{
@@ -4753,9 +4766,7 @@ export default function RigCalcPro() {
   },[g]);
 
   const clearAll = () => {
-    if(window.confirm("Clear all session data? This cannot be undone.")) {
-      setG({}); setModInputs({}); localStorage.removeItem(STORE_KEY); setHasUnsaved(false);
-    }
+    setG({}); setModInputs({}); localStorage.removeItem(STORE_KEY); setHasUnsaved(false);
   };
 
   const Comp = COMPS[activeModule]||ModulePlaceholder;
@@ -4764,28 +4775,40 @@ export default function RigCalcPro() {
     <AppCtx.Provider value={{g,updateG,modInputs,setModInputs,hasUnsaved,setHasUnsaved,clearAll}}>
       <style>{CSS}</style>
       <div className="app-root">
-        <Topbar liftStatus={liftStatus} hasUnsaved={hasUnsaved} />
+        <Topbar liftStatus={liftStatus} hasUnsaved={hasUnsaved} onAbout={()=>setShowAbout(true)} />
         <div className="app-body">
           <Sidebar active={activeModule} setActive={setActiveModule} g={g} />
           <div className="content">
             {activeModule<COMPS.length ? <Comp /> : <ModulePlaceholder id={activeModule} />}
             <RefPanel moduleId={activeModule} />
             <ModuleNavBar activeModule={activeModule} setActiveModule={setActiveModule} />
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 20px",borderTop:"1px solid #1e1e1e",marginTop:16,background:"#0d0d0d"}}>
-              <div style={{display:"flex",alignItems:"center",gap:12}}>
-                <svg width="22" height="22" viewBox="0 0 44 44" fill="none"><path d="M6 4L4 4L4 40L6 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round"/><path d="M38 4L40 4L40 40L38 40" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round"/><rect x="8" y="7" width="28" height="4" rx="1" fill="#f97316" opacity="0.8"/><line x1="22" y1="11" x2="22" y2="20" stroke="#f97316" strokeWidth="2" strokeLinecap="round"/><path d="M19 20L25 20L25 24Q25 30 19 30Q15 30 15 25.5Q15 22 18 22" stroke="#f97316" strokeWidth="2" fill="none" strokeLinecap="round"/><circle cx="18" cy="22" r="1.5" fill="#f97316"/><line x1="22" y1="30" x2="17" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.6"/><line x1="22" y1="30" x2="27" y2="34" stroke="#f97316" strokeWidth="1.2" strokeDasharray="2,1.5" opacity="0.6"/><rect x="13" y="34" width="18" height="5" rx="1.5" fill="rgba(249,115,22,0.15)" stroke="#f97316" strokeWidth="1.2"/></svg>
-                <div>
-                  <div style={{fontFamily:"var(--font-display)",fontSize:11,fontWeight:900,letterSpacing:"0.06em",background:"linear-gradient(135deg,#fff,#aaa)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>RigCalc<span style={{background:"linear-gradient(135deg,#f97316,#fb923c)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Pro</span></div>
-                  <div style={{fontFamily:"var(--font-mono)",fontSize:9,color:"#333",letterSpacing:"0.1em",textTransform:"uppercase"}}>v1.0 · Lifting &amp; Rigging Engineering Suite</div>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 20px",borderTop:"1px solid #e5e7eb",marginTop:16,background:"#f8f9fa"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <div style={{fontFamily:"'Arial Black',Arial,sans-serif",fontSize:13,fontWeight:900,color:"#1a1a1a",display:"flex",alignItems:"baseline",gap:4}}>
+                  <span>RigCalc</span><span style={{color:"#c00000"}}>Pro</span>
+                </div>
+                <div style={{width:1,height:16,background:"#d1d5db"}}/>
+                <div style={{fontFamily:"Arial,sans-serif",fontSize:10,color:"#6b7280",letterSpacing:"0.06em"}}>
+                  Precision Engineering For Every Lift &nbsp;·&nbsp; v1.0
                 </div>
               </div>
-              <div style={{textAlign:"right"}}>
-                <div style={{fontFamily:"var(--font-display)",fontSize:11,fontWeight:700,color:"#c8a97a",letterSpacing:"0.08em",textTransform:"uppercase"}}>Althaf Sali</div>
-                <a href="mailto:Althafsali.p@gmail.com" style={{fontFamily:"var(--font-mono)",fontSize:10,color:"#333",textDecoration:"none",letterSpacing:"0.02em"}} onMouseOver={e=>e.target.style.color='#f97316'} onMouseOut={e=>e.target.style.color='#333'}>Althafsali.p@gmail.com</a>
+              <div style={{display:"flex",alignItems:"center",gap:6}}>
+                <span style={{color:"#d1d5db",fontSize:10}}>|</span>
+                <a href="mailto:Althafsali.p@gmail.com?subject=RigCalc Pro Enquiry"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{fontFamily:"Arial,sans-serif",fontSize:11,color:"#4b5563",
+                    textDecoration:"none",cursor:"pointer",
+                    borderBottom:"1px dotted #9ca3af"}}
+                  onMouseOver={e=>{e.target.style.color='#c00000';e.target.style.borderBottomColor='#c00000'}}
+                  onMouseOut={e=>{e.target.style.color='#4b5563';e.target.style.borderBottomColor='#9ca3af'}}>
+                  Althafsali.p@gmail.com
+                </a>
               </div>
             </div>
           </div>
         </div>
+        {showAbout && <AboutModal onClose={()=>setShowAbout(false)} />}
         <button className={`btn-back-top ${showBackTop?"visible":""}`}
           onClick={()=>{const el=document.querySelector('.content');if(el)el.scrollTo({top:0,behavior:'smooth'});}}
           title="Back to top">↑</button>
