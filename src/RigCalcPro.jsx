@@ -195,6 +195,7 @@ const MODULES = [
   {id:17,icon:"🔄",label:"Redundancy Check"},
   {id:18,icon:"📐",label:"Pythagorean Calculator"},
   {id:19,icon:"📏",label:"Unit Converter"},
+  {id:20,icon:"🔍",label:"Knowledge Search"},
 ];
 
 // ── UTILITY HELPERS ────────────────────────────────────────────────────────────
@@ -4561,7 +4562,4278 @@ const ModulePlaceholder = ({id}) => (
 );
 
 // ── MODULE RENDERER ────────────────────────────────────────────────────────────
-const COMPS = [ProjectInfo,WeightCalc,CraneSelection,GBP,RiggingCalc,WindLoad,COGCalc,Dashboard,RiggingEquipRef,DiscardCriteria,ProofLoad,CraneConfig,Weather,HumanFactor,LiftSequence,ExclusionZone,DroppedObject,Redundancy,PythagoreanCalc,UnitConverter];
+
+// ── MODULE 20: KNOWLEDGE SEARCH ───────────────────────────────────────────────
+// Fully offline — no API, no cloud. Knowledge base embedded directly.
+
+const KB = [
+  // ── SLING ANGLES ────────────────────────────────────────────────────────────
+  {tags:["sling angle","minimum angle","angle","sling","degree","60","45","30"],
+   q:"What is the minimum sling angle?",
+   a:`SLING ANGLE — COMPLETE GUIDE
+
+Definition:
+The sling angle is the angle between the sling leg and the horizontal plane. As the angle decreases, the tension (load) in each sling leg increases dramatically.
+
+Recommended Minimum Angles:
+• Preferred minimum: 60° from horizontal
+• Acceptable minimum: 45° from horizontal  
+• Absolute minimum: 30° from horizontal (special circumstances only)
+• Below 30°: PROHIBITED — sling forces become excessive
+
+Tension Multiplication Factors (per leg):
+• 90° (vertical): factor = 1.000
+• 60°: factor = 1.155 (15.5% increase)
+• 45°: factor = 1.414 (41.4% increase)
+• 30°: factor = 2.000 (100% increase — double the vertical load!)
+• 20°: factor = 2.924
+• 10°: factor = 5.759
+
+Formula:
+Leg Tension = (Load / Number of Legs) × (1 / sin θ)
+
+Worked Example:
+Load = 10T, 2-leg sling at 45°
+Leg tension = (10/2) × (1/sin45°) = 5 × 1.414 = 7.07T per leg
+
+WLL Requirement:
+Each sling leg WLL must exceed the calculated leg tension with appropriate safety factor.
+
+📋 ASME B30.9 Sec.9-1.7 — Sling angle limitations
+📋 BS EN 1492-1 Sec.6.3 — Angle factors for flat slings
+📋 ISO 12480-1 Sec.7.3 — Rigging geometry requirements
+📋 LEEA COPSULE Sec.5 — Sling angle guidance
+
+⚠ Related Considerations:
+• Always check D/d ratio for wire rope slings around load
+• Horizontal force on load increases at shallow angles — check structural integrity
+• Use a spreader beam to improve sling angle when headroom is limited`},
+
+  // ── CRITICAL LIFT ───────────────────────────────────────────────────────────
+  {tags:["critical lift","critical","when is","classify","classification","criteria"],
+   q:"When is a lift classified as critical?",
+   a:`CRITICAL LIFT CLASSIFICATION
+
+A lift is classified as Critical when ANY ONE of the following criteria is met:
+
+LOLER 1998 Criteria (UK):
+• Load exceeds 75% of crane's rated capacity at that radius
+• Person is suspended or could be lifted
+• Load is over live plant, process equipment, or occupied buildings
+• Two or more cranes are used simultaneously (tandem/multiple crane lift)
+• Non-standard rigging arrangements are required
+• Load has unidentified or uncertain centre of gravity
+• Lift in close proximity to overhead power lines
+• Lift over water, hazardous areas, or public areas
+
+ASME P30.1 Criteria (USA):
+• Exceeds 75% of rated capacity
+• Involves more than one crane
+• Involves personnel
+• Custom rigging/engineered lifts
+• Near power lines (within Table 1 distances)
+• Over occupied buildings or areas
+• Load value exceeds defined threshold (site-specific)
+
+Additional Industry Criteria:
+• Load weight unknown or estimated (not weighed/calculated)
+• Blind lift — rigger cannot see load during entire operation
+• Night operations with reduced visibility
+• Marine/offshore lifts
+• Loads suspended over live process lines
+
+Critical Lift Requirements:
+1. Written Lift Plan mandatory
+2. Competent Person designated and named
+3. Pre-lift meeting with all personnel
+4. Engineering calculations independently checked
+5. Crane load chart verified by engineer
+6. Ground conditions assessed and approved
+7. Dedicated banksman/signal person
+
+📋 LOLER 1998 Regulation 8 — Organising lifting operations
+📋 ASME P30.1 Sec.5.3 — Critical lifts definition
+📋 BS 7121-1 Sec.9 — Special lifts and critical lift planning
+📋 ISO 12480-1 Sec.6 — Lifting operation planning
+📋 DNVGL-ST-N001 Sec.9 — Critical lifts offshore
+
+⚠ Related Considerations:
+• All critical lifts require a Lift Plan reviewed by a competent person
+• Near-capacity lifts require de-rating checks for ground conditions
+• Tandem lifts require load sharing analysis and synchronised communication plan`},
+
+  // ── PRE-LIFT INSPECTION ─────────────────────────────────────────────────────
+  {tags:["inspection","pre-lift","before","check","before lift","pre lift","pre-use"],
+   q:"What inspection is required before each lift?",
+   a:`PRE-LIFT INSPECTION REQUIREMENTS
+
+Pre-Use Inspection (Every Use):
+All lifting equipment must be visually inspected before each use by the operator/rigger.
+
+RIGGING EQUIPMENT — Check Every Time:
+Wire Rope Slings:
+• Kinking, crushing, birdcaging, core protrusion
+• Broken wires — count over any 6d or 30d length
+• Corrosion, heat damage, chemical damage
+• End attachments — swage integrity, hooks, shackles
+• Tags/markings — WLL, serial number legible
+
+Chain Slings:
+• Stretch — compare link length to new (max 5% elongation)
+• Bent, twisted, or damaged links
+• Nicks, gouges (>10% reduction in cross-section = discard)
+• Hooks, rings, master links
+
+Synthetic Slings (Webbing/Round):
+• Cuts, tears, abrasions through outer cover
+• UV degradation, bleaching
+• Chemical staining or contamination
+• Overloading damage — broken stitching, distortion
+
+Hardware (Shackles, Hooks, Eye Bolts):
+• Deformation, cracks, nicks, gouges
+• Thread engagement on pins (minimum full thread)
+• Safety pin/mousing on hooks
+• Shackle pin — correct size and locked
+
+CRANE — Pre-Use Checks:
+• Load chart available and legible in cab
+• Outriggers/crawlers — ground conditions
+• Crane level within manufacturer tolerance
+• All safety devices functional (LMI, anti-two-block)
+• Hydraulic fluid, fuel levels
+• Swing, hoist, derricking functions clear
+• Communication devices checked
+
+Formal Thorough Examination Schedule:
+• All lifting equipment: 12-month intervals minimum
+• Lifting equipment used to lift persons: 6-month intervals
+• All after significant event (overload, accident, major repair)
+
+📋 LOLER 1998 Regulation 9 — Thorough examination and inspection
+📋 PUWER 1998 Regulation 6 — Inspection requirements
+📋 ASME B30.9 Sec.9-6 — Inspection of slings
+📋 ASME B30.5 Sec.5-2.4 — Crane inspection
+📋 BS 7121-1 Sec.10 — Inspection requirements
+📋 ISO 4309 Sec.6 — Wire rope inspection and discard criteria
+
+⚠ Related Considerations:
+• Defective equipment must be immediately removed from service and tagged
+• Inspection records must be retained for the life of the equipment plus 2 years
+• Any equipment without legible marking must be taken out of service`},
+
+  // ── WIND SPEED ──────────────────────────────────────────────────────────────
+  {tags:["wind","wind speed","maximum wind","operations","weather","beaufort"],
+   q:"What is the maximum wind speed for crane operations?",
+   a:`WIND SPEED LIMITS FOR CRANE OPERATIONS
+
+General Crane Operations:
+• Caution zone begins: 10 m/s (36 km/h / 22 mph / Beaufort 5)
+• Normal operations cease: 13.4 m/s (48 km/h / Beaufort 6)
+• All operations cease: manufacturer's rated wind speed (typically 15–20 m/s)
+
+TYPICAL OPERATIONAL LIMITS BY CRANE TYPE:
+
+Mobile Cranes (on-road/site):
+• Caution: >10 m/s — reduce capacity per load chart
+• Stop operations: >13.4 m/s (30 mph) general guidance
+• Absolute maximum: per manufacturer's manual (usually 15–20 m/s)
+
+Tower Cranes:
+• Working limit: typically 15–20 m/s (site-specific, crane-specific)
+• Out-of-service (weathervaning): 36–45 m/s (manufacturer dependent)
+• NEVER park tower crane under working wind speed
+
+Offshore Cranes (DNVGL):
+• Routine operations: ≤15 m/s (significant wave height ≤2.5m)
+• Operations cease: per marine warranty surveyor approval
+• Exceptional circumstances: engineered case-by-case
+
+Key Factors Affecting Limits:
+1. Load size — large area loads catch more wind (sail effect)
+2. Crane boom angle — lower angles = higher wind loading on boom
+3. Crane age and condition
+4. Gust factors — peak gusts can be 1.4× mean wind speed
+5. Terrain — channelling between buildings amplifies wind
+
+Wind Force Calculation:
+F = Cd × A × q
+Where: Cd = drag coefficient, A = projected area (m²)
+q = dynamic wind pressure = 0.613 × V² (Pa, V in m/s)
+
+LOLER/BS 7121 Guidance:
+• Wind assessment must be part of every lift plan
+• Anemometer required on site for all significant lifts
+• Measure at hook height, not ground level
+
+📋 BS 7121-1 Sec.8.5 — Environmental conditions
+📋 ASME B30.5 Sec.5-1.7 — Wind effects on cranes
+📋 ISO 4302 — Cranes — Wind load assessment (full method)
+📋 EN 1991-1-4 (Eurocode 1) — Wind actions
+📋 DNVGL-ST-N001 Sec.12 — Environmental criteria offshore
+📋 CIRIA C703 Sec.4 — Site conditions including wind
+
+⚠ Related Considerations:
+• Always check manufacturer's manual for specific crane wind speed limits
+• Dynamic amplification (DAF) increases with wind-induced oscillation
+• Consider sail area of load when selecting slings and rigging`},
+
+  // ── GROUND BEARING PRESSURE ─────────────────────────────────────────────────
+  {tags:["ground bearing","GBP","ground pressure","outrigger","crawler","soil","foundation","bearing capacity"],
+   q:"How do I calculate ground bearing pressure for outriggers and crawler cranes?",
+   a:`GROUND BEARING PRESSURE — FULL CALCULATION METHOD
+
+OUTRIGGER PADS — Formula:
+P = R / A
+Where:
+P = Ground bearing pressure (kN/m² or kPa)
+R = Reaction load on outrigger (kN)
+A = Effective contact area of pad/mat (m²)
+
+Outrigger Reaction (R):
+From crane load chart, use maximum outrigger reaction for the lift configuration.
+If not given: R = (Max Tip Load × 1.1 load factor) spread over outriggers per geometry.
+
+For mobile crane — 4 outriggers:
+Maximum single outrigger load typically 50–70% of total crane + load weight.
+
+CRAWLER CRANES — Formula:
+P = (W_total) / (L × B × 2)
+Where:
+W_total = total operating weight (crane + load + rigging) (kN)
+L = crawler length (m)
+B = crawler shoe width (m)
+Factor 2 = two crawlers
+
+Dynamic Factor:
+P_dynamic = P_static × DAF (typically 1.1–1.25 for crawler cranes)
+
+ALLOWABLE GROUND BEARING PRESSURES (typical):
+• Solid rock: 2,000–10,000 kPa
+• Very dense gravel: 400–600 kPa
+• Dense gravel/coarse sand: 200–400 kPa
+• Loose gravel/medium sand: 100–200 kPa
+• Stiff clay: 150–300 kPa
+• Firm clay: 75–150 kPa
+• Soft clay: 25–75 kPa
+• Very soft clay: <25 kPa — specialist assessment required
+
+CRANE MAT DESIGN (spreading load):
+A_effective = A_pad + (2 × h × tan30°)²
+Where h = mat thickness
+
+Always verify with geotechnical report — presumed values are guidance only.
+
+Near Buried Services:
+Apply Marston's formula or 60° load spread from surface to service depth.
+Keep resultant stress below service allowable pressure (pipeline authority document).
+
+📋 CIRIA C703 Sec.5 — Ground bearing pressure for cranes
+📋 EN 1997-1 (EC7) Sec.6.5 — Bearing capacity of spread foundations
+📋 BS 8004 Sec.2.4 — Allowable bearing pressures
+📋 ASME P30.1 Sec.7 — Ground conditions assessment
+📋 BS 7121-1 Sec.7.2 — Site conditions and ground preparation
+📋 ISO 12480-1 Sec.7.6 — Ground bearing and stability
+
+⚠ Related Considerations:
+• Always obtain geotechnical investigation report for critical/heavy lifts
+• Check for buried services, basements, voids within 45° influence zone
+• Wet conditions — clay bearing capacity can reduce 50% when saturated`},
+
+  // ── WIRE ROPE DISCARD ───────────────────────────────────────────────────────
+  {tags:["discard","wire rope","broken wires","discard criteria","wire","rope","removal"],
+   q:"What are the discard criteria for wire rope slings?",
+   a:`WIRE ROPE SLING DISCARD CRITERIA
+
+Immediate Discard — Any ONE of these = REMOVE FROM SERVICE:
+
+Broken Wires:
+• 2 or more broken wires in any section of length = 6 × rope diameter (6d)
+• 4 or more broken wires in any 30 × rope diameter (30d) length
+• 1 broken wire at end termination (swage/ferrule/splice area)
+• Any broken wire in strand — for 6-strand ropes with fibre core
+
+Physical Damage:
+• Any kink — permanent angular deformation
+• Crushing — loss of round cross-section
+• Birdcaging — strands/wires displaced outward
+• Core protrusion — inner core visible
+• Loop or unlaying of strand
+
+Diameter Reduction:
+• Overall diameter reduced by >10% from nominal
+• Any localised necking or hourglass shape
+
+Corrosion:
+• Pitting corrosion visible
+• Loss of inter-wire lubrication
+• Internal corrosion (tap rope — hollow sound = internal corrosion)
+
+Heat/Chemical Damage:
+• Discolouration from heat (blue/brown) = heat exposure >300°C
+• Chemical contamination — acids (bright wires), alkalis
+• Electrical arcing marks (any = immediate discard)
+
+End Terminations (Swages/Ferrules):
+• Cracking, splitting, slipping
+• Swage diameter reduced >10%
+• 1 broken wire at or near termination
+
+WIRE ROPE INSPECTION PROCEDURE:
+1. Lay rope out straight — do NOT inspect under tension
+2. Count broken wires in any 6d and 30d length
+3. Measure rope diameter at 3 points — compare to nominal
+4. Flex rope — check for kinks, crushing, loss of lay
+5. Check end terminations thoroughly
+
+📋 ISO 4309 Sec.5 — Discard criteria for wire ropes on cranes
+📋 ASME B30.9 Sec.9-6.3 — Wire rope sling inspection and removal
+📋 BS 7121-1 Sec.10.4 — Wire rope inspection
+📋 LEEA COPSULE Sec.4 — Wire rope sling examination
+📋 EN 13414-1 Sec.5 — Wire rope sling inspection
+
+⚠ Related Considerations:
+• Any rope removed from service must be tagged and destroyed — prevent re-use
+• D/d ratio must be checked for the thimble/hook it bends around
+• Swage sleeves should be proof-loaded to 2× WLL after manufacture`},
+
+  // ── DAF ─────────────────────────────────────────────────────────────────────
+  {tags:["DAF","dynamic amplification","dynamic","amplification factor","dynamic load","impact factor"],
+   q:"What is Dynamic Amplification Factor (DAF) and how is it calculated?",
+   a:`DYNAMIC AMPLIFICATION FACTOR (DAF)
+
+Definition:
+DAF accounts for the increase in load due to dynamic effects during lifting — acceleration, deceleration, crane structure vibration, wave motion (offshore), and ground unevenness.
+
+Dynamic Load = Static Load × DAF
+
+DAF VALUES BY LIFTING CONDITION:
+
+Onshore — Level Hardstand:
+• Pick & Carry on level road: DAF = 1.10
+• Normal crane lift, smooth ground: DAF = 1.10–1.15
+• Rough ground operations: DAF = 1.20–1.30
+
+Offshore/Marine (DNVGL-ST-N001):
+• Crane lift in air (offshore): DAF = 1.10 minimum
+• Load entering/exiting water: DAF = 1.10–1.30 (splash zone)
+• Seafastening analysis: DAF = per motion analysis
+• Lifted from vessel deck: as per cargo/motion study
+
+In-Water Lifts:
+• Load lifted from seabed: high DAF — engineer-specific
+• Suction effect must be separately assessed
+
+Tandem Lifts:
+• Each crane applies its individual DAF
+• Load sharing imbalance adds additional dynamic component
+
+Formula (simplified):
+DAF = 1 + (v / g × L)^0.5 × Φ
+Where:
+v = hoisting/lowering speed (m/s)
+g = 9.81 m/s²
+L = sling length (m)
+Φ = crane structure dynamic factor
+
+Gross Lift Weight (GLW) Calculation:
+GLW = (Rigged Weight + Rigging Weight) × DAF × RF
+Where RF = rigging factor/contingency (typically 1.05–1.10)
+
+Table of Load Categories (DNVGL):
+• Structural: DAF from crane design document
+• Loose items: DAF = 1.30 for offshore
+• Below-water: engineer-assessed
+
+📋 ISO 12480-1 Sec.7.4 — Dynamic load factors
+📋 BS 7121-1 Sec.6.3 — Dynamic effects in lifting
+📋 DNVGL-ST-N001 Sec.4.3 — Dynamic amplification factors
+📋 ASME P30.1 Sec.6.2 — Load weight determination with DAF
+📋 CIRIA C703 Sec.3 — Load assessment including DAF
+
+⚠ Related Considerations:
+• DAF increases when crane is hoisting or lowering at speed — slow down near capacity
+• Offshore DAF must account for vessel motion — requires naval architect input
+• Always apply DAF before comparing to crane load chart capacity`},
+
+  // ── TANDEM LIFT ─────────────────────────────────────────────────────────────
+  {tags:["tandem","tandem lift","two cranes","multiple cranes","double crane"],
+   q:"What are the requirements for a tandem lift?",
+   a:`TANDEM LIFT REQUIREMENTS
+
+Definition:
+A tandem lift uses two or more cranes to lift a single load simultaneously.
+All tandem lifts are automatically classified as CRITICAL LIFTS.
+
+Key Engineering Requirements:
+
+1. LOAD SHARING ANALYSIS:
+• Calculate load on each crane based on load COG position
+• For equal-height lifts: Load_A = Total × (d_B / d_total)
+• Apply contingency: typically one crane takes 60%, other 40% minimum analysis
+• Each crane must be derated: maximum 75% of rated capacity for tandem use
+
+2. RIGGING:
+• Matching sling/rigging on each crane where possible
+• Equalisers/spreader beams recommended to control load distribution
+• All rigging must be independently rated for worst-case single crane scenario
+
+3. CRANE POSITIONING:
+• Cranes positioned to minimise boom interaction risk
+• Minimum safe distance between booms: consult manufacturer
+• Swing arcs must not overlap
+
+4. COMMUNICATION:
+• Single designated lift director — one voice only
+• Dedicated communication channel per crane (radio)
+• Agreed abort signal — all operators know it
+• Hand signals backup if radio fails
+
+5. LIFT PLAN REQUIREMENTS:
+• Engineered lift plan signed by competent engineer
+• Individual crane load charts annotated
+• Load sharing calculation documented
+• Pre-lift meeting — ALL personnel attend
+• Step-by-step procedure
+
+6. OPERATIONS:
+• Synchronised hoisting/lowering — speed matched
+• Maximum permissible height difference between hooks: defined in lift plan
+• Skewing forces: if load tilts >5°, re-level before proceeding
+• Never allow one crane to slacken its load — sudden load transfer = overload
+
+Safety Factors:
+• Each crane rated for full load (worst-case scenario analysis)
+• Structural adequacy of load lifting points checked for combined/eccentric loading
+
+📋 BS 7121-3 — Dedicated tandem lift standard
+📋 ASME P30.1 Sec.5.4 — Multiple crane lifts
+📋 ISO 12480-1 Sec.9 — Special lifting operations
+📋 DNVGL-ST-N001 Sec.9.8 — Tandem lifts offshore
+📋 LOLER 1998 Reg 8 — Organisation of tandem lifts
+
+⚠ Related Considerations:
+• Ensure both cranes have identical load chart revisions — do not mix old/new charts
+• Lateral/horizontal forces from rigging geometry must be within boom design limits
+• Ground bearing pressure under both cranes must be independently verified`},
+
+  // ── WLL / CHAIN SLINGS ──────────────────────────────────────────────────────
+  {tags:["WLL","working load limit","chain","chain sling","grade 8","grade 80","grade 100","SWL"],
+   q:"How is Working Load Limit determined for chain slings?",
+   a:`WORKING LOAD LIMIT (WLL) — CHAIN SLINGS
+
+Definition:
+WLL is the maximum load that may be applied to a sling component or assembly in direct tension. It incorporates the appropriate safety factor.
+
+WLL Formula:
+WLL = MBL / Safety Factor
+• Grade 8 (T80): Safety Factor = 4:1
+• Grade 10 (T100): Safety Factor = 4:1
+• Grade 12 (T120): Safety Factor = 4:1
+
+Common Grade 8 Chain WLL (single vertical leg):
+• 6mm chain:  1.12T
+• 7mm chain:  1.50T
+• 8mm chain:  2.00T
+• 10mm chain: 3.15T
+• 13mm chain: 5.30T
+• 16mm chain: 8.00T
+• 20mm chain: 12.50T
+• 22mm chain: 15.00T
+• 26mm chain: 21.20T
+• 32mm chain: 31.50T
+
+Hitch Mode Factors:
+• Single vertical: WLL × 1.0
+• Choker hitch: WLL × 0.75
+• Basket hitch (vertical): WLL × 2.0
+• 2-leg bridle at 60°: WLL per leg × 1.0 (each leg takes rated WLL)
+• 2-leg bridle at 45°: Each leg WLL must be ≥ load/(2×sin45°) = load/1.414
+• 4-leg sling at 60°: Use 3-leg rating (one leg may not carry load)
+
+Grade Identification:
+• Grade 8: stamped "8", "80", "T8", "T80" on every link or master link
+• Grade 10: stamped "10", "100", "T10", "T100"
+• NEVER use Grade 4 (proof coil) or Grade 3 chains for lifting
+• Stamping must be legible — unmarked chain = REMOVE FROM SERVICE
+
+Inspection & Discard:
+• Elongation >5% of original link length = discard
+• Reduction in cross-section >10% = discard
+• Any bent, twisted, or cracked link = discard immediately
+• Nicks or gouges >10% of bar diameter = discard
+
+Temperature Effects:
+• Grade 8 above 200°C: reduce WLL per manufacturer
+• Grade 8 below -40°C: consult manufacturer
+
+📋 BS EN 818-4 — Short link chain Grade T(8) for slings
+📋 ASME B30.9 Sec.9-1.7 — Chain sling WLL determination
+📋 BS 7121-1 Sec.10.5 — Chain sling inspection
+📋 LEEA COPSULE Sec.6 — Chain sling guidance
+📋 ASME BTH-1 — Below-the-hook lifting devices
+
+⚠ Related Considerations:
+• D/d ratio for chain over hooks or lifting points — minimum D/d = 1
+• Temperature derating must be applied for hot work operations
+• 4-leg slings: only 3 legs are assumed to share load (geometry variation)`},
+
+  // ── LOLER INSPECTION ────────────────────────────────────────────────────────
+  {tags:["LOLER","inspection frequency","thorough examination","6 month","12 month","examination","periodic"],
+   q:"What are the LOLER 1998 inspection frequencies for lifting equipment?",
+   a:`LOLER 1998 — THOROUGH EXAMINATION FREQUENCIES
+
+LOLER Regulation 9 Requirements:
+
+LIFTING EQUIPMENT — 12-Month Intervals:
+All lifting equipment not used to lift persons must be thoroughly examined at least:
+• Every 12 months, OR
+• In accordance with an examination scheme, OR
+• After exceptional circumstances (accident, overload, major repair)
+
+LIFTING EQUIPMENT USED FOR LIFTING PERSONS — 6-Month Intervals:
+• Man-riding cranes, man-riding winches
+• Personnel transfer baskets (PTBs) offshore
+• All suspended work platforms, cradles
+• Examined every 6 months minimum
+
+LIFTING ACCESSORIES (Slings, Shackles, etc.) — 6-Month Intervals:
+• All lifting accessories must be examined every 6 months minimum
+• Regardless of whether used to lift persons or not
+• Examination scheme can vary this interval with justification
+
+FIRST USE:
+• All lifting equipment must be thoroughly examined BEFORE first use
+• Unless it has an EC Declaration of Conformity dated within previous 12 months
+• And no assembly work was required that could affect safety
+
+AFTER EXCEPTIONAL CIRCUMSTANCES:
+Thorough examination required after:
+• Overload or suspected overload
+• Accident involving lifting equipment
+• Significant damage
+• Extended out-of-service period (define in examination scheme)
+• Major modification or repair
+• Returning to service after storage
+
+WHAT IS A "THOROUGH EXAMINATION"?
+Carried out by a Competent Person (typically LEEA member or insurance engineer):
+• Physical examination of all components
+• Functional testing where appropriate
+• Assessment against design and standards
+• Written report issued (Form F2034 or equivalent)
+• Defects categorised: Immediate danger vs. Time-limited
+
+RECORD KEEPING:
+• Written reports retained until next examination report received
+• For equipment used to lift persons: retained for 2 years minimum
+• Equipment register maintained showing examination dates
+
+📋 LOLER 1998 Regulation 9 — Thorough examination and inspection
+📋 LOLER 1998 Regulation 10 — Reports and defects
+📋 PUWER 1998 Regulation 6 — Inspection of work equipment
+📋 ACOP L113 — Safe use of lifting equipment (LOLER guidance)
+📋 BS 7121-1 Sec.10 — Inspection intervals
+
+⚠ Related Considerations:
+• LOLER applies to all UK workplaces — failure to comply is a criminal offence
+• Overseas operations may follow equivalent national legislation
+• Examination scheme developed by competent person can extend/reduce standard intervals with justification`},
+
+  // ── SHACKLE INSPECTION ──────────────────────────────────────────────────────
+  {tags:["shackle","bow shackle","dee shackle","anchor shackle","inspection","shackle criteria"],
+   q:"What are the inspection and discard criteria for shackles?",
+   a:`SHACKLE INSPECTION AND DISCARD CRITERIA
+
+Types of Shackles:
+• Bow/Anchor shackle (Omega): multi-directional loading, basket hitches
+• Dee/Chain shackle: in-line loading only
+• Safety bow: screw pin + safety bolt/cotter pin
+
+DISCARD CRITERIA — Any ONE = Remove from service:
+
+Body:
+• Any cracks (visually or NDT confirmed)
+• Gouges/nicks reducing cross-section >10%
+• Bending, distortion, or change in shape
+• Corrosion reducing section >10%
+• Heat damage (blue discolouration)
+• Weld repairs of any kind — NEVER weld shackles
+
+Pin:
+• Any cracks
+• Thread damaged/stripped — cannot achieve full thread engagement
+• Pin bent or deformed
+• Wrong pin (never substitute non-OEM pins)
+• Corrosion on thread reducing diameter
+• Collar worn or damaged
+
+Identification:
+• WLL/SWL marking not legible = remove from service
+• Grade marking not legible = remove from service
+• Cannot confirm manufacturer specifications = remove
+
+Angular Loading (Bow Shackles):
+• Bow shackle rated for 0° (in-line) as marked
+• Side loading reduces WLL:
+  - 45° load angle: reduce WLL by 30% (×0.70)
+  - 90° load angle: reduce WLL by 50% (×0.50)
+• Always consult manufacturer for angular derating table
+
+Pre-Use Check:
+1. Pin fully seated and correctly secured
+2. Screw pin: mouse wire or pin rotation — prevent backing out
+3. Bolt-type pin: nut and split pin/cotter pin in place
+4. No material trapped under pin shoulder
+5. Pin flushness — fully home position
+
+Sizes and WLL (Grade S — 6:1 Safety Factor):
+• 4.75mm (3/16"): 0.33T
+• 6.5mm (1/4"): 0.5T
+• 8mm (5/16"): 0.75T
+• 9.5mm (3/8"): 1.0T
+• 11mm (7/16"): 1.5T
+• 13mm (1/2"): 2.0T
+• 16mm (5/8"): 3.25T
+• 19mm (3/4"): 4.75T
+• 22mm (7/8"): 6.5T
+• 25mm (1"): 8.5T
+• 32mm (1-1/4"): 12.0T
+• 38mm (1-1/2"): 17.0T
+
+📋 BS EN 13889 Sec.5 — Forged steel shackles for lifting
+📋 ASME B30.26 Sec.26-1.3 — Shackle inspection and removal
+📋 LOLER 1998 Reg 9 — Thorough examination of accessories
+📋 LEEA COPSULE Sec.8 — Shackle guidance
+
+⚠ Related Considerations:
+• Never use standard shackles for man-riding — use certificated safety-type shackles
+• Tri-link assemblies — check for wear at contact points
+• Load pin shackles require load monitoring calibration check`},
+
+  // ── SLING WLL WEBBING ────────────────────────────────────────────────────────
+  {tags:["webbing","flat sling","webbing sling","polyester","nylon","textile sling","synthetic"],
+   q:"What are the WLL and inspection criteria for flat webbing slings?",
+   a:`FLAT WEBBING SLINGS — WLL AND INSPECTION
+
+Material: Polyester (most common), Nylon, Polypropylene
+Polyester recommended for most lifting — minimal stretch, resistant to moisture.
+
+COLOUR CODING (EN 1492-1):
+• Violet: 1 tonne
+• Green: 2 tonnes
+• Yellow: 3 tonnes
+• Grey: 4 tonnes
+• Red: 5 tonnes
+• Brown: 6 tonnes (or white with brown stripe)
+• Blue: 8 tonnes
+• Orange: 10 tonnes (or orange with orange stripe)
+• Multi-coloured: over 10T — check label
+
+Hitch Mode Factors:
+• Straight pull (single): WLL × 1.0
+• Choker hitch: WLL × 0.75
+• Basket hitch (0°): WLL × 2.0
+• Basket at 45°: WLL × 1.41
+• Basket at 60°: WLL × 1.73
+
+Safety Factor:
+BS EN 1492-1 minimum safety factor: 7:1 (on MBL)
+
+INSPECTION — Remove from service if:
+Cuts and Tears:
+• Any cut — even partial — through loadbearing fibres
+• Edge damage over 10% of sling width
+• Surface abrasion penetrating through to loadbearing core
+
+Stitching:
+• Any broken stitching in end loop or assembly seam
+• Stitches pulled through to base material
+
+Chemical Damage:
+• Discolouration — may indicate acid or alkali attack
+• Any chemical contamination — test before continuing use
+• Stiffening of fibres (acid damage)
+
+Heat/UV Damage:
+• Glazing or melting of surface fibres
+• Bleaching (UV degradation)
+• Sling must not be used near heat sources, sparks, or cutting operations
+
+Distortion/Overloading:
+• Permanent elongation >10% of original length
+• Twist — cannot be straightened
+• Any deformation of end fittings
+
+Tag/Label:
+• ID label not legible = REMOVE
+• CE marking required for EU/UK supply
+• WLL, angle rating must be visible
+
+Polyester vs. Nylon Comparison:
+• Polyester: lower stretch (2% at WLL), unaffected by water
+• Nylon: up to 10% stretch (shock absorption), reduces WLL when wet
+• Polypropylene: avoid — UV degradation, heat-sensitive, lowest performance
+
+📋 BS EN 1492-1 Sec.7 — Flat webbing slings for general purpose
+📋 ASME B30.9 Sec.9-5 — Synthetic web sling inspection and removal
+📋 LOLER 1998 Reg 9 — Lifting accessories examination
+📋 LEEA COPSULE Sec.7 — Textile sling guidance
+
+⚠ Related Considerations:
+• Always use corner protection where sling bends over sharp edges — load corners destroy slings quickly
+• Never drag synthetic slings across ground — abrasion not visible inside
+• Store slings hanging (not in a pile) in cool, dry, UV-protected location`},
+
+  // ── EXCLUSION ZONE ──────────────────────────────────────────────────────────
+  {tags:["exclusion zone","radius","dropped object","safety zone","keep clear","slewing"],
+   q:"How is an exclusion zone established for crane operations?",
+   a:`EXCLUSION ZONE — CRANE OPERATIONS
+
+Definition:
+An exclusion zone is a clearly marked, enforced area where unauthorised personnel are not permitted during lifting operations.
+
+Minimum Exclusion Zone — General Principle:
+• Horizontal distance = vertical height of highest point of load travel
+• OR radius of crane's maximum working radius — whichever is greater
+• Plus minimum 1m buffer beyond load footprint at all positions
+
+Specific Zones Required:
+
+1. SLEWING ZONE — Crane Body:
+• Full slewing radius of crane upperworks + 1m
+• Tail swing: rear of crane body must be clear at all times
+• Counterweight swing path must be barriered
+
+2. LOAD PATH ZONE:
+• Entire area beneath planned load travel path
+• Buffer: load footprint + 1m on all sides
+• For personnel below: clear zone = load height × 1.0 horizontal
+
+3. DROPPED OBJECT ZONE (Offshore DNVGL):
+• Horizontal drop distance = 0.1 × drop height (minimum)
+• For lifts over FPSO/vessel: segregation between modules required
+• Safety sector must be communicated to all vessel departments
+
+Barriers and Communication:
+• Physical barriers: cones, barrier tape, temp fencing
+• Warning signs: "Crane Operations — Keep Clear"
+• Banksman/flagman at zone boundary
+• Radio communication — all relevant personnel on same channel
+• Permit to Work system for any entry to exclusion zone
+
+Power Lines:
+OSHA/BS 7121 minimum clearances to overhead power lines:
+• Up to 50kV: 3m (10 ft) minimum clearance
+• 50kV to 200kV: 4.5m (15 ft) minimum
+• 200kV to 350kV: 6m (20 ft) minimum
+• 350kV to 500kV: 7.5m (25 ft) minimum
+• Always assume power lines are LIVE unless written confirmation from utility
+
+Special Considerations:
+• Night operations: lighting must maintain visibility throughout zone
+• Blind lifts: banksman required with direct view at all times
+• Public areas: zone extends to public boundary — may require permit from authority
+
+📋 BS 7121-1 Sec.8.8 — Exclusion zones
+📋 ASME P30.1 Sec.8 — Lifting area segregation
+📋 ISO 12480-1 Sec.8.3 — Control of lifting area
+📋 DNVGL-ST-N001 Sec.9.4 — Exclusion zones offshore
+📋 OSHA 1926.1407 — Power line safety
+
+⚠ Related Considerations:
+• Review exclusion zone any time crane configuration changes (radius, hook height)
+• Buried services must be identified before erecting crane (CAT scan and permit)
+• All zone boundaries must be briefed to ALL site personnel — not just crane team`},
+
+  // ── PROOF LOAD ──────────────────────────────────────────────────────────────
+  {tags:["proof load","proof test","test load","SWL test","load test","overload test"],
+   q:"What are the proof load requirements for lifting equipment?",
+   a:`PROOF LOAD TESTING REQUIREMENTS
+
+Definition:
+A proof load test applies a defined overload to lifting equipment to verify structural integrity. It does NOT determine the WLL — it verifies the equipment can withstand the test load without permanent deformation.
+
+Standard Proof Load Values:
+
+Cranes and Hoists:
+• Proof load = 1.25 × SWL/WLL (most standards)
+• Some standards: 1.1 × SWL for cranes >10T capacity
+• Dynamic proof test (load lifted, slewed, braked)
+
+Lifting Accessories (Slings, Shackles, Hooks):
+• BS EN standards: typically 2.0 × WLL (200% of WLL)
+• ASME B30.9/B30.26: typically 2.0 × WLL
+• Some components tested to 1.5 × WLL with engineer justification
+
+Below-The-Hook Lifting Devices (ASME BTH-1):
+• New equipment: proof load = 1.5 × rated load
+• After repair: depends on extent of repair
+
+LOLER 1998 Requirements:
+• New lifting equipment: thoroughly examined before first use
+• After assembly at site: thorough examination required
+• After major repair: proof test may be required — competent person decides
+
+Offshore (DNVGL-ST-N001):
+• All new offshore lifting equipment: SWL × 1.25 or per manufacturer
+• Padeyes on structures: typically tested to 2× maximum design load
+• Re-certification after repair: engineer-specified test load
+
+What Proof Testing Checks:
+1. No permanent deformation exceeding tolerance
+2. No cracks or fracture — visual + NDT if required
+3. Function of safety devices under load
+4. Brake holding capacity (hoists)
+5. Mechanical function throughout
+
+Test Procedure:
+1. Test on calibrated test bed or under controlled lift conditions
+2. Load held for minimum 10 minutes
+3. Inspect all components during and after test
+4. Measure critical dimensions before and after
+5. NDT (MPI, UT) on welds and stress concentration areas
+6. Issue test certificate with all readings
+
+Acceptance Criteria:
+• No cracks, fractures, or permanent deformation beyond tolerance
+• All safety devices function correctly
+• Load cell/dynamometer used to confirm applied load (±2% accuracy)
+
+📋 BS 7121-1 Sec.10.6 — Load testing procedures
+📋 ASME B30.20 Sec.20-3 — Below-the-hook proof tests
+📋 DNVGL-ST-N001 Sec.14 — Padeye and structural testing
+📋 ISO 12480-1 Sec.10 — Testing and commissioning
+📋 LOLER 1998 Reg 9 — Thorough examination after installation/repair
+📋 ASME BTH-1 Sec.5 — Proof load testing
+
+⚠ Related Considerations:
+• Proof testing is NOT the same as destructive testing — do not test to failure
+• Annealing/heat treatment may be required for heavily cold-worked chains after testing
+• Never proof test equipment that shows existing cracks or damage`},
+
+  // ── HOOK INSPECTION ─────────────────────────────────────────────────────────
+  {tags:["hook","hook inspection","crane hook","latch","hook stretch","hook opening","discard hook"],
+   q:"What are the inspection and discard criteria for crane hooks?",
+   a:`CRANE HOOK INSPECTION AND DISCARD CRITERIA
+
+Hook Types:
+• Swivel hook — rotates freely under load
+• Fixed eye/shank hook — no rotation
+• Clevis hook — with pin attachment
+• Safety/latch hook — with spring-loaded latch
+
+DISCARD CRITERIA — Immediate Removal:
+
+Throat Opening (Most Critical):
+• Discard if throat opening has increased >15% from original dimension
+• Measure with go/no-go gauge or caliper at narrowest throat point
+• Any permanent deformation — even slight
+
+Twist:
+• Discard if hook twisted >10° from original plane
+
+Cracks:
+• Any crack anywhere — immediate discard
+• NDT (MPI) required if surface cracks suspected
+• Focus on: shank/body transition, inner radius, latch groove
+
+Wear:
+• Load-bearing surface worn >10% reduction in cross-section
+• Seat of hook (where sling contacts) worn >10%
+• Pin holes worn >3% of original diameter
+
+Latch/Safety Catch:
+• Spring latch must return to closed position freely
+• Gap >3mm when latch pressed = repair or discard
+• Broken, bent, or non-functioning latch = remove from service
+• Exception: mousing wire may be used if latch replaced
+
+Corrosion:
+• Pitting reducing section >10%
+• Surface corrosion — clean and assess under-rust condition
+
+HOOK INSPECTION PROCEDURE:
+1. Measure throat opening (record in inspection log)
+2. Measure shank diameter — compare to original
+3. Check hook twist with straight-edge
+4. Inspect latch — spring action, gap
+5. Visual inspection — cracks, wear, corrosion
+6. MPI/NDT if any doubt — annual at minimum for intensively used hooks
+7. Swivel freedom of rotation (should rotate under light hand pressure)
+
+ASME B30.10 Rating Identification:
+• Hooks rated by WLL stamped on body
+• Manufacturer identification required
+• Any unmarked hook = remove from service
+
+Mousing of Hooks:
+• Mousing required when accidental disengagement possible
+• Mousing wire: minimum 1.2mm diameter galvanised wire
+• Synthetic mousing cord acceptable if rated and secured
+• Never use mousing as substitute for a functional latch
+
+📋 ASME B30.10 Sec.10-2 — Hook inspection, testing, maintenance
+📋 BS 7121-1 Sec.10.7 — Hook inspection
+📋 EN 1677-1 Sec.6 — Hooks for lifting — inspection
+📋 ASME B30.9 — Hook end attachments for slings
+📋 LOLER 1998 Reg 9 — Lifting accessories examination
+
+⚠ Related Considerations:
+• Hook replacement requires like-for-like specification — never upsize without engineer approval
+• Swivel hook torque should be checked — stiff swivel creates sling twist and torsion damage
+• After any shock/snatch loading: immediately inspect and NDT if required`},
+
+  // ── EYE BOLTS ──────────────────────────────────────────────────────────────
+  {tags:["eye bolt","eyebolt","DIN 580","angular load","lifting point","padeye"],
+   q:"What are the requirements and limitations for eye bolts used in lifting?",
+   a:`EYE BOLTS — COMPLETE REQUIREMENTS
+
+Types:
+• DIN 580 collar eye bolts — most common for vertical/angled lifts
+• Non-collar eye bolts — vertical use only (0 degrees)
+• Swivel hoist rings — preferred for angled loads (360 rotation)
+• Shoulder eye bolts (ASME) — similar to DIN 580
+
+ANGULAR DERATING — Critical:
+DIN 580 Collar Eye Bolt WLL reduction with angle from vertical:
+• 0 deg (vertical): WLL x 1.00 (full rated load)
+• 15 deg: WLL x 0.70 (30% reduction)
+• 30 deg: WLL x 0.55 (45% reduction)
+• 45 deg: WLL x 0.35 (65% reduction)
+• 60 deg: WLL x 0.20 (80% reduction)
+• Above 60 deg: DO NOT USE
+
+KEY RULE: Load must be applied IN THE PLANE of the eye, not across it.
+
+Installation Requirements:
+1. Thread engagement minimum = full nominal diameter of bolt (M20 = 20mm minimum)
+2. Collar must be fully seated on surface — no gap
+3. Torque to manufacturer specification
+4. Surface under collar must be flat, perpendicular to bolt axis (+-1 deg)
+
+DIN 580 Standard Sizes and Vertical WLL:
+• M8: 0.14T  M10: 0.20T  M12: 0.32T  M16: 0.63T
+• M20: 1.00T  M24: 1.50T  M30: 2.50T  M36: 3.60T
+• M42: 5.00T  M48: 6.30T  M64: 10.0T
+
+SWIVEL HOIST RINGS:
+• Rotate 360 degrees — always in-plane loading
+• Pivot up to 180 degrees — no derating for angle
+• Safer than eye bolts for angled rigging
+
+Inspection Before Each Use:
+• Thread condition — no damage
+• Eye not bent or deformed
+• No cracks in eye or collar
+• WLL marking legible
+• Collar fully seating flat
+
+📋 DIN 580 — Eye bolts for lifting
+📋 ASME B30.26 Sec.26-1.5 — Eye bolts
+📋 BS 7121-1 Sec.6.7 — Lifting points
+📋 ISO 12480-1 Sec.7.5 — Rigging hardware requirements
+📋 LEEA COPSULE Sec.9 — Eye bolt guidance
+
+Warning — Related Considerations:
+• Always calculate resultant force direction — not just vertical component
+• Multiple eye bolts: check load distribution with COG offset
+• Never weld eye bolts — heat treatment destroyed`},
+
+  // ── SPREADER BEAMS ──────────────────────────────────────────────────────────
+  {tags:["spreader beam","lifting beam","spreader","spreader bar","below hook","lifting frame"],
+   q:"When should a spreader beam or lifting beam be used?",
+   a:`SPREADER BEAMS AND LIFTING BEAMS
+
+Definitions:
+• Lifting Beam: rigid beam — load is in bending. Requires structural design.
+• Spreader Beam: compression member between sling legs. No bending — pure compression.
+
+WHEN TO USE:
+1. Sling angle would be less than 45 degrees without beam (headroom limited)
+2. Load has multiple lift points requiring precise load distribution
+3. Load cannot accept inward horizontal forces (thin-walled vessels, fragile items)
+4. Long loads where single central lift would cause structural overstress
+5. Tandem lifts requiring equal load sharing
+
+SPREADER BEAM DESIGN:
+Compression Force:
+F_comp = (W/2) x (cos theta / sin theta) = (W/2) x cot(theta)
+Where W = total load, theta = sling angle from horizontal
+
+Slenderness check: L/r less than 150
+Buckling: P_crit = pi^2 x E x I / L^2
+
+MARKINGS REQUIRED (All Beams):
+• WLL — clearly stamped or painted
+• Tare weight — must be included in lift plan
+• Serial/ID number — traceable to design and test certificate
+• Centre of gravity marked if not central
+
+Proof Test: 1.5 x rated load before first use (ASME BTH-1)
+
+📋 ASME BTH-1 — Below-the-hook lifting devices
+📋 BS EN 13155 Sec.5 — Non-fixed load lifting attachments
+📋 BS 7121-1 Sec.6.8 — Special lifting accessories
+📋 LOLER 1998 Reg 9 — Thorough examination
+
+Warning — Related Considerations:
+• Tare weight of beam must always be included in crane capacity check
+• Off-centre loading generates torsion — check beam design
+• Never use structural steel beam as lifting beam without engineering calculation and proof test`},
+
+  // ── ROUND SLINGS ────────────────────────────────────────────────────────────
+  {tags:["round sling","roundsling","endless sling","soft sling","polyester round sling"],
+   q:"What are the requirements and WLL for round slings?",
+   a:`ROUND SLINGS (ENDLESS SLINGS)
+
+Construction:
+• Endless loop of parallel polyester filaments (core)
+• Protected by woven tubular sleeve (cover)
+• Cover colour = WLL indication per EN 1492-2
+
+COLOUR CODE AND WLL (EN 1492-2):
+Vertical single:
+• Violet: 1T  Green: 2T  Yellow: 3T  Grey: 4T  Red: 5T
+• Brown (or white): 6T  Blue: 8T  Orange: 10T
+
+Hitch Mode Factors:
+• Vertical: x 1.0
+• Choker: x 0.75
+• Basket vertical: x 2.0
+• Basket at 60 deg: x 1.73
+• Basket at 45 deg: x 1.41
+
+Safety Factor: 7:1 minimum on MBL per EN 1492-2
+
+DISCARD CRITERIA:
+• Any hole or cut through cover exposing core filaments
+• Abrasion exposing core
+• Cuts from sharp edges
+• ID label not legible — remove from service
+• UV bleaching affecting significant length
+• Temperature damage — glazing or melting
+
+Temperature: -40 deg C to +100 deg C for polyester
+
+Protection: MUST use corner protection over ALL sharp edges.
+Never drag on ground — abrasion unseen inside cover.
+
+📋 BS EN 1492-2 Sec.6 — Round slings made of man-made fibres
+📋 ASME B30.9 Sec.9-5.4 — Round sling inspection
+📋 LOLER 1998 Reg 9 — Lifting accessory examination
+
+Warning — Related Considerations:
+• Core damage often not visible through intact cover — inspect both ends
+• Never cut sling to shorten — structural loop integrity destroyed
+• Always match WLL to hitch type, not just straight pull rating`},
+
+  // ── LOAD COG ────────────────────────────────────────────────────────────────
+  {tags:["COG","centre of gravity","center of gravity","load balance","load COG","trim","balance load"],
+   q:"How is the centre of gravity (COG) of a load determined for lifting?",
+   a:`CENTRE OF GRAVITY (COG) DETERMINATION
+
+Definition:
+The COG is the single point through which all gravitational force acts. Correct COG location is essential for level lifts.
+
+METHODS:
+
+Method 1 — Calculation:
+X_cog = Sum(mi x xi) / Sum(mi)
+Where mi = mass of each component, xi = distance from datum.
+Calculate X, Y, and Z separately for 3D loads.
+
+Method 2 — Two-Crane Weigh:
+COG position = L x (F2 / (F1+F2))
+Where L = distance between lift points, F1 and F2 = measured forces.
+
+Method 3 — Certified Weighing:
+• Portable load cells under each support point
+• Best for unknown/complex loads
+• Required for lifts over 75% crane capacity
+• Accuracy: +-1 to 2%
+
+COG Height Assessment:
+• Slight tilt of suspended load (max 5 deg) — does load self-level?
+• Rigging hardware migrates to one side = COG not over centre
+
+Rigging Point Adjustment:
+If COG is offset from geometric centre:
+• Adjust rigging above COG
+• Use adjustable rigging to trim
+• Or add counterweight
+
+Critical Requirements:
+• COG within +-50mm of assumed position for critical lifts
+• Document COG in lift plan with source of data
+
+📋 ISO 12480-1 Sec.7.3 — Load COG assessment
+📋 ASME P30.1 Sec.6.3 — Centre of gravity determination
+📋 BS 7121-1 Sec.6.4 — Load assessment including COG
+
+Warning — Related Considerations:
+• Liquid-filled vessels: COG shifts as fluid moves during tilting
+• Rotating machinery: COG may not be at geometric centre
+• Always include rigging hardware weight in COG calculation`},
+
+  // ── LIFT PLAN ───────────────────────────────────────────────────────────────
+  {tags:["lift plan","method statement","lifting plan","documentation","planning","lift plan content"],
+   q:"What must be included in a lifting operation plan?",
+   a:`LIFTING OPERATION PLAN — REQUIRED CONTENT
+
+MANDATORY CONTENTS (LOLER/BS 7121/ASME P30.1):
+
+1. PROJECT AND OPERATION DETAILS:
+• Project name, location, date
+• Description of load
+• Classification: routine / non-routine / critical
+
+2. LOAD INFORMATION:
+• Verified load weight (method used)
+• Centre of gravity position (X, Y, Z)
+• Load dimensions
+• Structural integrity of lift points
+• Special considerations (fragile, hazardous, pressurised)
+
+3. CRANE AND EQUIPMENT:
+• Crane type, make, model, serial number
+• Configuration: boom length, jib, counterweight
+• Working radius
+• Rated capacity at working radius
+• Percentage of rated capacity = (GLW / rated capacity) x 100
+• Ground conditions assessment
+
+4. RIGGING SCHEME:
+• Rigging arrangement drawing
+• Sling types, grades, sizes, WLL
+• All accessories — shackles, hooks, beams, padeyes
+• Sling angles calculated
+• GLW = (Load + rigging) x DAF
+
+5. PERSONNEL:
+• Lift director/competent person — named
+• Crane operator — named, certificate number
+• Banksman — named
+• Riggers
+
+6. HAZARD ASSESSMENT:
+• Hazards identified with controls
+• Exclusion zone defined
+• Overhead power lines — distances confirmed
+• Buried services — CAT scan completed
+• Weather limits
+
+7. STEP-BY-STEP PROCEDURE:
+• Numbered steps from pre-lift to load landed
+• Hold points identified
+• Contingency actions
+
+8. APPROVALS:
+• Prepared by (name, qualification, date)
+• Reviewed by competent person
+• Approved by site manager
+• LOLER records attached
+
+Critical Lift — Additional:
+• Engineering calculations attached
+• Independent third-party review
+• Pre-lift meeting attendance register
+
+📋 LOLER 1998 Regulation 8 — Organising lifting operations
+📋 ASME P30.1 Sec.5 — Lift planning requirements
+📋 BS 7121-1 Sec.7 — Planning lifting operations
+📋 ISO 12480-1 Sec.6 — Lift plan requirements
+
+Warning — Related Considerations:
+• Lift plan must be communicated to ALL personnel — pre-lift meeting
+• Deviations require re-approval before proceeding
+• Retain lift plans for minimum 2 years after operation`},
+
+  // ── RIGGING CALCULATIONS ─────────────────────────────────────────────────────
+  {tags:["rigging calculation","sling tension","leg load","load per leg","calculation","formula","tension factor"],
+   q:"How do I calculate sling leg tensions for any rigging configuration?",
+   a:`SLING LEG TENSION CALCULATIONS — COMPLETE METHOD
+
+STEP 1 — TOTAL RIGGED WEIGHT:
+Total Rigged Weight = Load Weight + Rigging Hardware Weight
+Typical rigging hardware allowance: 2 to 5% of load weight
+
+STEP 2 — APPLY DAF:
+Gross Lift Weight (GLW) = Total Rigged Weight x DAF
+• Onshore normal: DAF = 1.10
+• Offshore: DAF = 1.10 minimum
+• Rough ground: DAF = 1.25 to 1.30
+
+STEP 3 — SLING GEOMETRY:
+Sling angle from horizontal (theta):
+theta = (180 degrees - included angle between legs) / 2
+
+STEP 4 — LOAD PER LEG:
+For 2-leg symmetric:
+T_leg = (GLW / 2) x (1 / sin theta)
+
+For 2-leg asymmetric (COG offset):
+T_A = GLW x (d_B / d_total) / sin theta
+T_B = GLW x (d_A / d_total) / sin theta
+
+For 4-leg (use 3-leg rule):
+T_leg = GLW / 3 / sin theta
+
+TENSION FACTOR TABLE (1/sin theta):
+• 90 deg: 1.000
+• 60 deg: 1.155
+• 45 deg: 1.414
+• 30 deg: 2.000
+• 20 deg: 2.924
+
+WORKED EXAMPLE:
+Load: 20,000 kg  Rigging: 400 kg  Total: 20,400 kg
+GLW = 20,400 x 1.10 = 22,440 kg = 22.44T
+2-leg sling, 90 degree included angle (each leg at 45 deg)
+T_leg = (22.44/2) x (1/sin45) = 11.22 x 1.414 = 15.87T per leg
+Select: WLL greater than or equal to 15.87T per leg
+Master link: WLL greater than or equal to 22.44T total
+
+STEP 5 — SELECT SLING WLL:
+Required WLL per leg greater than or equal to T_leg.
+Add safety margin: WLL greater than or equal to T_leg x 1.1
+
+📋 ASME B30.9 Sec.9-1.7 — Sling load calculations
+📋 BS EN 1492-1 Annex B — Calculation of forces in sling legs
+📋 ISO 12480-1 Sec.7.3 — Rigging geometry and calculations
+📋 BS 7121-1 Sec.6.3 — Rigging selection based on calculation
+
+Warning — Related Considerations:
+• Always round UP to next available sling size
+• Asymmetric COG can double tension in one leg — always check
+• Include horizontal force on padeye structure in design: H = T_leg x cos(theta)`},
+
+  // ── MULTI-LEG SLINGS ────────────────────────────────────────────────────────
+  {tags:["4 leg","four leg","3 leg","three leg","multi-leg","multiple leg","4-leg sling","3-leg sling","four leg sling"],
+   q:"How are 3-leg and 4-leg slings rated and used correctly?",
+   a:`MULTI-LEG SLINGS — RATING AND USE
+
+KEY RULE — 4-LEG SLINGS:
+A 4-leg sling is rated as a 3-leg sling.
+Reason: geometry makes it impossible to guarantee all 4 legs share load equally.
+One leg may carry minimal or no load.
+ALWAYS use 3-leg rating for 4-leg slings.
+
+ASSEMBLY RATED CAPACITY:
+• 1-leg vertical: WLL_leg x 1.0
+• 2-leg at 60 deg: WLL_leg x 1.73
+• 2-leg at 45 deg: WLL_leg x 1.41
+• 2-leg at 30 deg: WLL_leg x 1.0
+• 3-leg at 60 deg: WLL_leg x 2.60
+• 4-leg at 60 deg: WLL_leg x 2.60 (3-leg rule applies)
+
+MARKING ON ASSEMBLY:
+• WLL for each configuration stamped on tag
+• Example: "2-leg 60 deg: 5.0T, 45 deg: 4.0T"
+• Tag must be legible — if missing, remove from service
+
+Leg Length Matching:
+• All legs same length for level lift from symmetric load
+• Shortening hooks allow adjustment — must be rated for purpose
+
+INSPECTION:
+• Master link/ring — throat, wear, distortion
+• Each individual leg — per type (wire/chain/webbing)
+• All connectors — shackles, hooks, rings
+• Identification of each component traceable to certificate
+
+📋 ASME B30.9 Sec.9-1.5 — Multi-leg sling ratings
+📋 BS EN 818-4 Sec.6 — Multi-leg chain sling assembly ratings
+📋 LEEA COPSULE Sec.5 — Sling assembly ratings
+
+Warning — Related Considerations:
+• Equalizer rings do not fix the 3-leg rule for 4-leg slings
+• Master link WLL must be greater than or equal to total assembly WLL
+• 4 symmetric padeyes ideally required to work with 4-leg geometry`},
+
+  // ── COMPETENCY ──────────────────────────────────────────────────────────────
+  {tags:["competent person","competency","CPCS","NPORS","LEEA","certification","qualification","appointed person"],
+   q:"What qualifications are required for lifting equipment roles?",
+   a:`LIFTING EQUIPMENT COMPETENCY AND QUALIFICATIONS
+
+KEY PRINCIPLE (LOLER 1998 / BS 7121):
+All persons involved in lifting operations must be COMPETENT.
+Competence = appropriate knowledge + training + experience.
+
+ROLES AND QUALIFICATIONS:
+
+1. CRANE OPERATOR:
+• CPCS Card (Construction Plant Competence Scheme) — UK standard
+• NPORS (National Plant Operators) — alternative
+• Category-specific: A60 Mobile Crane, A04 Tower Crane, etc.
+• Medical fitness certificate required
+• Minimum age 18 (UK)
+
+2. SLINGER / SIGNALLER (BANKSMAN):
+• CPCS A40 — Slinger/Signaller
+• NPORS N101 — Slinger/Signaller
+• Minimum 3 days formal training plus assessment
+
+3. APPOINTED PERSON (Lift Director):
+• Responsible for planning and managing the operation
+• CPCS A61 (Appointed Person) or LEEA TEAM course
+• Must understand: lift planning, load charts, rigging, LOLER
+• For complex lifts: engineering degree + crane experience typical
+
+4. THOROUGH EXAMINATION (LOLER Reg 9):
+• Must be carried out by a COMPETENT PERSON
+• Industry standard: LEEA member company or insurance engineer
+• Result documented on report (F2034 or equivalent)
+
+CERTIFICATION BODIES (UK):
+• CPCS — administered by CITB
+• NPORS — independent body
+• LEEA — Lifting Equipment Engineers Association
+• OPITO — offshore specific
+
+Offshore (OPITO):
+• Offshore Crane Operator: OPITO-approved training + competency assessment
+• Offshore Rigger: OPITO-approved
+• Typically requires 12 months onshore experience first
+
+📋 LOLER 1998 Regulation 8 — Competence requirements
+📋 BS 7121-1 Sec.3 — Definitions and competence
+📋 ACOP L113 — Safe use of lifting equipment
+📋 ISO 12480-1 Sec.5 — Competence of persons
+📋 DNVGL-ST-N001 Sec.3 — Qualifications offshore
+
+Warning — Related Considerations:
+• CPCS cards must be checked on site — verify expiry date and category
+• International equivalent qualifications must be independently assessed
+• Competence must be demonstrated for the specific equipment type being operated`},
+
+  // ── OFFSHORE LIFTING ────────────────────────────────────────────────────────
+  {tags:["offshore","marine","vessel","DNVGL","MWS","marine warranty","FPSO","platform","sea","wave","offshore lift"],
+   q:"What are the key requirements for offshore lifting operations?",
+   a:`OFFSHORE LIFTING OPERATIONS
+
+Governing Standards:
+• DNVGL-ST-N001 — Marine Operations and Marine Warranty
+• ISO 12480-1 with offshore additions
+• Marine Warranty Surveyor (MWS) requirements for critical lifts
+
+PADEYE DESIGN:
+• Engineered — not ad hoc attachment
+• Designed for 2x maximum design load
+• Material: high-toughness notch-tough steel
+• 100% MPI and UT of welds after welding
+• Proof tested (typically 2x design load) or equivalent analysis
+
+DYNAMIC AMPLIFICATION FACTOR (offshore):
+• Crane lift in air: DAF minimum 1.10
+• Splash zone (entering/exiting sea): DAF = 1.10 to 1.30
+• Seafastened cargo: per vessel motion analysis
+
+ENVIRONMENTAL LIMITS (typical):
+• Maximum wind speed: 15 m/s for routine lifts
+• Maximum significant wave height (Hs): 1.5 to 2.5m
+• Current: typically limited to 1.0 m/s
+
+MARINE WARRANTY:
+Lifts typically requiring MWS approval:
+• Lifts above 50T offshore
+• Complex/critical lifts
+• Personnel transfer
+• In-water/subsea lifts
+
+CRANE CERTIFICATION (Offshore):
+• 4-yearly major examination plus annual inspection
+• Certification body: DNV, Lloyds, BV, ABS etc.
+• Operator: OPITO-certified for offshore
+
+RIGGING FOR OFFSHORE:
+• DNVGL-certified or equivalent third-party certification
+• Wire rope: heat-set socketed terminations preferred
+• Shackles: Grade S alloy, bolt-type pin for dynamic use
+• Sling register maintained at work site
+
+📋 DNVGL-ST-N001 Sec.4-9 — Marine operations lifting
+📋 DNVGL-ST-N001 Sec.12 — Environmental criteria
+📋 ISO 12480-1 Sec.9.4 — Offshore lifting
+📋 LOLER 1998 — Applies in UK waters
+
+Warning — Related Considerations:
+• Dropped object prevention: all tools and equipment above deck must be secured
+• SIMOPS: lifts must be coordinated with drilling and production operations
+• Crane operator must halt if radio communication fails`},
+
+  // ── TEMPERATURE EFFECTS ──────────────────────────────────────────────────────
+  {tags:["temperature","cold","hot","heat","temperature effect","environmental","weather","frost","cold weather"],
+   q:"How do temperature and environmental conditions affect lifting equipment?",
+   a:`TEMPERATURE AND ENVIRONMENTAL EFFECTS
+
+LOW TEMPERATURE:
+
+Wire Rope:
+• No derating below 0 deg C in normal range
+• Lubricant may stiffen below -20 deg C — pre-load before use
+
+Chain Slings (Grade 8):
+• Full WLL maintained to -40 deg C per BS EN 818-4
+• Below -40 deg C: consult manufacturer
+
+Synthetic Slings:
+• Polyester: rated to -40 deg C
+• Check for ice/frost — does not affect rating but inspect mechanism
+
+Crane Structural Steel:
+• Manufacturer states minimum ambient temperature (typically -20 to -30 deg C)
+• Sub-arctic operations: specialist cranes with arctic-grade steel required
+
+HIGH TEMPERATURE:
+
+Wire Rope:
+• Above 100 deg C: reduce WLL approximately 10% per 100 deg C rise
+• Above 400 deg C: permanent damage — discard immediately
+• Identify by: blue/brown discolouration of individual wires
+
+Chain Slings (Grade 8):
+• 0-200 deg C: full WLL
+• 200-300 deg C: reduce to 90% WLL
+• 300-400 deg C: reduce to 75% WLL
+• Above 400 deg C: discard
+
+Synthetic Slings:
+• Polyester: DO NOT USE above +100 deg C
+• Nylon: DO NOT USE above +80 deg C
+• Use wire rope or chain slings for hot work
+
+RAIN AND WET CONDITIONS:
+• Steel/chain equipment: generally unaffected
+• Nylon webbing slings: WLL reduces when wet — use polyester instead
+• Wet/icy surfaces: assess stability and ground conditions
+
+WIND: See wind speed section for specific operational limits.
+
+📋 BS EN 818-4 Annex A — Temperature derating for chain slings
+📋 ISO 4309 Sec.5.7 — Temperature effects on wire rope
+📋 BS EN 1492-1 Sec.5 — Temperature limits for webbing slings
+📋 BS 7121-1 Sec.8.5 — Environmental operating conditions
+
+Warning — Related Considerations:
+• Always check manufacturer certificate for temperature range
+• After exposure to extreme temperature: examine thoroughly before reuse
+• Inspect fire-damaged equipment — NDT required before any reuse`},
+
+  // ── CRANE STABILITY ──────────────────────────────────────────────────────────
+  {tags:["stability","crane stability","tipping","overturn","outrigger level","crane level","stable"],
+   q:"How is crane stability assessed and maintained during lifting?",
+   a:`CRANE STABILITY — ASSESSMENT AND MAINTENANCE
+
+Fundamental Principle:
+A crane tips when the resultant of all forces falls outside the tipping line (outrigger footprint or track edges).
+
+STABILITY FACTOR:
+Stabilising moment / Overturning moment
+• Typical minimum: 1.25 to 1.40
+• At rated capacity: typically 1.15 to 1.25 (built into load chart)
+
+OUTRIGGER SETUP REQUIREMENTS:
+1. Outriggers FULLY extended before any lift (unless chart specifies partial)
+2. Each outrigger pad on firm, level, adequately-bearing ground
+3. Crane levelled within manufacturer tolerance (typically +-0.5 to 1.0 deg)
+4. Level checked after each slew position change
+5. Verify mat/pad provides acceptable GBP
+
+LEVEL TOLERANCE EFFECTS:
+• 1 deg out of level: capacity derating required
+• Most cranes: derate 1% capacity per 0.1 deg out of level
+• Above 1 deg: consult manufacturer derating table
+
+CRAWLER CRANES:
+• On-track stability maintained by wide track gauge and counterweight
+• Travel with load: strictly limited — consult load chart
+• Pick-and-carry radius much less than stationary capacity
+
+OVER-FRONT vs OVER-SIDE:
+• Capacity LOWER when lifting over side (typically 75-85% of over-front)
+• Load charts indicate direction — ALWAYS use correct sector chart
+
+GROUND MONITORING:
+• Assign spotter to watch outrigger pads throughout lift
+• Halt if any pad sinking or cracking
+• Re-assess if rain occurs during extended lift
+
+📋 CIRIA C703 Sec.3-5 — Crane stability on site
+📋 ASME B30.5 Sec.5-1.4 — Crane level and setup
+📋 BS 7121-1 Sec.7.3 — Crane positioning
+📋 ISO 12480-1 Sec.7.6 — Stability of lifting equipment
+
+Warning — Related Considerations:
+• Soft-ground mats: single 1.2x1.2m mat rarely adequate for large cranes
+• Wind loading on long booms adds significant overturning moment
+• Counterweight must exactly match configuration used for load chart`},
+
+  // ── BANKSMAN REQUIREMENTS ────────────────────────────────────────────────────
+  {tags:["banksman","signaller","signal","hand signal","slinger","banks man","communication signal"],
+   q:"What are the requirements for a banksman in crane operations?",
+   a:`BANKSMAN / SIGNALLER REQUIREMENTS
+
+Definition:
+A banksman (signaller/slinger) directs crane movements when the operator cannot see the load, and supervises slinging operations.
+
+LEGAL REQUIREMENT (LOLER 1998):
+Every lifting operation must be supervised by a competent person.
+Where the crane operator does not have clear view of the load, a banksman is MANDATORY.
+
+COMPETENCY:
+• Formal training and certification — CPCS A40 or NPORS N101
+• Must understand crane limitations, not just hand signals
+• Knowledge of rigging equipment and inspection
+• Ability to read a basic load chart
+• LOLER awareness training
+
+DUTIES Before Lift:
+• Inspect all rigging before use
+• Confirm load weight matches lift plan
+• Check exclusion zone clear and barriers in place
+• Confirm clear communication with crane operator
+• Participate in pre-lift meeting
+
+DUTIES During Lift:
+• Clear unambiguous signals — ONE banksman signals at a time
+• Maintain visual contact with load at ALL times
+• Keep personnel clear of load path
+• Monitor exclusion zone
+• Halt IMMEDIATELY if any unsafe condition
+
+STANDARD HAND SIGNALS (BS 7121):
+• Hoist: Arm extended upward, index finger rotating clockwise
+• Lower: Arm extended downward, index finger rotating anti-clockwise
+• Stop: One arm raised, palm outward
+• Emergency stop: Both arms raised, palms outward
+• Slew clockwise: Arm raised, hand rotating clockwise
+• Boom up: Arm horizontal, thumb up
+• Boom down: Arm horizontal, thumb down
+
+RADIO COMMUNICATION:
+• Pre-agreed abort codeword (e.g. "STOP STOP STOP")
+• Confirmation back from operator before movement
+• Radio check before every lift
+
+📋 BS 7121-1 Sec.8.7 — Banksmen and signalers
+📋 ISO 12480-1 Sec.8.2 — Communication during lifting
+📋 LOLER 1998 Regulation 8 — Competent supervision
+
+Warning — Related Considerations:
+• One designated banksman per lift — multiple signalers creates dangerous confusion
+• Night operations: illuminated wands or radio only — no hand signals
+• After any communication failure: STOP and re-establish before continuing`},
+
+  // ── WIRE ROPE SPECIFICATION ──────────────────────────────────────────────────
+  {tags:["wire rope","rope grade","steel wire rope","6x19","6x36","1770","IWRC","fibre core","rope type","rope construction"],
+   q:"What are the different wire rope types and how are they selected?",
+   a:`WIRE ROPE TYPES AND SELECTION
+
+CONSTRUCTION NOTATION: Strands x Wires per Strand
+• 6x19: 6 strands, 16-26 wires (stiff, abrasion-resistant)
+• 6x36: 6 strands, 27-49 wires (flexible, crush-resistant, preferred for cranes)
+• 8x19: 8 strands (more flexible than 6-strand)
+• 35x7: Rotation-resistant
+• 19x7: Non-spinning — use for single-part hoisting
+
+Core Types:
+• FC (Fibre Core): flexible, NOT for high-temperature use
+• IWRC (Independent Wire Rope Core): higher MBL, crush-resistant, preferred for cranes
+• WSC (Wire Strand Core): between FC and IWRC
+
+Grade (Strength):
+• 1770 N/mm^2: standard for general lifting
+• 1960 N/mm^2: high-strength — same diameter, higher MBL
+• 2160 N/mm^2: ultra-high, specialist
+
+D/d RATIO (Sheave to Rope Diameter) — Critical for Rope Life:
+• Crane hoist on sheaves: D/d minimum 16 (BS 7121)
+• Crane hoist on drums: D/d minimum 14
+• General slings over pin: D/d minimum 12
+• Higher D/d = longer rope life — aim 25+ where possible
+
+MBL Approximation (1770 N/mm^2 IWRC 6x36):
+MBL (tonnes) approximately d^2 x 0.0385 (d in mm)
+e.g. 20mm rope: MBL approximately 15.4T (verify from manufacturer catalogue)
+
+End Termination Efficiency:
+• Swaged/Flemish eye: 100%
+• Rope socket (spelter/resin): 100%
+• Mechanical splice: 90-95%
+• Hand splice: 75-80%
+• Bulldog clips (min 3): 75-80%
+
+📋 ISO 2408 — Steel wire ropes for general purposes
+📋 ISO 4309 Sec.4 — Wire rope selection for cranes
+📋 BS EN 12385 — Steel wire ropes for lifting
+📋 ASME B30.9 Sec.9-1.2 — Wire rope sling specifications
+
+Warning — Related Considerations:
+• Rotation-resistant ropes must never be used in multi-part reeving — internal strands unlay
+• Running rope (hoist line) and static rope (pendant) have different service requirements
+• Always verify rope diameter after installation — wrong drum groove causes rapid wear`},
+
+  // ── PERSONNEL LIFTING ───────────────────────────────────────────────────────
+  {tags:["man riding","personnel basket","man basket","PTB","people","person lifted","human factor","personnel transfer"],
+   q:"What are the requirements for lifting personnel in a basket?",
+   a:`LIFTING PERSONNEL (MAN-RIDING) REQUIREMENTS
+
+GENERAL PRINCIPLE:
+Lifting persons by crane must be the ABSOLUTE LAST RESORT.
+All other means of access must be considered and documented as impractical first.
+
+LOLER 1998 (UK):
+• Permitted ONLY if purpose-designed equipment is used
+• Written risk assessment required justifying no other means practicable
+• Thorough examination every 6 months minimum
+
+PERSONNEL BASKET REQUIREMENTS:
+• Purpose-designed per BS EN 1808 or equivalent
+• SWL includes: personnel + equipment + basket tare weight
+• Full perimeter — toe boards, mid-rail, top rail
+• Inward-opening gate only
+• Clearly marked WLL and maximum persons
+• Primary and secondary (anti-fall) suspension — independent
+• Anti-spin device
+
+CRANE REQUIREMENTS FOR MAN-RIDING:
+• Crane specifically approved for man-riding by manufacturer
+• Secondary braking on hoist
+• Controlled lowering device — prevents free fall
+• Anti-two-block device mandatory
+• LMI functional
+• Derating: typically 50% of normal rated capacity
+• Maximum hoist speed: typically 0.5 m/s
+
+Offshore (DNVGL):
+• PTBs approved by Marine Warranty Surveyor
+• Environmental limit: Hs typically less than 2.0m
+
+OPERATING REQUIREMENTS:
+• Competent person in charge
+• Banksman with constant visual on basket
+• Two-way radio in basket at ALL times
+• PPE: full-body harness with lanyard to basket secondary point
+• Emergency recovery plan documented
+
+📋 LOLER 1998 Regulation 8(1)(c) — Lifting persons
+📋 BS EN 1808 — Safety requirements for suspended access equipment
+📋 ASME B30.23 — Personnel lifting systems
+📋 DNVGL-ST-N001 Sec.11 — Personnel transfer offshore
+📋 BS 7121-4 — Cranes used to lift persons
+
+Warning — Related Considerations:
+• NEVER lift persons in equipment not purpose-designed for this task
+• All personnel must wear full-body harness with secondary attachment to basket
+• Emergency lowering must be tested before each man-riding operation`},
+
+  // ── STOP WORK AND NEAR MISS ─────────────────────────────────────────────────
+  {tags:["near miss","incident","accident","stop work","safety","SWA","unsafe","report","hazard"],
+   q:"What is Stop Work Authority and how should near-misses be managed?",
+   a:`STOP WORK AUTHORITY AND NEAR-MISS MANAGEMENT
+
+STOP WORK AUTHORITY (SWA):
+Every person — regardless of role — has both the RIGHT and DUTY to stop any lifting operation if they observe an unsafe condition.
+No authority can overrule a safety stop. No person should face consequences for exercising SWA.
+
+CONDITIONS REQUIRING IMMEDIATE STOP:
+• Any rigging equipment visually damaged during operation
+• Load swinging uncontrolled beyond exclusion zone
+• Communication failure between operator and banksman
+• Personnel entering exclusion zone unexpectedly
+• Weather deteriorating beyond limits in lift plan
+• Crane showing abnormal behaviour (unusual sounds, list, movement)
+• Load weight greater than planned (crane near relief valve)
+• Any dropped object
+• Ground sinking or cracking near crane supports
+• ANY doubt — STOP first, investigate, restart only when safe
+
+NEAR-MISS DEFINITION:
+An event that COULD have resulted in injury or damage but did not.
+
+Lifting near-miss examples:
+• Rigging detachment during operation (self-corrected)
+• Load swinging into exclusion zone without collision
+• Defective equipment found before use
+• Crane operating near or over rated capacity
+• Communication breakdown requiring emergency abort
+• Unauthorised personnel found in exclusion zone
+
+NEAR-MISS REPORTING PROCESS:
+1. STOP operation — ensure scene is safe
+2. Report immediately to supervisor
+3. Complete incident report within 24 hours
+4. Root cause analysis (5-Why method)
+5. Corrective actions with assigned owner and due date
+6. Lessons learned — share across organisation
+
+Statutory Reporting (UK):
+• Fatality/serious injury: notify HSE immediately
+• RIDDOR 2013: reportable within 10 days
+• Retain all evidence until investigation complete
+
+📋 LOLER 1998 Regulation 8 — Organising lifting operations
+📋 ISO 12480-1 Sec.11 — Incident management
+📋 BS 7121-1 Sec.8.10 — Emergency procedures
+📋 RIDDOR 2013 — Reporting regulations (UK)
+
+Warning — Related Considerations:
+• After any incident: all equipment involved must be examined before reuse
+• Dropped objects require full investigation — size and severity do not determine reporting
+• Rigger and banksman training must include explicit SWA empowerment`},
+
+
+  // ── DISCARD: SHACKLES ──────────────────────────────────────────────────────
+  {tags:["discard shackle","shackle removal","shackle condemn","shackle criteria","shackle worn","shackle crack"],
+   q:"What are the complete discard criteria for shackles?",
+   a:`SHACKLE DISCARD CRITERIA — COMPLETE
+
+IMMEDIATE REMOVAL FROM SERVICE (Any One = Discard):
+
+BODY:
+• Any crack anywhere — visual or NDT confirmed
+• Throat opening increased more than 10% from nominal — measure with calipers
+• Permanent deformation — any bending, twisting, or change in shape
+• Corrosion reducing section more than 10%
+• Gouges or nicks reducing cross-section more than 10%
+• Heat damage — blue or rainbow discolouration
+• Weld repair of any kind — NEVER weld shackles
+• Bow distorted — oval shape changed
+
+PIN:
+• Any crack — visual or NDT
+• Thread damaged or stripped — cannot achieve full engagement
+• Pin bent or deformed even slightly
+• Wrong pin — non-OEM replacement
+• Corrosion on thread reducing diameter more than 10%
+• Collar cracked or missing
+• Split pin missing on bolt-type pin
+
+IDENTIFICATION:
+• WLL marking not legible
+• Grade marking not legible
+• Cannot confirm manufacturer specs from documentation
+• No certification available and cannot be traced
+
+ANGULAR LOADING DERATING (Bow Shackles):
+• 0 deg in-line: full WLL
+• 45 deg: reduce to 70% of WLL
+• 90 deg (side loaded): reduce to 50% of WLL
+• Cross-pin loading (load on pin not body): consult manufacturer
+
+THREAD ENGAGEMENT CHECK:
+• Screw pin: minimum one full thread visible above jaw
+• Bolt pin: nut fully run on, split pin through hole and bent
+
+MEASUREMENT TABLE — Condemn if throat opening exceeds:
+• 6.5mm (1/4"): greater than 7.2mm
+• 9.5mm (3/8"): greater than 10.5mm
+• 13mm (1/2"): greater than 14.3mm
+• 19mm (3/4"): greater than 20.9mm
+• 25mm (1"): greater than 27.5mm
+• 32mm (1.25"): greater than 35.2mm
+
+📋 BS EN 13889 Sec.5 — Forged steel shackles for lifting — inspection
+📋 ASME B30.26 Sec.26-1.3 — Shackle inspection and removal from service
+📋 LOLER 1998 Reg 9 — Thorough examination
+📋 LEEA COPSULE Sec.8 — Shackle guidance
+
+Warning — Related Considerations:
+• After overload or shock load: inspect immediately and NDT if any doubt
+• Shackle pin must be of correct size — never substitute with bolt or nail
+• Tri-link assemblies: check all contact wear points on bow and connecting links`},
+
+  // ── DISCARD: HOOKS ──────────────────────────────────────────────────────────
+  {tags:["discard hook","hook removal","hook condemn","hook criteria","hook deformation","hook stretch"],
+   q:"What are the complete discard criteria for lifting hooks?",
+   a:`LIFTING HOOK DISCARD CRITERIA — COMPLETE
+
+IMMEDIATE REMOVAL FROM SERVICE (Any One = Discard):
+
+THROAT OPENING (Most Critical Measurement):
+• Discard if throat opening has increased more than 15% from nominal
+• Measure at narrowest throat point with calibrated gauge
+• Any permanent deformation visible — even slight — is discard criteria
+Nominal throat check table:
+• 1T hook: throat approx 16mm — discard if greater than 18.4mm
+• 2T hook: throat approx 20mm — discard if greater than 23mm
+• 5T hook: throat approx 28mm — discard if greater than 32.2mm
+• 10T hook: throat approx 38mm — discard if greater than 43.7mm
+
+TWIST:
+• Discard if hook twisted more than 10 degrees from original plane
+• Measure with straight-edge or plumb line comparison to shank axis
+
+CRACKS (Zero Tolerance):
+• Any crack anywhere — shank, body, inner radius, latch groove
+• MPI (magnetic particle inspection) annually for intensively used hooks
+• Particular attention: shank-to-body transition, inner bend radius
+
+WEAR:
+• Load-bearing saddle worn more than 10% reduction in cross-section
+• Depth of contact groove exceeds 10% of hook cross-section diameter
+• Pin holes (clevis hooks) worn more than 3% of nominal diameter
+
+LATCH / SAFETY CATCH:
+• Latch does not return to closed position under spring tension alone
+• Gap when latch pressed: more than 3mm
+• Broken, bent, missing, or non-functioning latch
+• Exception: mousing wire may be used temporarily if latch being replaced
+
+SHANK / THREAD:
+• Thread stripped or cross-threaded
+• Shank bent or deformed
+• Nut not correctly locked (split pin, lock-nut)
+
+CORROSION:
+• Pitting reducing section more than 10%
+• Internal corrosion on shank threads
+
+HEAT DAMAGE:
+• Any discolouration — blue, brown, rainbow
+• Exposure to fire — discard regardless of visual appearance
+
+IDENTIFICATION:
+• WLL not legible — remove
+• Manufacturer identification missing
+
+INSPECTION FREQUENCY:
+• Pre-use: visual every shift by operator
+• Formal: minimum annually as part of LOLER examination
+• Heavy use: 6-monthly recommended, MPI annually
+
+📋 ASME B30.10 Sec.10-2 — Hook inspection, testing, maintenance
+📋 EN 1677-1 Sec.6 — Hooks for lifting — inspection criteria
+📋 BS 7121-1 Sec.10.7 — Hook inspection
+📋 LOLER 1998 Reg 9 — Lifting accessories examination
+
+Warning — Related Considerations:
+• After any shock/snatch loading: inspect and NDT before reuse
+• Swivel hooks: torque to rotate under hand load — stiff swivel creates sling torsion damage
+• Never repair or re-heat hooks — mechanical properties destroyed`},
+
+  // ── DISCARD: CHAIN SLINGS ───────────────────────────────────────────────────
+  {tags:["discard chain","chain removal","chain condemn","chain criteria","chain elongation","chain link"],
+   q:"What are the complete discard criteria for chain slings?",
+   a:`CHAIN SLING DISCARD CRITERIA — COMPLETE
+
+IMMEDIATE REMOVAL FROM SERVICE (Any One = Discard):
+
+ELONGATION (Most Common Failure Mode):
+• Measure individual link length against new link length
+• Discard if link elongated more than 5% of original length
+• How to measure: lay chain straight, measure over 11 links, compare to stamped original
+• Example: Grade 8, 10mm chain — original pitch 29mm
+  11-link measurement should be 319mm
+  Discard if greater than 335mm (5% elongation)
+
+LINK DAMAGE:
+• Any crack — visual or NDT
+• Bent or kinked link — cannot be straightened and returned to service
+• Twisted link — even slight twist
+• Gouges or nicks reducing cross-section diameter more than 10%
+• Corrosion reducing section diameter more than 10%
+• Weld or repair marks on any link
+
+CROSS-SECTION WEAR:
+• Wear at bearing points (where links contact each other)
+• Measure with calipers at most worn point
+• Discard if diameter reduced more than 10% from nominal
+Nominal dia. / Condemn at:
+• 6mm chain: less than 5.4mm
+• 7mm: less than 6.3mm
+• 8mm: less than 7.2mm
+• 10mm: less than 9.0mm
+• 13mm: less than 11.7mm
+• 16mm: less than 14.4mm
+• 20mm: less than 18.0mm
+• 22mm: less than 19.8mm
+• 26mm: less than 23.4mm
+
+CONNECTING COMPONENTS:
+• Master link — throat opening increased more than 10%, any deformation or crack
+• Hooks — see hook discard criteria
+• Coupling links — any deformation, crack, or wear more than 10%
+• Safety latches — non-functioning
+
+HEAT AND CHEMICAL DAMAGE:
+• Heat: any discolouration (yellow, blue, brown, black)
+• Above 200 deg C: mandatory examination — above 300 deg C: discard
+• Chemical: bright or pitted surface — indicates acid attack
+• Any unknown contamination: quarantine until tested
+
+IDENTIFICATION:
+• Grade marking not legible (Grade 8, 10, or 12)
+• WLL tag or label missing
+• Chain grade not confirmed: DISCARD — never assume grade
+
+INSPECTION PROCEDURE:
+1. Lay chain straight — inspect link by link
+2. Measure sample links — compare to original pitch
+3. Measure cross-section at wear points with calipers
+4. Flex each link — feel for stiffness (may indicate crack or deformation)
+5. Inspect all end fittings thoroughly
+
+📋 BS EN 818-4 Sec.7 — Short link chain for lifting — inspection and discard
+📋 ASME B30.9 Sec.9-2.6 — Chain sling inspection and removal
+📋 BS 7121-1 Sec.10.5 — Chain sling inspection
+📋 LEEA COPSULE Sec.6 — Chain sling guidance
+📋 ISO 12480-1 Sec.10 — Inspection of lifting accessories
+
+Warning — Related Considerations:
+• Overloaded chain must be immediately discarded — permanent cold-working not always visible
+• Never attempt to repair chain by cutting and re-welding links
+• After chemical exposure: do not use until metallurgical assessment completed`},
+
+  // ── DISCARD: WEBBING SLINGS ─────────────────────────────────────────────────
+  {tags:["discard webbing","webbing removal","webbing condemn","webbing criteria","synthetic sling discard","flat sling discard"],
+   q:"What are the complete discard criteria for flat webbing slings?",
+   a:`FLAT WEBBING SLING DISCARD CRITERIA — COMPLETE
+
+IMMEDIATE REMOVAL FROM SERVICE (Any One = Discard):
+
+CUTS AND TEARS:
+• Any cut through loadbearing fibres — even partial
+• Edge damage exceeding 10% of sling width over any length
+• Diagonal cut across width — entire cross-section compromised
+• Check BOTH faces and both edges along ENTIRE length
+
+STITCHING:
+• Any broken stitching in end loop seam — even single thread
+• Stitches pulled through to base material
+• Stitching areas stiff or hardened (chemical damage)
+• All end loops must be tight — no gap between stitching rows
+
+ABRASION AND SURFACE WEAR:
+• Abrasion penetrating through outer yarns to loadbearing core
+• Surface pile completely worn flush in any area
+• Glazed or polished areas (high friction abrasion) — check fibre integrity below
+
+CHEMICAL CONTAMINATION:
+• Any staining that cannot be identified and confirmed as non-harmful
+• Acid attack: hardens and discolours fibres — sling becomes stiff and brittle
+• Alkali attack: may not discolour but weakens fibres — sling becomes soft/floppy
+• Solvents: dissolved surface — shiny or waxy appearance
+• If in doubt — DISCARD
+
+UV DEGRADATION:
+• Bleaching of colour — especially for red, green, yellow (colour-coded slings)
+• Fibres become brittle — snap individual fibres with thumbnail
+• Long outdoor storage without UV protection: mandatory thorough examination
+
+HEAT AND FIRE DAMAGE:
+• Glazed or melted surface fibres — any amount
+• Burn marks or charring
+• Stiff areas from heat exposure
+• Sling must NOT be used near heat sources, sparks, flame, welding, or cutting operations
+
+OVERLOADING DAMAGE:
+• Permanent elongation more than 10% of original length
+• Width reduction more than 10% over any section (fibres have failed)
+• Twist that cannot be removed — internal fibres broken
+• Any deformation of end fittings (if metal end loops)
+
+IDENTIFICATION:
+• WLL label not legible — REMOVE
+• Colour coding obscured — REMOVE
+• CE marking not visible — REMOVE (EU/UK supply requirement)
+• Angle rating table on label illegible — REMOVE
+
+MEASUREMENT AIDS:
+• Original length marked on label — measure if elongation suspected
+• Original width: compare to label specification
+• Go/no-go sling condition test: pull taut, twist 180 deg — should recover flat
+
+POST-CLEANING:
+• Synthetic slings can be washed in mild detergent at 40 deg C
+• Do NOT bleach or use chemical cleaners
+• Dry naturally — away from heat and UV
+• Re-inspect after cleaning
+
+📋 BS EN 1492-1 Sec.7 — Flat webbing slings — inspection and discard
+📋 ASME B30.9 Sec.9-4.6 — Synthetic web sling inspection and removal
+📋 LOLER 1998 Reg 9 — Lifting accessory examination
+📋 LEEA COPSULE Sec.7 — Textile sling guidance
+
+Warning — Related Considerations:
+• Never join two webbing slings by knotting — strength reduction greater than 50%
+• Corner protection is mandatory — sharp edges cut webbing slings rapidly
+• Polyester recommended over Nylon for most applications: unaffected by moisture, less stretch`},
+
+  // ── DISCARD: WIRE ROPE (EXTENDED) ───────────────────────────────────────────
+  {tags:["discard wire rope","wire rope removal","wire rope condemn","broken wires count","wire rope criteria","birdcage","kink","rope damage"],
+   q:"What are the extended discard criteria and broken wire counting for wire rope?",
+   a:`WIRE ROPE DISCARD CRITERIA — EXTENDED GUIDE
+
+BROKEN WIRE COUNTING RULES:
+
+Step 1 — Identify rope construction:
+• Count strands (typically 6 or 8) and wires per strand (varies)
+• Note: 6x19 class = 16-26 wires per strand; 6x36 class = 27-49 wires per strand
+
+Step 2 — Measure inspection lengths:
+• Short reference length: 6 x rope diameter (6d)
+  e.g. 20mm rope: inspect any 120mm length
+• Long reference length: 30 x rope diameter (30d)
+  e.g. 20mm rope: inspect any 600mm length
+
+Step 3 — Count broken wires:
+• Count ALL broken wires visible — on surface only (internal invisible)
+• Count each broken end separately — one break = 2 broken wire ends but count as 1
+
+DISCARD LIMITS PER ISO 4309 (most stringent):
+6-strand rope, FC core:
+• In any 6d length: 2 or more broken wires = discard
+• In any 30d length: 4 or more broken wires = discard
+
+6-strand rope, IWRC:
+• In any 6d length: 2 or more broken wires = discard
+• In any 30d length: 4 or more broken wires = discard
+
+8-strand rope:
+• In any 6d length: 3 or more broken wires = discard
+• In any 30d length: 6 or more broken wires = discard
+
+Rotation-resistant rope (19x7, 35x7):
+• More stringent: 2 broken wires in 6d or any visible damage = discard
+• Any broken wires in outer strands of inner rope = discard
+
+OTHER DISCARD CONDITIONS:
+
+Kinking:
+• Any kink — permanent angular distortion in rope lay
+• Even if straightened — internal wire damage remains
+• Immediate discard — no exception
+
+Crushing and Deformation:
+• Loss of round cross-section
+• Basket/core protrusion visible
+• Strand displacement — one or more strands pushed outward
+• Reduction in diameter more than 10% from nominal
+
+Birdcaging:
+• Outer strands opened outward like cage — internal rope buckled
+• Caused by sudden load release — inner core springs outward
+• Immediate discard — no repair possible
+
+Internal Corrosion Detection:
+• Hold rope, bend through 90 deg over small diameter — listen for crackle
+• Tap rope with hammer — hollow sound indicates internal corrosion
+• Lub oil does not flow freely between strands when rope is flexed
+• NDT (ultrasonic) available for thorough examination
+
+Heat Damage:
+• Any discolouration: blue, brown, or straw colour
+• Damaged area may appear bright due to lubricant burning off
+• Discard entire rope — heat affects full metallurgy
+
+End Terminations:
+• Any crack in swage sleeve
+• Swage diameter reduced more than 10%
+• Any movement of rope within swage — mark rope, check after next use
+• 1 broken wire at or within 1 rope diameter of termination = discard
+
+DIAMETER REDUCTION (Detailed):
+Measure at 3 locations — discard if AVERAGE reduction exceeds:
+• Single layer ropes: more than 10% from nominal diameter
+• Multi-layer ropes: more than 5% from nominal
+
+📋 ISO 4309 — Cranes — Wire ropes — Code of practice for examination and discard
+📋 ASME B30.9 Sec.9-1.8 — Wire rope sling inspection and removal
+📋 BS EN 12385-4 — Steel wire ropes for lifting
+📋 BS 7121-1 Sec.10.4 — Wire rope inspection
+📋 LEEA COPSULE Sec.4 — Wire rope sling examination
+
+Warning — Related Considerations:
+• Discarded rope must be cut into short sections on site — prevent re-use
+• Any rope removed due to shock load: quarantine and test before any return to service
+• D/d ratio check mandatory whenever rope is re-reeved onto different crane`},
+
+  // ── DISCARD: EYE BOLTS ──────────────────────────────────────────────────────
+  {tags:["discard eye bolt","eye bolt removal","eye bolt condemn","eye bolt criteria","eye bolt damage"],
+   q:"What are the discard criteria for eye bolts and hoist rings?",
+   a:`EYE BOLT AND HOIST RING DISCARD CRITERIA
+
+EYE BOLT DISCARD (DIN 580 / ASME):
+Immediate Removal:
+• Any crack — in eye, collar, or shank — zero tolerance
+• Eye deformed — not circular, bent outward, or narrowed
+• Collar not flat — bent, cracked, or corroded
+• Shank bent even slightly — indicates overload or wrong application
+• Thread stripped or damaged — cannot achieve full engagement
+• Corrosion reducing any cross-section more than 10%
+• Heat damage — discolouration
+
+Overload Indicators:
+• Permanent deformation of eye (stretched or bent)
+• Collar lifting from surface (shank bending under load)
+• Any evidence of bending in wrong plane (cross-loading)
+
+Inspection Method:
+1. Check eye: measure inside diameter — compare to nominal + 10% limit
+2. Rotate in hand — should spin freely if OK
+3. Inspect shank threads — run nut down by hand to detect damage
+4. Visual all surfaces for cracks — use dye penetrant (PT) if suspected
+
+HOIST RING DISCARD:
+Immediate Removal:
+• Pivot or swivel mechanism stiff or seized — will not rotate freely
+• Any crack in body, bail, or retaining hardware
+• Threads stripped or damaged
+• Deformation of bail (ring) under load
+• Retaining ring/snap ring missing or deformed
+• WLL marking missing
+
+Hoist Ring Thread Installation Check:
+• Must achieve full manufacturer-specified thread engagement
+• Torque verified per manufacturer specification
+• Check pivot rotates and bail swings freely after installation under no-load
+
+LIFTING POINTS ON STRUCTURES (Padeyes):
+Discard/Condemn Criteria:
+• Hole ovality more than 3% of hole diameter
+• Plate thickness reduction more than 10% from design
+• Any weld defect — crack, undercut more than 10% thickness, major porosity
+• Corrosion reducing plate thickness more than 10%
+• Material upgrade required — original spec not acceptable for new load
+
+📋 DIN 580 — Eye bolts — inspection requirements
+📋 ASME B30.26 Sec.26-1.5 — Eye bolt inspection and removal
+📋 BS EN 15011 — Cranes — Padeye and lug inspection
+📋 LOLER 1998 Reg 9 — Thorough examination
+📋 BS 7121-1 Sec.6.7 — Lifting point inspection
+
+Warning — Related Considerations:
+• Never re-use eye bolts removed from hot work locations without metallurgical clearance
+• Galvanised eye bolts: zinc coating masks surface cracks — PT/MPI required for thorough examination
+• Hoist rings with seized pivots: do NOT lubricate and continue — replace immediately`},
+
+  // ── DISCARD: RIGGING HARDWARE ───────────────────────────────────────────────
+  {tags:["discard hardware","rigging hardware removal","masterlink discard","turnbuckle discard","rigging condemn"],
+   q:"What are the discard criteria for general rigging hardware (masterlinks, rings, turnbuckles)?",
+   a:`RIGGING HARDWARE DISCARD CRITERIA
+
+MASTER LINKS AND RINGS:
+
+Discard Criteria:
+• Throat opening increased more than 5% from nominal (more stringent than shackles)
+• Any crack — visual or NDT
+• Permanent deformation — bending, twisting, change of shape
+• Wear at contact points exceeding 10% of cross-section diameter
+• Corrosion reducing section more than 10%
+• WLL marking not legible
+• Grade marking not legible
+
+Measurement — Condemn if throat opening exceeds:
+• Grade 8, 10mm master link nominal throat 11mm: discard if greater than 11.55mm
+• Grade 8, 13mm master link nominal throat 14mm: discard if greater than 14.7mm
+• Grade 8, 16mm master link nominal throat 18mm: discard if greater than 18.9mm
+• Grade 8, 20mm master link nominal throat 22mm: discard if greater than 23.1mm
+
+DELTA / PEAR-SHAPED RINGS:
+Same criteria as master links.
+Additional: check inner radius of delta — concentrated wear point from sling legs.
+
+TURNBUCKLES / RIGGING SCREWS:
+Discard Criteria:
+• Any crack in body, jaw, or hook ends
+• Thread stripped — cannot achieve minimum engagement
+• Body bent or deformed
+• Jaw opening increased more than 10%
+• Jaw pin missing or damaged
+• Safety locking device (lock nut, cotter pin) missing
+• Bearing surfaces worn more than 10%
+
+WIRE ROPE CLIPS (BULLDOG GRIPS):
+Discard Criteria:
+• U-bolt cracked or deformed
+• Saddle cracked or worn more than 10%
+• Nut thread stripped
+• Any clip that cannot be properly torqued
+
+SWIVEL CONNECTORS:
+Discard Criteria:
+• Will not rotate freely under light hand load
+• Any crack or deformation
+• Bearing/swivel mechanism corroded or seized
+• Locking device (split pin) missing
+
+LOAD BINDERS (Chain BOOMERS):
+Not for lifting — lashing only. If found in lifting application: REMOVE immediately.
+
+WIRE ROPE THIMBLES:
+Discard if:
+• Groove worn more than 25% of original depth
+• Thimble bent or pulled open more than 10% of groove diameter
+• Corrosion pitting in groove
+• Split along seam (open thimbles)
+
+📋 BS EN 818-4 Sec.7 — Masterlinks — inspection and discard
+📋 ASME B30.26 — Rigging hardware inspection and removal
+📋 LOLER 1998 Reg 9 — Thorough examination
+📋 LEEA COPSULE Sec.8 — Rigging hardware discard guidance
+
+Warning — Related Considerations:
+• All hardware must be returned to quarantine when removed — not back into general store
+• "Condemned" tag must be physically attached before removal from service
+• Destroyed or cut discarded slings/hardware to prevent re-use`},
+
+  // ── ENGINEERING: GROSS LIFT WEIGHT ─────────────────────────────────────────
+  {tags:["GLW","gross lift weight","lift weight","weight calculation","rigging weight","total weight","margin"],
+   q:"How is Gross Lift Weight (GLW) calculated with all factors?",
+   a:`GROSS LIFT WEIGHT (GLW) — COMPLETE CALCULATION
+
+DEFINITION:
+GLW = the total weight the crane must lift including all loads and factors.
+This is compared to the crane's rated capacity at the working radius and configuration.
+
+FULL GLW FORMULA:
+GLW = (Net Load Weight + Rigging Weight + Contingency) x DAF x RF
+
+WHERE:
+
+Net Load Weight:
+• Verified weight of the load itself
+• Source: engineering drawings, certified weighing, or conservative calculation
+• If estimated: add minimum 10% margin
+• For liquid-filled: include full liquid weight at maximum fill level
+
+Rigging Weight (RW):
+• All slings, shackles, hooks, beams, spreaders, padeyes
+• Typical: 2-5% of net load for standard lifts
+• Complex lifts: calculate each item individually
+• Lifting frame/jig: always calculate individually
+
+Contingency Factor (CF):
+• Added to cover weight uncertainty
+• Weighed load: CF = 1.0 (no contingency needed if certified weight)
+• Calculated weight: CF = 1.05 to 1.10 (5-10% contingency)
+• Estimated weight: CF = 1.10 to 1.20 (10-20% contingency)
+
+Dynamic Amplification Factor (DAF):
+• Onshore level hardstand: DAF = 1.10
+• Onshore rough ground: DAF = 1.15 to 1.25
+• Offshore in air: DAF = 1.10 minimum
+• Offshore splash zone: DAF = 1.10 to 1.30
+
+Rigging Factor (RF):
+• Accounts for sling angle inefficiency in vertical component
+• RF = 1/(sin theta) — for most vertical lifts this is already in sling selection
+• Some companies apply RF to GLW instead (approach varies by company)
+
+WORKED EXAMPLE — Complete:
+Net load: 45,000 kg (from engineering drawing — calculated)
+Contingency: 10% = 4,500 kg
+Rigging hardware: 850 kg (calculated individually)
+Sub-total: 50,350 kg
+
+DAF = 1.10 (onshore, normal conditions)
+GLW = 50,350 x 1.10 = 55,385 kg = 55.4T
+
+Crane capacity at working radius: 70T
+Capacity utilisation: 55.4/70 x 100 = 79.1%
+Classification: CRITICAL (above 75%)
+
+Net load margin: (70T - 55.4T) = 14.6T available margin
+Load chart must show capacity at exact radius AND configuration (boom length, counterweight).
+
+CAPACITY UTILISATION TABLE:
+• Below 50%: Routine lift
+• 50-75%: Non-routine lift — enhanced planning required
+• 75-85%: CRITICAL lift — full critical lift procedure
+• Above 85%: Maximum effort lift — director of engineering approval typically required
+• Above 90%: Exceptional lift — specialist review mandatory
+
+📋 ISO 12480-1 Sec.7.4 — Gross lift weight calculation
+📋 ASME P30.1 Sec.6.2 — Load weight determination
+📋 BS 7121-1 Sec.6.2 — Weight assessment
+📋 DNVGL-ST-N001 Sec.4.3 — Weight and DAF for offshore
+
+Warning — Related Considerations:
+• GLW must always be compared to crane capacity with ALL derating applied (wind, ground, level)
+• Rigging weight is often underestimated on complex lifts — always calculate individually for critical lifts
+• If load weight is uncertain: do NOT proceed past 80% crane capacity without independent weight verification`},
+
+  // ── ENGINEERING: SLING ANGLE FORCE ─────────────────────────────────────────
+  {tags:["sling force","sling tension formula","angle factor","K factor","force calculation","tension calculation"],
+   q:"How are sling forces and angle factors calculated precisely?",
+   a:`SLING FORCE AND ANGLE FACTOR CALCULATIONS
+
+FUNDAMENTAL RELATIONSHIPS:
+
+Vertical Component Equilibrium:
+Sum of vertical force components from all legs = Total load
+For N legs at equal angle theta:
+N x T x sin(theta) = W
+T = W / (N x sin(theta))
+
+Horizontal Force Component (on load structure):
+H = T x cos(theta)
+This inward horizontal force acts on the load — MUST be checked against structural capacity.
+
+ANGLE FACTOR (AF or K factor):
+AF = 1 / sin(theta)
+This is the multiplier on the single vertical leg load.
+
+Complete AF Table:
+theta(deg) | sin(theta) | AF=1/sin | Increase over vertical
+90 deg     | 1.000      | 1.000    | 0%
+85 deg     | 0.996      | 1.004    | 0.4%
+80 deg     | 0.985      | 1.015    | 1.5%
+75 deg     | 0.966      | 1.035    | 3.5%
+70 deg     | 0.940      | 1.064    | 6.4%
+65 deg     | 0.906      | 1.104    | 10.4%
+60 deg     | 0.866      | 1.155    | 15.5%
+55 deg     | 0.819      | 1.221    | 22.1%
+50 deg     | 0.766      | 1.305    | 30.5%
+45 deg     | 0.707      | 1.414    | 41.4%
+40 deg     | 0.643      | 1.556    | 55.6%
+35 deg     | 0.574      | 1.743    | 74.3%
+30 deg     | 0.500      | 2.000    | 100%  LIMIT
+25 deg     | 0.423      | 2.366    | 136.6% DANGER
+20 deg     | 0.342      | 2.924    | 192.4% PROHIBITED
+
+HORIZONTAL FORCE TABLE (as % of leg tension):
+90 deg: H = 0%  |  60 deg: H = 57.7%  |  45 deg: H = 100%  |  30 deg: H = 173%
+
+SLING INCLUDED ANGLE vs SLING ANGLE FROM HORIZONTAL:
+Included angle (A) between two sling legs:
+theta (from horizontal) = (180 - A) / 2
+
+Examples:
+A = 60 deg: theta = 60 deg from horizontal
+A = 90 deg: theta = 45 deg from horizontal
+A = 120 deg: theta = 30 deg from horizontal (LIMIT)
+A = 150 deg: theta = 15 deg from horizontal (PROHIBITED)
+
+MEASURING SLING ANGLE IN FIELD:
+Method 1: Measure hook height (H) and horizontal spread (S) from hook to padeye
+theta = arctan(H/S)
+
+Method 2: Use angle gauge on sling leg directly
+
+Method 3: Calculate from geometry
+If sling length = L and vertical height = h:
+theta = arcsin(h/L)
+
+PRACTICAL SHORTCUT RULE:
+If the horizontal spread between lift points equals the hook height above them:
+theta = 45 deg, AF = 1.414 — legs carry 41% more than vertical share
+
+PROOF CHECK — EQUILIBRIUM:
+For 2-leg sling at 45 deg, 10T load:
+T_leg = (10/2) x 1.414 = 7.07T per leg
+Vertical check: 2 x 7.07 x sin45 = 2 x 7.07 x 0.707 = 10.0T CORRECT
+Horizontal check: 2 x 7.07 x cos45 = 2 x 5.0 = 10.0T (inward, cancels out)
+
+📋 ASME B30.9 Sec.9-1.7 — Sling angle and tension factors
+📋 BS EN 1492-1 Annex B — Angle factors for flat slings
+📋 ISO 12480-1 Sec.7.3 — Rigging geometry
+📋 ASME P30.1 Sec.6.2 — Sling force calculations
+
+Warning — Related Considerations:
+• The horizontal force component must be checked against load structure — padeye plates must resist this
+• For basket hitches: the sling contacts the load along its length — friction and contact pressure also apply
+• Calculate angle for WORST CASE position during entire lift — not just start position`},
+
+  // ── ENGINEERING: GBP DETAILED ───────────────────────────────────────────────
+  {tags:["GBP formula","ground pressure formula","bearing pressure","Boussinesq","mat design","spread formula","ground bearing calculation"],
+   q:"What are the detailed formulas for ground bearing pressure calculations?",
+   a:`GROUND BEARING PRESSURE — DETAILED FORMULAS
+
+BASIC FORMULA:
+q = R / A
+q = Ground bearing pressure (kPa or kN/m2)
+R = Concentrated reaction load (kN)
+A = Contact area of pad, float, or mat (m2)
+
+OUTRIGGER FLOAT CALCULATION:
+Step 1: Get outrigger reaction from crane load chart (R kN)
+Step 2: Determine pad/float area
+    If pad size known: A_pad = length x width
+    Circular pad: A_pad = pi x r^2
+
+Step 3: Check against soil capacity
+    If q less than q_allow: OK
+    If q greater than q_allow: use larger mat
+
+LOAD SPREAD THROUGH MAT/CRIBBING:
+Effective area at depth z below pad surface:
+
+Square pad (B x B), load spread at 30 deg (conservative):
+A_eff = (B + 2z x tan30)^2 = (B + 1.155z)^2
+
+Square pad, load spread at 45 deg (optimistic):
+A_eff = (B + 2z)^2
+
+Pressure at depth z:
+q_z = R / A_eff
+
+USE: Check pressure at top of buried service or weak layer below surface.
+
+RECTANGULAR PAD (L x B):
+A_eff at depth z (30 deg spread): (L + 1.155z) x (B + 1.155z)
+
+BOUSSINESQ POINT LOAD DISTRIBUTION (for subsurface stress check):
+Vertical stress at depth z and horizontal distance r from load:
+sigma_z = (3R/2 pi z^2) x 1/(1+(r/z)^2)^(5/2)
+
+For directly below load (r=0):
+sigma_z = 3R/(2 pi z^2)
+
+This gives stress in soil at depth z — compare to allowable bearing at that depth.
+
+CRAWLER CRANE GBP:
+Track contact pressure (uniform assumption):
+q = W_total / (2 x L_track x B_track)
+W_total = gross operating weight including load (kN)
+L_track = track contact length (m)
+B_track = track shoe width (m)
+Factor 2 = two tracks
+
+Dynamic pressure with DAF:
+q_dynamic = q_static x DAF (use DAF = 1.10 to 1.25)
+
+WORKED EXAMPLE — Outrigger:
+Outrigger reaction R = 800 kN
+Pad size: 1.0m x 1.0m = 1.0 m2
+q = 800/1.0 = 800 kPa — too high for most ground
+
+Use 2.0m x 2.0m timber mat (4.0 m2):
+q = 800/4.0 = 200 kPa — acceptable for dense gravel or stiff clay
+
+Check at 0.5m depth (buried service):
+A_eff = (2.0 + 1.155x0.5)^2 = (2.0 + 0.578)^2 = 2.578^2 = 6.65 m2
+q_0.5m = 800/6.65 = 120 kPa — check against pipe allowable bearing
+
+ALLOWABLE BEARING CAPACITY TABLE:
+• Very soft clay: 25-50 kPa
+• Soft clay: 50-75 kPa
+• Firm clay: 75-150 kPa
+• Stiff clay: 150-300 kPa
+• Loose sand: 50-100 kPa
+• Medium dense sand: 100-200 kPa
+• Dense sand: 200-400 kPa
+• Dense gravel: 300-600 kPa
+• Very dense gravel: 500-1000 kPa
+• Weak rock: 1000-3000 kPa
+• Sound rock: 3000-10000+ kPa
+Always verify with site-specific geotechnical investigation.
+
+FACTOR OF SAFETY (FOS):
+Typically applied to allowable bearing:
+q_allow = q_ultimate / FOS
+Where FOS = 2.5 to 3.0 for crane operations per EN 1997-1
+
+📋 CIRIA C703 Sec.5 — GBP calculations for cranes
+📋 EN 1997-1 Sec.6.5 — Bearing capacity of spread foundations
+📋 BS 8004 Sec.2.4 — Allowable bearing pressures
+📋 ASME P30.1 Sec.7.3 — Ground conditions assessment
+
+Warning — Related Considerations:
+• Saturated soils: bearing capacity can reduce 50% or more — get geotechnical advice
+• Adjacent excavations within 45 deg influence zone must be assessed
+• Mat rotation during crane slew — ensure mat bearing pressure uniformly distributed`},
+
+  // ── ENGINEERING: WIND LOAD ON CRANES ───────────────────────────────────────
+  {tags:["wind load","wind force","crane wind","boom wind","sail area","wind calculation","Beaufort","dynamic pressure"],
+   q:"How is wind load calculated on cranes and lifted loads?",
+   a:`WIND LOAD CALCULATIONS ON CRANES AND LOADS
+
+DYNAMIC WIND PRESSURE:
+q = 0.5 x rho x V^2 = 0.613 x V^2 (simplified, at sea level, 15 deg C)
+q = dynamic pressure (Pa = N/m2)
+V = wind velocity (m/s)
+rho = air density = 1.225 kg/m3
+
+WIND FORCE ON AN OBJECT:
+F = Cd x A x q
+F = wind force (N or kN)
+Cd = drag coefficient (dimensionless)
+A = projected area perpendicular to wind direction (m2)
+q = dynamic pressure (Pa)
+
+Common Cd Values:
+• Flat plate (perpendicular): Cd = 1.2 to 2.0
+• Cylinder: Cd = 0.5 to 1.2
+• Square section: Cd = 1.5 to 2.0
+• Lattice structure (open): Cd = 1.3 (use solidity ratio method)
+• Crane cab (box shape): Cd = 1.4
+• I-beam or H-section: Cd = 1.5
+
+LATTICE BOOM WIND FORCE (ISO 4302 Method):
+Step 1: Determine solidity ratio phi = (solid area) / (total outline area)
+Step 2: Drag coefficient for lattice: Cd_lattice = 0.5 + 0.3/phi (approximate)
+Step 3: F_boom = Cd x A_boom_outline x q
+
+GUST FACTOR:
+Mean wind to peak gust conversion:
+V_gust = Vg x V_mean
+Where Vg = gust factor (typically 1.4 to 1.6 for short duration gusts)
+Peak gust pressure = 2.0 to 2.6 x mean pressure
+
+WORKED EXAMPLE:
+Large plate load: 10m x 4m = 40 m2, Cd = 1.3
+Wind speed: 12 m/s mean, gust = 12 x 1.4 = 16.8 m/s
+q_gust = 0.613 x 16.8^2 = 0.613 x 282 = 173 Pa
+F_wind = 1.3 x 40 x 173 = 9,000 N = 9.0 kN
+
+This horizontal force:
+• Causes crane to work at offset radius (effective radius increase)
+• Creates overturning moment on crane structure
+• Must be compared to crane stability margin
+
+CRANE OVERTURNING MOMENT FROM WIND:
+M_wind = F_wind x h_cog
+Where h_cog = height of wind force centroid above ground
+
+WIND SPEED TO PRESSURE TABLE:
+5 m/s (18 km/h): q = 15 Pa — gentle breeze
+10 m/s (36 km/h): q = 61 Pa — fresh breeze — CAUTION
+13.4 m/s (48 km/h): q = 110 Pa — near gale — STOP operations
+20 m/s (72 km/h): q = 245 Pa — gale
+30 m/s (108 km/h): q = 551 Pa — storm
+
+BEAUFORT SCALE REFERENCE:
+• Beaufort 5 (10 m/s): Fresh breeze — whitecaps — caution zone
+• Beaufort 6 (12 m/s): Strong breeze — small tree movement — review limits
+• Beaufort 7 (15 m/s): Near gale — whole tree movement — most ops cease
+• Beaufort 8 (18 m/s): Gale — difficulty walking — crane operations prohibited
+
+📋 ISO 4302 — Cranes — Wind load assessment
+📋 EN 1991-1-4 — Eurocode 1 Wind Actions
+📋 BS 7121-1 Sec.8.5 — Wind and environmental limits
+📋 DNVGL-ST-N001 Sec.12 — Wind criteria offshore
+📋 ASME B30.5 Sec.5-1.7 — Wind effects
+
+Warning — Related Considerations:
+• Large-area loads (sheet goods, platforms, vessels): wind force can exceed structural limit of load
+• Wind increases effective radius — check capacity at increased radius plus original radius
+• Measure wind at HOOK HEIGHT — not at ground level — can be 50-100% higher`},
+
+  // ── ENGINEERING: DAF FULL CALCULATION ──────────────────────────────────────
+  {tags:["DAF calculation","dynamic factor formula","dynamic amplification calculation","impact factor formula","DAF table"],
+   q:"How is Dynamic Amplification Factor (DAF) calculated in detail?",
+   a:`DYNAMIC AMPLIFICATION FACTOR — DETAILED CALCULATION
+
+DEFINITION:
+DAF accounts for increase in actual load above static weight due to dynamic effects:
+acceleration, deceleration, crane structure flexibility, ground irregularity, wave motion.
+
+Dynamic Load = Static Load x DAF
+
+METHOD 1 — DIRECT TABLE (ISO 12480-1 / BS 7121):
+Lifting Condition                               | DAF
+Onshore, level hardstand, smooth operations     | 1.10
+Onshore, slightly uneven ground, steady         | 1.15
+Onshore, rough ground, start/stop               | 1.20-1.25
+Offshore crane lift in air (still water)        | 1.10
+Offshore, light vessel motion                   | 1.10-1.15
+Offshore, moderate vessel motion                | 1.20-1.30
+Splash zone (entering/leaving water)            | 1.10-1.30
+Pick and carry (on road)                        | 1.10
+
+METHOD 2 — CALCULATED (DNVGL-ST-N001):
+
+Dynamic Coefficient for Hoisting:
+Phi_1 = 1 + xi_1 x v_h / Sqrt(g x L_r)
+Where:
+xi_1 = hoist system dynamic factor (typically 0.5 for crane)
+v_h = hoisting velocity at hook (m/s)
+g = 9.81 m/s^2
+L_r = elastic elongation length of rope = L_rope + c_rigid
+Typical value: Phi_1 = 1.05 to 1.15
+
+Dynamic Coefficient for Travel (ASME P30.1):
+Phi_2 = 1 + v_travel^2 / (g x L_pendulum)
+Where:
+v_travel = travel speed (m/s)
+L_pendulum = effective pendulum length (hook height to load COG) (m)
+
+Offshore Dynamic Load Factor (DNVGL Method):
+DAF_total = (W_static + W_dynamic) / W_static
+W_dynamic from vessel motion analysis = mass x acceleration
+Typical range: 1.05 to 1.50 depending on sea state
+
+METHOD 3 — DNVGL SIMPLIFIED (Common Offshore Use):
+For lifts in sheltered waters (Hs less than 0.5m): DAF = 1.10
+For normal offshore (Hs = 1.0-2.5m): DAF = 1.15 to 1.25
+For heavy weather (Hs greater than 2.5m): requires dynamic analysis
+
+SUBSEA/SPLASH ZONE SNATCH LOAD:
+Snatch load factor when load exits water:
+SF = (W_in_water + F_suction + F_hydro_added_mass) / W_in_air
+Can be very high — requires specialist calculation for submerged lifts.
+
+APPLYING DAF:
+GLW = (Rigged Weight) x DAF
+Do NOT apply DAF twice — it covers all routine dynamic effects.
+Separate factors for wind, inertia, and inclination apply ADDITIONALLY.
+
+REDUCTION FOR SLOW CRANE OPERATIONS:
+For very slow operations (v_h less than 0.1 m/s):
+DAF may be reduced to 1.05 with engineering justification.
+
+📋 ISO 12480-1 Sec.7.4 — Dynamic load factors
+📋 BS 7121-1 Sec.6.3 — Dynamic effects
+📋 DNVGL-ST-N001 Sec.4.3 — Dynamic amplification
+📋 ASME P30.1 Sec.6.2 — DAF in load determination
+📋 CIRIA C703 Sec.3 — Load assessment with DAF
+
+Warning — Related Considerations:
+• DAF increases significantly with hoisting speed — SLOW DOWN when near rated capacity
+• Offshore: never exceed sea state limits stated in lift plan — DAF becomes unpredictable
+• Tandem lifts: each crane applies own DAF — load sharing imbalance adds additional dynamic`},
+
+  // ── ENGINEERING: PROOF LOAD FORMULAS ───────────────────────────────────────
+  {tags:["proof load formula","proof test calculation","test load","SWL test calculation","structural test"],
+   q:"What are the proof load formulas and acceptance criteria?",
+   a:`PROOF LOAD CALCULATIONS AND ACCEPTANCE CRITERIA
+
+STANDARD PROOF LOAD VALUES:
+
+Lifting Equipment (Cranes, Hoists):
+• Standard: Test Load = 1.25 x WLL/SWL
+• Alternative (BS 7121 for cranes over 10T): 1.1 x SWL may be acceptable
+• After major repair: 1.1 x SWL minimum
+
+Lifting Accessories (Slings, Shackles, Chain, Hooks):
+• BS EN standards: Test Load = 2.0 x WLL (200%)
+• ASME B30 series: Test Load = 2.0 x rated load
+• New components must be proof tested before first use
+• Exception: components with full EC Declaration of Conformity per EN 818/EN 1492 etc.
+
+Padeyes and Structural Lifting Points:
+• New offshore padeyes: typically 2.0 x maximum design load
+• Critical structures: 2.5 x design load per project specification
+• After repair: engineer-specified
+
+Spreader Beams and Below-Hook Devices (ASME BTH-1):
+• New: Test Load = 1.5 x rated load
+• After significant repair: 1.5 x rated load
+
+PROOF TEST PROCEDURE:
+1. Load application method: calibrated dead weights, hydraulic test bed, or dynamometer-verified crane lift
+   Accuracy required: +-2% of specified test load
+
+2. Loading sequence:
+   a. Apply 50% of test load — hold 2 minutes — inspect
+   b. Apply 100% of test load — hold 10 minutes minimum — inspect
+   c. Release load
+   d. Measure critical dimensions before and after — compare
+
+3. During load hold:
+   • Monitor for creep (load drops or component extends)
+   • Inspect all welds, connections, joints
+   • Watch for crack formation (listen for sounds)
+
+4. Post-test inspection:
+   • Full visual inspection all surfaces
+   • NDT (MPI or UT) on all structural welds
+   • Measure all critical dimensions — compare to pre-test and nominal
+
+ACCEPTANCE CRITERIA:
+• No fracture or rupture of any member
+• No permanent deformation exceeding specified tolerance:
+  Cranes: typically 0.5% of span or L/200 for beams
+  Accessories: return to within 2% of original dimension
+• No movement of rope within swage (mark before test)
+• All safety devices functional after test
+• No cracking confirmed by NDT
+
+CALIBRATION REQUIREMENTS:
+• Load cells: calibrated annually (traceable to national standard)
+• Pressure gauges: calibrated quarterly if used for test loads
+• Certificate of calibration available on site during test
+
+DOCUMENTATION:
+• Test specification signed by responsible engineer
+• Test data sheet: date, operator, pre/post measurements, all readings
+• NDT report attached
+• Certificate of test issued — includes test load, duration, acceptance
+• Traceable to load cell calibration certificate
+
+📋 BS 7121-1 Sec.10.6 — Load testing procedures
+📋 ASME BTH-1 Sec.5 — Proof load testing
+📋 DNVGL-ST-N001 Sec.14 — Structural testing offshore
+📋 ISO 12480-1 Sec.10 — Testing and commissioning
+📋 BS EN 818-4 Sec.8 — Chain sling proof testing
+
+Warning — Related Considerations:
+• NEVER test beyond specified proof load — you are not doing a destructive test
+• Personnel must be excluded from test area during load application — wire rope or chain failure can be catastrophic
+• Cold weather testing: ensure material is within ductile-to-brittle transition temperature before applying load`},
+
+  // ── ENGINEERING: STABILITY MOMENT ──────────────────────────────────────────
+  {tags:["stability calculation","overturning moment","tipping moment","stabilising moment","anti-tip","moment calculation"],
+   q:"How are overturning and stabilising moments calculated for crane stability?",
+   a:`CRANE STABILITY MOMENT CALCULATIONS
+
+PRINCIPLE:
+Crane tips when: Overturning Moment (M_OT) greater than Stabilising Moment (M_S)
+Safety factor: M_S / M_OT must be greater than or equal to required minimum (1.15 to 1.40)
+
+STABILISING MOMENT (M_S):
+M_S = W_crane x d_S
+Where:
+W_crane = total crane weight (kN), including counterweight and all equipment
+d_S = horizontal distance from tipping line to crane centre of gravity
+
+OVERTURNING MOMENT (M_OT):
+M_OT = (W_load + W_rigging) x R + W_boom x d_boom
+Where:
+W_load = load weight (kN)
+W_rigging = rigging weight (kN)
+R = working radius (m) — measured from slew centre to hook point
+W_boom = boom weight (kN)
+d_boom = horizontal distance from slew centre to boom COG
+
+TIPPING LINE DEFINITION:
+• 4-outrigger crane: line connecting the two outriggers on the relevant side
+• Crawler crane: outer edge of the crawler tracks
+• For slewing: tipping line changes with boom direction — use load chart for correct sector
+
+SIMPLIFIED MOBILE CRANE STABILITY CHECK:
+Total overturning moment = (Load + Rigging) x Radius
+Total stabilising moment = (Counterweight x CW radius) + (Crane body weight x body radius)
+
+At rated capacity: M_S / M_OT typically = 1.15 to 1.25 (per load chart derivation standard)
+
+EFFECT OF SLOPE ON STABILITY:
+Lateral slope angle alpha reduces stability margin significantly.
+Stability reduction factor = cos(alpha)^2 (approximate)
+At 1 deg lateral: factor = 0.9997 — negligible
+At 2 deg lateral: factor = 0.9988 — marginal
+At 3 deg lateral: must derate per manufacturer table
+At 5 deg lateral: major derating required — consult manufacturer
+
+WIND EFFECT ON OVERTURNING MOMENT:
+Additional overturning = F_wind x h_centroid
+Where h_centroid = height of wind force resultant above tipping line
+
+DYNAMIC TIPPING ANALYSIS:
+During crane travel with load, additional dynamic moment:
+M_dynamic = (Load + Rigging) x a/g x h_load
+Where a = acceleration (m/s^2), h_load = load height above ground
+
+OUTRIGGER LOAD (REACTION FORCE):
+For symmetric 4-point support, maximum outrigger reaction:
+R_max = [(M_OT_max) / L_tip] + (W_total / 4)
+Where L_tip = distance from crane centreline to outrigger pad
+
+Check R_max against allowable GBP x pad area.
+
+📋 CIRIA C703 Sec.3 — Crane stability calculations
+📋 ISO 4302 — Crane wind load and stability
+📋 BS EN 13000 Sec.4 — Mobile crane stability standard
+📋 BS 7121-1 Sec.7.3 — Crane setup and stability
+📋 ASME B30.5 Sec.5-1.4 — Crane stability requirements
+
+Warning — Related Considerations:
+• Slewing changes the tipping line — always use the load chart sector that matches the actual slew position
+• Counter-weight configuration must EXACTLY match what was used to derive the load chart
+• Any modification to crane (shortened boom, added attachment) invalidates the standard load chart`},
+
+  // ── ENGINEERING: LOAD CHART READING ────────────────────────────────────────
+  {tags:["load chart","crane chart","capacity chart","radius","chart reading","derating","crane capacity"],
+   q:"How do you correctly read and apply a crane load chart?",
+   a:`CRANE LOAD CHART — CORRECT USE
+
+WHAT A LOAD CHART SHOWS:
+Maximum permissible load (gross) at each combination of:
+• Working radius (m or ft)
+• Main boom length
+• Optional: jib/fly configuration
+• Counterweight configuration
+• Outrigger width (full/partial/crawlers)
+• Operating sector (over front/rear/side)
+• Crane on outriggers vs on rubber (travel configuration)
+
+KEY PRINCIPLE:
+Load chart capacity = maximum permissible at tipping limit OR structural limit, divided by appropriate safety factor. It already includes crane self-weight. You compare your HOOK LOAD (GLW) against the chart value.
+
+READING PROCEDURE — STEP BY STEP:
+1. Identify exact crane model and serial number — confirm correct load chart for that crane
+2. Confirm current counterweight configuration matches chart header
+3. Confirm outrigger width used matches chart column (full/75%/50%)
+4. Determine working radius: measure from slew centre to load hook point
+5. Determine main boom length in use
+6. Find radius row and boom length column intersection
+7. Read off chart capacity
+8. Reduce for any derating factors (wind, level, operating sector)
+9. Compare GLW vs derating chart capacity — must have margin
+
+INTERPOLATION:
+If radius falls between tabulated values:
+Interpolated capacity = Lower capacity - [(radius - lower radius)/(higher radius - lower radius)] x (lower capacity - higher capacity)
+Always interpolate between radii at SAME boom length.
+Capacities decrease as radius increases — interpolation reduces capacity.
+
+DERATING FACTORS:
+• Over side vs over front: capacity may be 60-80% of over-front
+• Level tolerance: derate per manufacturer table if out of level
+• Wind: derate per ISO 4302 if significant wind load
+• Blocked/partial outrigger extension: use partial outrigger column in chart
+
+COMMON ERRORS:
+• Wrong radius: measure from slewing centre, not from crane body edge
+• Wrong boom length: actual rigged boom vs chart boom length
+• Wrong counterweight: check ACTUAL installed counterweight
+• Adding boom extensions: must use jib chart — main boom chart doesn't apply
+• Gross vs net load confusion: chart shows GROSS capacity — do not add load twice
+
+BOOM ANGLE vs RADIUS RELATIONSHIP:
+Radius = L_boom x cos(boom angle from vertical)
+At 80 deg from vertical: radius = L x 0.174 (close to minimum)
+At 45 deg from vertical: radius = L x 0.707
+At 20 deg from vertical: radius = L x 0.940
+
+MAXIMUM RADIUS CHECK:
+Always confirm you are not exceeding the structural maximum radius (separate from tipping limit — may be less for long booms).
+
+📋 ISO 9374 — Cranes — Information to be provided
+📋 BS EN 13000 Sec.6 — Mobile crane load chart requirements
+📋 ASME B30.5 Sec.5-1.2 — Crane load charts
+📋 BS 7121-1 Sec.7.4 — Load chart use and verification
+
+Warning — Related Considerations:
+• Load charts are crane-specific — NEVER use another crane's chart even if same model
+• Charts show maximum values — always operate below 90% capacity for adequate control margin
+• Site conditions (ground, wind, utilities) may impose lower limits than the chart`},
+
+  // ── ENGINEERING: WIRE ROPE REEVING ─────────────────────────────────────────
+  {tags:["reeving","wire rope reeving","parts of line","fleet angle","drum","sheave","mechanical advantage"],
+   q:"How does wire rope reeving work and what are the engineering requirements?",
+   a:`WIRE ROPE REEVING — ENGINEERING REQUIREMENTS
+
+DEFINITION:
+Reeving = the arrangement of wire rope through sheaves and around the drum to provide:
+• Mechanical advantage (multiple parts = reduced line pull)
+• Geometric arrangement for controlled lifting
+
+PARTS OF LINE (N):
+N = number of rope parts supporting the load block
+Mechanical advantage = N (approximately, ignoring friction)
+Required line pull = Load / (N x Efficiency)
+
+SHEAVE EFFICIENCY (per sheave):
+Each sheave introduces friction loss:
+e = 0.98 per sheave (roller bearings — well maintained)
+e = 0.96 per sheave (plain bearings)
+
+Total system efficiency with N parts through S sheaves:
+E = (e^S) — per Neale's approximation
+Or: E = (e^(S)) where S = total number of sheaves in system
+
+REQUIRED HOIST LINE PULL:
+T_line = Load / (N x E_total)
+Where E_total = product of all individual sheave efficiencies
+
+WORKED EXAMPLE:
+Load = 100T, 8-part reeving, 7 sheaves, roller bearings (e=0.98):
+E = 0.98^7 = 0.868
+T_line = 100T / (8 x 0.868) = 100 / 6.94 = 14.4T single-line pull
+
+Check: winch rated for 14.4T minimum single-line pull at that layer of drum.
+
+FLEET ANGLE:
+Angle between rope leaving drum and groove centreline.
+Must not exceed:
+• Smooth drum: maximum 2 degrees
+• Grooved drum: maximum 4 degrees
+• Spooling device: maximum 1.5 degrees
+Excessive fleet angle causes rope-to-rope contact, rapid wear, irregular spooling.
+
+Fleet Angle Calculation:
+alpha = arctan(D / (2L_drum))
+Where D = horizontal distance from drum centreline to outermost sheave
+L_drum = distance from drum to outermost layer position
+
+D/d RATIO (Sheave diameter / rope diameter):
+• BS 7121 minimum for crane hoist sheave: D/d = 16
+• Drum: D/d minimum 14
+• Low-frequency service: D/d = 18 recommended
+• High-frequency service: D/d = 20-25 recommended
+
+REVERSE BENDS:
+Wire rope bent first one way then immediately the other = reverse bend.
+Rope fatigue life reduces to approximately 50% for each reverse bend compared to single bend.
+Minimise reverse bends in reeving design.
+
+LAY DIRECTION AND DRUM WINDING:
+Right-hand lay rope on right-hand drum (or left on left) = regular spooling
+Opposite = irregular spooling and rapid rope wear
+
+DRUM CAPACITY CHECK:
+n_layers x pi x D_mean x L_drum / rope_pitch
+Where n_layers = number of rope layers that fit
+L_drum = drum barrel length
+D_mean = mean drum diameter for that layer
+Must provide sufficient rope for maximum working height plus minimum wraps.
+
+MINIMUM WRAPS ON DRUM:
+At maximum hook height/rope pay-out:
+Minimum 2 dead wraps must remain on drum (ASME B30.2) or 3 wraps (BS 7121)
+These wraps absorb anchorage stress — not counted in capacity.
+
+📋 ISO 4309 Sec.4 — Wire rope reeving requirements
+📋 BS 7121-1 Sec.10.3 — Wire rope reeving and D/d ratios
+📋 ASME B30.2 Sec.2-1.7 — Hoist reeving requirements
+📋 ASME B30.5 Sec.5-1.6 — Crane reeving
+
+Warning — Related Considerations:
+• Reeving must match the certified load chart — DO NOT change reeving without new capacity assessment
+• Twisted reeving: load will rotate and slings will wind up — use rotation-resistant rope for single-part reeving
+• Drum overcrowding: extra rope layers reduce D/d ratio and reduce rope life significantly`},
+
+  // ── ENGINEERING: PADEYE DESIGN ─────────────────────────────────────────────
+  {tags:["padeye","padeye design","padeye calculation","lifting lug","lug design","structural attachment","lifting point design"],
+   q:"What are the engineering requirements for designing padeyes and lifting lugs?",
+   a:`PADEYE AND LIFTING LUG DESIGN
+
+COMPONENTS OF A PADEYE:
+• Mainplate: primary load-bearing element, contains pin hole
+• Cheekplates: two side plates welded to mainplate to increase thickness at hole
+• Backing plate (optional): distributes load into parent structure
+• Weld: connects padeye to structure — critical element
+
+FORCES ON A PADEYE (2-leg sling):
+Vertical: F_V = T x sin(theta)
+Horizontal: F_H = T x cos(theta) [inward, perpendicular to sling plane]
+Out-of-plane: F_OOP = T x sin(phi) [if sling has lateral offset]
+T = sling leg tension per leg
+
+PLATE BEARING STRESS (PIN-HOLE):
+sigma_bearing = F / (d_pin x t_plate)
+Must be less than allowable bearing stress: typically 0.9 x Fy (yield stress)
+For S355 steel: Fy = 355 MPa, allowable bearing = 0.9 x 355 = 320 MPa
+
+PLATE SHEAR-OUT (TEAR-OUT) CHECK:
+Shear area on each side of hole: A_shear = (e - d/2) x t
+Where e = edge distance from hole centre to edge, d = pin diameter, t = plate thickness
+Shear stress = F / (2 x A_shear)
+Must be less than 0.6 x Fy = 0.6 x 355 = 213 MPa (S355)
+
+MINIMUM EDGE DISTANCE:
+e_min = 1.5 x d_hole (to maintain adequate shear-out strength)
+
+PLATE TENSION ACROSS HOLE:
+Net tension stress at hole: sigma = F / ((W - d) x t)
+Where W = plate width, d = hole diameter, t = plate thickness
+Must be less than Fy = 355 MPa (S355)
+
+WELD DESIGN:
+Weld throat area: A_weld = throat size x total weld length
+Weld stress: tau = F / A_weld
+Must be less than allowable weld shear stress: 0.7 x 355 x 0.7 = 174 MPa (E70xx filler, S355 parent)
+Use fillet weld leg size: a = F / (0.7 x 174 x 2 x perimeter) + 20% margin
+
+MINIMUM DIMENSIONS FOR STANDARD PADEYE:
+Cheekplate thickness = 0.5 x mainplate thickness minimum
+Pin diameter = 0.8 to 0.95 x hole diameter (minimum clearance 1mm each side for free movement)
+Min plate thickness = 20mm for loads above 5T
+Hole edge distance = 1.5 x pin diameter minimum
+
+MATERIAL REQUIREMENTS:
+• Offshore: EN 10225 grade S355G or S420G (notch tough at -20 deg C)
+• Onshore: S355 J2 minimum (Charpy impact at -20 deg C)
+• High-strength steel: not recommended — brittle fracture risk at weld heat-affected zone
+
+NDT REQUIREMENTS (Offshore per DNVGL):
+• 100% MPI of all padeye welds
+• 100% UT of all full-penetration welds
+• PT (dye penetrant) if MPI not possible
+• After proof test: repeat MPI
+
+PROOF LOAD TESTING:
+• 2.0 x design load typical for offshore padeyes
+• Measure all dimensions before and after
+• NDT after proof test
+
+📋 DNVGL-ST-N001 Sec.13 — Padeye design
+📋 BS EN 1993-1-8 — Steel connections design
+📋 AISC 360 — Steel construction manual
+📋 ISO 12480-1 Sec.7.5 — Lifting point requirements
+📋 AWS D1.1 — Structural welding code
+
+Warning — Related Considerations:
+• In-plane vs out-of-plane loading: padeyes are much weaker for out-of-plane — always align sling in plane of padeye
+• Fatigue: repeated use at high stress cycles requires fatigue assessment per BS EN 1993-1-9
+• Heat input from welding: post-weld inspection mandatory — HAZ is crack initiation zone`},
+
+  // ── ENGINEERING: BEAM RIGGING CALCULATIONS ──────────────────────────────────
+  {tags:["lifting beam calculation","spreader calculation","beam design","bending stress","compression","beam rigging"],
+   q:"How are lifting beams and spreader beams structurally designed?",
+   a:`LIFTING BEAM AND SPREADER BEAM STRUCTURAL DESIGN
+
+LIFTING BEAM — IN BENDING:
+
+Loading:
+Multiple downward forces from rigging + upward reaction at crane attachment point(s).
+Self-weight of beam acts as distributed load.
+
+Maximum Bending Moment:
+For single central crane attachment and two symmetric load points:
+M_max = (W/2) x a
+Where W = total suspended load (kN), a = half-span between load points (m)
+
+For two crane attachment points, single central load:
+M_max = W x (L/4) if load at midspan (simple two-point suspension)
+
+Bending Stress Check:
+sigma = M_max / Z_section
+Must be less than allowable: F_allow = Fy / 1.5 (yield/safety factor)
+For S355: sigma_allow = 355/1.5 = 237 MPa
+
+Section Modulus Required:
+Z_req = M_max / F_allow (m^3 or mm^3)
+Select beam where actual Z greater than Z_req.
+
+Deflection Check:
+For simply supported beam with central load:
+delta = WL^3 / (48EI)
+Typically limit: L/300 to L/500 — beam must not visually appear to sag.
+
+SPREADER BEAM — IN COMPRESSION:
+
+Compressive Force:
+F_comp = (W/2) x cos(theta) / sin(theta) = (W/2) x cot(theta)
+Where W = total load, theta = sling angle from horizontal
+
+For 2-leg sling with included angle A:
+F_comp = (W/2) / tan(theta) where theta = (180-A)/2
+
+Example: 10T load, sling at 45 deg from horizontal:
+F_comp = (10/2) x cot(45) = 5 x 1.0 = 5T compression in beam
+
+Euler Buckling Check (Critical Compressive Load):
+P_crit = pi^2 x E x I / (K x L)^2
+Where:
+E = 200,000 MPa (steel)
+I = second moment of area of beam cross-section (mm^4)
+K = effective length factor: 1.0 for pin-pin ends
+L = beam length (m)
+
+Actual compressive stress:
+sigma_c = F_comp / A_section
+
+Slenderness ratio (must not exceed 150 per most standards):
+Lambda = (K x L) / r_min
+Where r_min = Sqrt(I_min / A) = minimum radius of gyration
+
+If Lambda less than 150: adequate for light duty
+If Lambda greater than 150: redesign — risk of elastic buckling
+
+WORKED EXAMPLE — Spreader Beam:
+Load: 20T, 2-leg sling at 45 deg from horizontal
+F_comp = (20/2) x cot(45) = 10T = 100 kN
+
+Try 203x203x46 UC (Universal Column), L = 3.0m:
+I = 4568 cm^4, A = 58.7 cm^2, r_min = 5.13 cm
+Lambda = (1.0 x 300cm) / 5.13 = 58.5 — acceptable (less than 150)
+P_crit = pi^2 x 200,000 x 4568x10^4 / (300)^2 = 1,003,000 N = 1003 kN
+FOS = 1003 / 100 = 10.0 — adequate
+
+Sigma_c = 100,000 / 5870 = 17 MPa — well within 237 MPa allowable.
+
+SAFETY FACTORS:
+• Use minimum 4:1 safety factor on yield for lifting beams
+• Proof test to 1.5 x rated load before first use (ASME BTH-1)
+
+📋 ASME BTH-1 — Below-the-hook lifting device design
+📋 BS EN 13155 Sec.5 — Non-fixed load lifting attachments
+📋 BS EN 1993-1-1 — Steel structure design (Eurocode 3)
+📋 AISC 360 — Steel design standard (US)
+📋 LOLER 1998 — Thorough examination after manufacture
+
+Warning — Related Considerations:
+• Lifting beam COG must be clearly marked — off-centre crane attachment causes beam rotation
+• Never use a structural steel section as lifting beam without formal design calculation and proof test
+• Checkerplate or grating additions: recalculate self-weight — changes load distribution and natural frequency`},
+
+
+  // ── CHAIN HOIST — FULL GUIDE ─────────────────────────────────────────────
+  {tags:["chain hoist","chain block","chain pulley block","manual hoist","hand chain","hoist block","chain fall"],
+   q:"What are the full requirements for chain hoists (chain blocks)?",
+   a:`CHAIN HOIST (CHAIN BLOCK) — COMPLETE REQUIREMENTS
+
+TYPES OF CHAIN HOISTS:
+• Manual chain hoist: hand-chain operated, vertical lift only
+• Electric chain hoist: powered motor drive, vertical or inclined
+• Air/pneumatic chain hoist: compressed air powered
+• 2-fall chain hoist: internal 2:1 reeving for lighter hand effort on heavier loads
+
+HOW IT WORKS:
+Hand chain drives the load wheel via reduction gearing.
+Load chain loops through load wheel and supports hook block.
+Brake (ratchet or disc): automatically engages under load — holds load when hand chain released.
+
+RATED CAPACITY (WLL):
+• Marked on body — this is the FINAL rated capacity
+• Accounts for mechanical efficiency, brake capacity, structural strength
+• Never exceed WLL — internal brake will slip or structure will fail
+
+STANDARD WLL RATINGS:
+250kg, 500kg, 1T, 1.5T, 2T, 3T, 5T, 10T, 20T, 30T, 50T
+
+SUSPENSION HEIGHT (HEADROOM):
+Minimum headroom = closed height of hoist (hook to hook, fully retracted)
+Check before ordering — inadequate headroom = cannot use bottom hook
+
+HAND EFFORT REQUIRED:
+Standard rating: maximum 350N (35kg) hand pull to lift rated load
+Efficiency factor typically 70-85% (remaining is friction loss)
+Pull force = (Load x gravity) / (N x efficiency)
+Where N = number of gears and reduction ratio
+
+OPERATING REQUIREMENTS:
+
+Suspension Point:
+• Rated for full WLL of hoist
+• If beam: check local flange bending, web buckling
+• Beam clamp: rated and correctly fitted — anti-displacement device
+• Monorail: checked for lateral forces and rail capacity
+
+Lifting in LINE (Vertical):
+• Hook must hang freely — no side loading
+• Maximum deviation from vertical: manufacturer states (typically 10-15 deg)
+• Inclined use: ONLY if specifically rated — most hoists are vertical-only
+
+Load Attachment:
+• Bottom hook must accept sling/shackle size used
+• Safety latch functional
+• Load never attached to tip of hook — must seat fully in saddle
+
+Operating Position:
+• Operator should stand to side — not under suspended load
+• If must stand under: use tested load carrier
+• Two-blocking: cannot occur on chain hoist (limited lift height) but check chain length vs headroom
+
+LOAD CHAIN MAINTENANCE:
+• Lubricate with chain oil per manufacturer — typically every 50 operating hours
+• Lubrication reduces wear AND reduces hand effort
+• Check pocket wheel for wear — worn pockets cause chain jump
+• Chain stretch check: 11-link measurement per manufacturer's table
+
+LOLER REQUIREMENTS:
+• Thorough examination: minimum every 12 months
+• After exceptional circumstances: re-examination before use
+• Register entry: every hoist must be in equipment register
+• Chain hoist used for man-riding: every 6 months minimum
+
+DISCARD CRITERIA — Chain Hoist:
+• Load chain: any crack, elongation greater than 5%, nick or gouge greater than 10% section
+• Load chain: any twisted, bent, or damaged link
+• Hooks: throat opening greater than 15% increase, any crack, latch failure
+• Body: visible crack in housing
+• Brake: hoist does not hold rated load (chain creeps under static load = brake failure)
+• Hand chain: any broken link, distortion, kinking
+• Gear: abnormal noise, jerky operation — take out of service for inspection
+• Any drop or impact damage — inspect and test before reuse
+
+BRAKE TEST — BEFORE EACH USE:
+1. Lift load 150-300mm off ground
+2. Release hand chain
+3. Load must remain stationary — zero creep
+4. If load creeps: STOP — hoist removed from service — brake failure
+
+COMPATIBILITY — CHAIN HOIST WITH ATTACHMENTS:
+• Beam clamp rating must equal or exceed hoist WLL
+• Lug attachments: check orientation — most lugs rated axial only
+• Chain container bag: prevents chain from contaminating work area — check attachment
+
+📋 BS EN 13157 — Cranes — Hand-powered lifting equipment — chain hoists
+📋 ASME B30.16 — Overhead underhung and stationary hoists
+📋 LOLER 1998 Reg 9 — Thorough examination requirement
+📋 LEEA COPSULE Sec.12 — Manual hoists and chain blocks
+📋 PUWER 1998 Reg 6 — Inspection and maintenance
+
+Warning — Related Considerations:
+• Never use chain hoist for horizontal pulling — lever hoist/come-along required
+• Chain hoists with twisted or kinked load chain must be removed immediately — jam causes sudden release
+• After any overload (chain slipped through load wheel or brake slipped): full inspection and test before reuse`},
+
+  // ── LEVER HOIST — FULL GUIDE ─────────────────────────────────────────────
+  {tags:["lever hoist","lever block","come along","ratchet lever","puller","comealong","tirfor","coffing","lever chain"],
+   q:"What are the full requirements for lever hoists?",
+   a:`LEVER HOIST (LEVER BLOCK / COME-ALONG) — COMPLETE REQUIREMENTS
+
+DEFINITION:
+A lever hoist is a hand-operated device using a ratchet-and-pawl mechanism to lift, lower, or pull loads. It can be used in ANY direction — vertical, horizontal, inclined.
+This is the fundamental difference from chain hoists (vertical only).
+
+TYPES:
+• Chain lever hoist: uses short-link load chain (most common)
+• Wire rope lever hoist (Tirfor/Griphoists): wire rope grip mechanism — long travel
+• Ratchet hoist: simple ratchet, limited capacity — NOT for sustained load suspension
+
+STANDARD CAPACITIES:
+250kg, 500kg, 750kg, 1.0T, 1.5T, 2.0T, 3.0T, 6.0T, 9.0T
+Tirfor wire grip: 0.8T, 1.6T, 3.2T, 5.0T, 8.0T
+
+LEVER LENGTH AND HAND EFFORT:
+• Standard lever: 400-500mm long
+• Maximum hand effort: 350-400N at lever end
+• Shorter lever = more effort required but better control in confined spaces
+• Extension: permitted ONLY if manufacturer approves — NEVER improvise
+
+OPERATING DIRECTIONS:
+Lever Hoist:
+• Vertical lift: standard application
+• Horizontal pull: fully rated — used for rigging, alignment, skidding
+• Inclined pull: any angle — rate remains valid
+• Upside down: ONLY if specifically marked on hoist — some cannot be inverted
+
+Tirfor Wire Grip Hoist:
+• Forward: grips and pulls wire rope
+• Reverse: releases grip and allows rope back
+• Can be used as tensioner for pendants, guide wires
+
+SUSPENSION REQUIREMENTS:
+• Top hook/shackle rated for full lever hoist WLL
+• For horizontal use: anchor point rated for full horizontal force
+• Reaction anchor: check direction — anchor point must resist the pull direction
+
+LOAD ATTACHMENT:
+• Bottom hook: load seated in hook saddle, safety latch locked
+• Can also use lower shackle point if provided
+• For rigging tensions: connect via shackle to sling
+
+APPLICATIONS IN LIFTING:
+• Load trimming: adjust load level after crane lift
+• Tag line tensioning: controlled pull during crane swing
+• Rigging alignment: pulling sling legs into position
+• Load securement: tensioning lashings (not the primary use — use ratchet straps)
+• Pulling structure into alignment before bolting
+• Backstay tension on mast/derrick
+
+FREE-WHEEL MODE:
+Many lever hoists have free-wheel lever:
+• In free-wheel: load chain runs freely — for rapid repositioning
+• NEVER activate free-wheel with load on hoist — load will freefall
+• Free-wheel only in UNLOADED condition
+
+RATCHET FUNCTION:
+• Forward ratchet: lifts load, pawl engages on each click
+• Reverse ratchet: lowers load in controlled increments
+• Neutral: hoist holds load — lever cannot move (load locked)
+
+DISCARD CRITERIA — Lever Hoist:
+• Load chain: any elongation greater than 5%, nick or gouge greater than 10%, crack, twist, bend
+• Hooks (top and bottom): throat opening greater than 15%, crack, latch failure
+• Lever: bent, cracked, or repaired lever — discard
+• Ratchet pawl: worn, chipped, or not engaging — hoist does not hold load = immediate discard
+• Body housing: cracked or severely corroded housing
+• Free-wheel mechanism: pawl will not re-engage after free-wheel = dangerous — remove service
+• Any drop or impact damage — inspect thoroughly
+
+OPERATIONAL SAFETY:
+• Never stand in the pull line — wire rope/chain failure sends energy along line
+• No side loading on hooks — load must be in plane of hook
+• Do not extend lever beyond rated length
+• Check anchor/suspension points can resist the applied load direction
+• Periodic chain lubrication per manufacturer schedule
+
+TIRFOR (WIRE GRIP HOIST) SPECIFIC:
+• Wire rope must be clean and straight for proper grip — kinked rope will not grip
+• Check jaws for wear — worn jaws slip under load
+• NEVER use wire rope that is corroded, kinked, or damaged
+• Minimum wire rope grade: as specified by manufacturer — typically 6x19 or 6x36 IWRC
+• Wire rope end: clean cut, no fraying into jaw mechanism
+
+LOLER COMPLIANCE:
+• Lever hoists are lifting accessories under LOLER
+• Thorough examination minimum every 12 months
+• After any overload event: examination before reuse
+• Equipment register entry required
+
+📋 BS EN 13157 Sec.5 — Hand-powered lifting equipment — lever hoists
+📋 ASME B30.21 — Manually lever-operated hoists
+📋 LOLER 1998 Reg 9 — Thorough examination
+📋 LEEA COPSULE Sec.12 — Lever hoist guidance
+
+Warning — Related Considerations:
+• Free-wheel with load is the most common fatal error with lever hoists — train all users explicitly
+• Horizontal pulls: check both anchor and load attachment — horizontal force is same magnitude as vertical
+• Chain jamming: if lever becomes very stiff — STOP — do not force — load may be jammed at sheave`},
+
+  // ── SNATCH BLOCK — FULL GUIDE ─────────────────────────────────────────────
+  {tags:["snatch block","pulley block","snatch","block","redirect","sheave block","wire rope pulley","rope redirect"],
+   q:"What are the full requirements for snatch blocks and pulley blocks?",
+   a:`SNATCH BLOCKS AND PULLEY BLOCKS — COMPLETE REQUIREMENTS
+
+DEFINITION:
+A snatch block is a pulley block with an opening side plate allowing rope to be inserted laterally without threading through end-to-end. Used to redirect rope or create mechanical advantage systems.
+
+TYPES:
+• Single sheave snatch block: one pulley — redirect rope, reduce friction, or create 2:1 advantage
+• Double sheave block: two pulleys — higher mechanical advantage
+• Triple sheave block: three pulleys — 4:1 or 6:1 advantage (with corresponding fixed block)
+• Swivel snatch block: top swivel eye allowing 360-deg rotation of attachment point
+• Wire rope block: matched to specific wire rope diameter
+• Chain block (as above): uses chain pockets
+
+RATED LOAD vs SHEAVE LOAD:
+CRITICAL: The WLL of a snatch block applies to the MAXIMUM force at the suspension point — which is NOT the same as the rope pull force.
+
+For rope deflection angle alpha (angle between incoming and outgoing rope):
+Resultant force on block (R) = 2 x T x cos(alpha/2)
+Where T = rope tension, alpha = included angle between rope legs
+
+When rope reversal = 180 deg (full block):
+R = 2 x T (block load = double rope tension)
+Block WLL must be greater than or equal to 2T
+
+When rope deflection = 90 deg:
+R = T x sqrt(2) = 1.41T
+Block WLL must be greater than or equal to 1.41T
+
+When rope deflection = 60 deg:
+R = T x 1.0 = T
+Block WLL must be greater than or equal to T
+
+MECHANICAL ADVANTAGE SYSTEMS WITH BLOCKS:
+
+Single Moveable Block (2:1 system):
+One snatch block attached to load, fixed point at anchor.
+MA = 2 — pull force = load/2
+Load moves half the distance the pull rope moves.
+
+Double Moveable Block (3:1 system):
+Two blocks — one fixed, one moveable.
+MA = 3 — pull force = load/3
+
+Gun Tackle (4:1 system):
+Two double blocks.
+MA = 4 — pull force = load/4
+
+Efficiency Loss per Sheave:
+Each sheave reduces efficiency by approximately 5-10%.
+Actual MA = theoretical MA x (0.95^N) where N = number of sheaves
+
+For 4:1 system with 4 sheaves:
+Actual MA = 4 x (0.95^4) = 4 x 0.81 = 3.26:1 (not 4:1)
+
+ROPE-TO-SHEAVE COMPATIBILITY:
+• Sheave groove diameter must match rope diameter
+• Groove too small: rope pinches — rapid rope wear
+• Groove too large: rope flattens and spills — rope damage
+• Typical: groove diameter = 1.05 to 1.10 x rope diameter
+
+D/d RATIO FOR SNATCH BLOCKS:
+• Minimum D/d (sheave OD to rope diameter): 16:1 for cranes
+• Minimum D/d for general use: 12:1
+• Low D/d significantly reduces rope fatigue life
+
+OPENING MECHANISM:
+• Locking pin or bolt on side plate — must be fully engaged before load application
+• Safety: ensure side plate is positively locked — not just friction held
+• After each use: inspect locking mechanism — replace if worn or bent
+
+SHEAVE CONDITION CHECK:
+• Sheave must rotate freely — stiff sheave increases friction, wears rope
+• Check with rope: sheave should spin when rope pulled
+• Groove: no sharp edges, no cracking, no excessive wear (score marks across groove)
+
+ATTACHMENT TO ANCHOR POINT:
+• Shackle: must be rated for full block reaction load (R calculated above)
+• No improvised attachment — always use purpose-rated hardware
+• For horizontal pulls: check lateral loading on anchor
+
+INSPECTION BEFORE EACH USE:
+1. Open side plate — inspect sheave groove condition
+2. Rotate sheave by hand — must spin freely
+3. Check locking pin — positive engagement
+4. Inspect all welds and the body for cracks
+5. Check swivel (if swivel type): free rotation
+6. Verify WLL marking legible
+
+DISCARD CRITERIA — Snatch Block:
+• Any crack in body, side plate, or swivel
+• Sheave: groove worn groove depth reduced more than 25%
+• Sheave: does not rotate freely — seized bearing
+• Groove: sharp edges or severe scoring
+• Locking pin: missing, bent, or cannot engage positively
+• Side plate: distorted, cracked, or hinge damaged
+• Swivel: seized, cracked, or deformed
+• WLL marking not legible — remove from service
+
+OFFSHORE USE:
+• Offshore snatch blocks typically 6:1 safety factor on MBL
+• Sheaves for wire rope with working load over 5T typically require roller bearings
+• All offshore blocks to be DNVGL or equivalent certified
+
+SYNTHETIC ROPE BLOCKS:
+• Standard steel sheave groove may damage synthetic ropes — use rounded groove
+• HMPE (Dyneema) rope: minimum D/d = 40:1 to avoid crushing
+• Check specific manufacturer recommendations for rope-to-block compatibility
+
+WORKED EXAMPLE — Block Selection:
+Pull force T = 5T, rope deflected 120 deg (60 deg each side)
+Included angle alpha = 120 deg
+R = 2 x 5 x cos(120/2) = 10 x cos(60) = 10 x 0.5 = 5T
+Select block: WLL greater than or equal to 5T
+Shackle: WLL greater than or equal to 5T also
+
+If same rope deflected 180 deg (full reversal):
+R = 2 x 5 x cos(90) = 10 x 1.0 = 10T — need 10T block!
+
+📋 BS EN 13135 — Cranes — Design requirements for equipment — Sheave blocks
+📋 ASME B30.26 Sec.26-1.7 — Sheave blocks
+📋 ISO 4309 Sec.4 — Rope and sheave compatibility
+📋 LOLER 1998 Reg 9 — Thorough examination
+📋 LEEA COPSULE Sec.11 — Pulley block guidance
+
+Warning — Related Considerations:
+• Block WLL is for the pin/suspension force — which is often DOUBLE the rope tension for full reversal
+• Never run fibre rope over a steel sheave designed for wire rope — groove geometry causes abrasion
+• After any side-plate opening under load (accidental): inspect fully — frame may be permanently distorted`},
+
+  // ── DISCARD: SNATCH BLOCKS ───────────────────────────────────────────────
+  {tags:["discard snatch block","block removal","pulley block discard","block condemn","sheave worn","block criteria"],
+   q:"What are the specific discard criteria for snatch blocks and pulley blocks?",
+   a:`SNATCH BLOCK AND PULLEY BLOCK — DISCARD CRITERIA
+
+IMMEDIATE REMOVAL FROM SERVICE (Any One = Discard):
+
+BODY / FRAME:
+• Any crack in body — zero tolerance (visual or NDT)
+• Permanent deformation of frame — even slight distortion
+• Corrosion reducing section more than 10%
+• Weld crack at attachment lugs or suspension eye
+• Side plate bent, cracked, or hinge damaged
+• Heat damage — discolouration
+
+SHEAVE (PULLEY WHEEL):
+• Groove worn to depth reduced more than 25% of original groove depth
+• Groove has sharp edges or severe scoring across groove direction
+• Sheave does not rotate freely by hand (seized or rough bearing)
+• Sheave cracked — any crack regardless of location
+• Groove diameter has changed shape — deformed groove
+• Excessive side play in sheave — bearing worn more than manufacturer tolerance
+
+LOCKING MECHANISM (Side Plate Lock):
+• Locking pin missing — NEVER operate block without lock pin
+• Locking pin bent or damaged — cannot positively engage
+• Side plate hinge worn — plate does not close flush
+• Any deformation preventing positive closure
+• Lock pin retaining device (R-clip, split pin) missing
+
+SWIVEL (If Swivel-Type Block):
+• Swivel seized — cannot rotate freely
+• Any crack at swivel bearing or eye
+• Swivel eye deformed or worn more than 10%
+• Bearing/race corroded or failed
+
+IDENTIFICATION:
+• WLL marking not legible — REMOVE
+• Rope size rating not legible
+• CE marking missing (EU/UK supply requirement)
+
+CONDITION CHECKS — Regular Inspection:
+
+Groove Wear Measurement:
+• New groove profile: measure groove depth with radius gauge
+• Compare to nominal groove depth
+• Discard at 25% groove depth reduction
+• Also check groove width — should match rope diameter plus tolerance
+
+Bearing Condition Test:
+• Hold block body, flick sheave — should spin 3-5 rotations freely
+• Rough or stiff rotation = bearing needs replacement
+• Listen for grinding — indicates bearing race damage
+
+Locking Pin Test:
+• Insert pin — should slide freely and positively lock
+• Wiggle pin when locked — no movement means good
+• Any rattle or loose fit — inspect more closely
+
+Sheave Crack Detection:
+• Use dye penetrant (PT) or MPI on sheave rim annually if in high-use service
+• Look especially at bottom of groove and spoke roots
+
+WIRE ROPE COMPATIBILITY CHECK:
+• Compare rope diameter to groove diameter
+• Rope too large: cannot seat in groove — rope rides on edge — immediate mismatch — do not use
+• Rope too small: rope bottoms in groove — uneven load — if severe, replace block
+
+RECONDITIONING:
+• Sheave bearings can be replaced — new bearings restore free rotation
+• Groove re-cutting: specialist — must maintain correct radius and diameter
+• NEVER weld repairs on load-bearing body or sheave
+
+POST-ACCIDENT INSPECTION:
+After any of the following: thorough examination before return to service:
+• Block dropped
+• Side plate accidentally opened under load
+• Overload (rope tension exceeded WLL)
+• Block snagged or shock-loaded
+
+📋 BS EN 13135 — Sheave blocks — design and inspection
+📋 ASME B30.26 Sec.26-1.7 — Sheave blocks inspection and removal
+📋 ISO 4309 Sec.6 — Rope and sheave inspection
+📋 LOLER 1998 Reg 9 — Thorough examination of lifting accessories
+
+Warning — Related Considerations:
+• Side plate that opened under load may have permanently distorted frame — full NDT required before reuse
+• Seized sheave causes rope to drag — increases rope tension and causes rapid rope wear
+• Always use correct rope size — undersized rope in oversized groove causes rope rolling and crushing`},
+
+  // ── DISCARD: LEVER HOIST ─────────────────────────────────────────────────
+  {tags:["discard lever hoist","lever hoist removal","lever hoist condemn","lever hoist criteria","ratchet failure"],
+   q:"What are the specific discard criteria for lever hoists?",
+   a:`LEVER HOIST DISCARD CRITERIA — COMPLETE
+
+IMMEDIATE REMOVAL FROM SERVICE (Any One = Discard):
+
+LOAD CHAIN:
+• Any crack in any link — zero tolerance
+• Elongation: measure 11 links, compare to stamped original — discard if more than 5% elongation
+• Cross-section diameter worn to less than 90% of nominal (more than 10% wear)
+• Any bent, twisted, or kinked link
+• Corrosion reducing section more than 10%
+• Chemical damage — bright or pitted surface
+• Heat damage — any discolouration (yellow, brown, blue, black)
+• Stretched pocket wheel groove contact points: replace chain AND check pocket wheel
+
+HOOKS (TOP AND BOTTOM):
+• Throat opening increased more than 15% from nominal — measure with calipers
+• Any crack anywhere in hook
+• Permanent deformation — any bending or distortion
+• Safety latch spring broken, bent, or missing
+• Latch does not close and hold under light spring pressure
+• Wear in saddle more than 10% of cross-section
+• Heat damage — any discolouration
+
+LEVER:
+• Lever bent even slightly — cannot apply rated WLL safely
+• Crack in lever anywhere
+• Lever repaired by welding — immediate discard
+• Lever extension added (improvised) — immediate discard
+• Lever sleeve grip worn, split, or missing
+
+RATCHET AND PAWL:
+• Ratchet will not hold load (hoist creeps under static test load) — BRAKE FAILURE
+• Pawl worn — does not seat fully in ratchet tooth
+• Ratchet teeth worn or chipped — pawl slips
+• Ratchet mechanism makes grinding or clicking noise under load (not the normal click)
+• Any corrosion binding the ratchet mechanism
+
+FREE-WHEEL MECHANISM:
+• Free-wheel pawl will not positively re-engage after free-wheel mode
+• Free-wheel activates under load — severe danger — immediate discard
+• Selector lever stiff or jammed
+
+BODY AND HOUSING:
+• Visible crack in cast housing — zero tolerance
+• Corrosion through housing wall
+• Pocket wheel visible damage — cracks, chipped pockets, groove wear
+
+BRAKING SYSTEM TEST — BEFORE EACH USE:
+1. Apply rated load (or safe representative load)
+2. Release lever to neutral position
+3. Load must not move — zero creep
+4. If load moves downward at all: BRAKE FAILURE — remove from service immediately
+
+IDENTIFICATION:
+• WLL marking not legible — remove
+• Chain grade not identifiable — remove
+• Serial number not traceable to certificate — remove
+
+INSPECTION FREQUENCY:
+• Pre-use: visual by user every use
+• Formal: minimum every 12 months per LOLER
+• Intensive use (daily): 6-monthly inspection recommended
+• After any accident/overload: immediate inspection before reuse
+
+CHAIN LUBRICATION CHECK:
+• Dry chain = increased wear rate = reduces service life
+• Check: pull chain through fingers — should leave slight oil film
+• If dry: lubricate immediately with chain hoist oil (not WD40 — too thin)
+
+TIRFOR / WIRE GRIP HOIST SPECIFIC DISCARD:
+• Gripping jaws worn — rope slips under rated load (immediate discard)
+• Jaw faces have sharp edges or scoring — damages wire rope
+• Wire rope in use: any broken wires, kinks, corrosion (per wire rope discard criteria)
+• Actuating mechanism: any crack in lever, housing, or jaw carriers
+
+📋 BS EN 13157 Sec.8 — Hand-powered lifting equipment — discard criteria
+📋 ASME B30.21 Sec.21-3 — Lever hoist inspection and removal
+📋 LOLER 1998 Reg 9 — Thorough examination
+📋 LEEA COPSULE Sec.12 — Lever hoist examination guidance
+
+Warning — Related Considerations:
+• Brake failure with load suspended is immediately dangerous — never leave lever hoist holding unsecured load unattended
+• Chain jam at pocket wheel: if lever becomes immoveable under load — call rigging engineer — do not force
+• After chemical spill on lever hoist: strip and inspect all internal components — corrosion may not be visible externally`},
+
+  // ── MECHANICAL ADVANTAGE SYSTEMS ─────────────────────────────────────────
+  {tags:["mechanical advantage","pulley system","block and tackle","4:1","3:1","2:1","rope purchase","compound purchase"],
+   q:"How are mechanical advantage systems using blocks and hoists designed and calculated?",
+   a:`MECHANICAL ADVANTAGE (MA) SYSTEMS — DESIGN AND CALCULATION
+
+DEFINITION:
+A mechanical advantage (MA) system uses multiple pulleys and rope to multiply force.
+MA = Load / Effort (ideal, ignoring friction)
+
+COUNTING PARTS OF LINE (N):
+Count the number of rope segments supporting the moveable block.
+The fixed rope end at anchor DOES NOT count.
+MA = N (ideal, no friction)
+
+COMMON CONFIGURATIONS:
+
+Single Fixed Block (1:1 — Direction Change Only):
+N = 1
+MA = 1.0
+Use: redirect pull direction only — no force multiplication
+Example: Crane rope over single sheave to change direction
+
+Single Moveable Block — Gun Tackle (2:1):
+N = 2
+MA = 2.0
+Pull force = Load / 2
+Load moves: 0.5m per 1m of rope hauled
+Use: light lifting, load alignment
+
+Double Moveable + Double Fixed — Luff Tackle (3:1):
+N = 3
+MA = 3.0
+Pull force = Load / 3
+Use: pulling structures, rigging alignment
+
+Double Moveable + Double Fixed (4:1):
+N = 4
+MA = 4.0
+Pull force = Load / 4
+Load moves: 0.25m per 1m of rope hauled
+
+6:1 System (Triple Blocks):
+N = 6
+MA = 6.0 (ideal)
+Pull force = Load / 6
+Actual: approximately Load / (6 x 0.95^6) = Load / 4.4 (with friction)
+
+COMPOUND SYSTEMS (Multiplying):
+Use one MA system to pull another MA system.
+Example: 3:1 pulling a 3:1 = 9:1 compound
+But efficiency: (0.95^3) x (0.95^3) = 0.73 — actual MA = 9 x 0.73 = 6.6:1
+
+EFFICIENCY FACTOR PER SHEAVE:
+• Roller bearings, well lubricated: e = 0.98 per sheave
+• Plain bearings: e = 0.96 per sheave
+• Synthetic rope on steel: e = 0.94 per sheave (higher friction)
+
+Total system efficiency with N sheaves:
+E = e^N
+Total actual pull: F_actual = Load / (MA x E)
+
+ROPE TRAVEL vs LOAD TRAVEL:
+Rope travel = Load movement x MA
+If load must move 500mm and MA = 4:1:
+Rope to pull = 500 x 4 = 2000mm = 2.0m
+
+ANCHOR LOAD:
+Fixed anchor end load = Load / MA (approximately)
+But anchor must also resist the haul force.
+Total anchor force = Load + Haul force = Load + (Load/MA) = Load x (1 + 1/MA)
+
+For 4:1 system, 10T load:
+Haul force = 10/4 = 2.5T
+Anchor must resist: 10 + 2.5 = 12.5T (perpendicular components vary by geometry)
+
+SELECTING THE RIGHT SYSTEM:
+
+For lifting light loads (under 2T with one person): 2:1 or 3:1
+For heavier loads or limited pull force: 4:1 or 6:1
+For pulling structures into alignment: 4:1 with come-along as haul device
+For emergency recovery: compound systems up to 9:1
+
+LIMITATIONS:
+• Higher MA = more rope travel needed
+• More sheaves = lower efficiency — diminishing returns above 6:1
+• Heat buildup in sheaves at high use rates — allow cooling
+• Long rope travel: rope management becomes critical — do not allow rope to pile
+
+COMBINATION WITH LEVER HOIST:
+Common setup: anchor snatch block + lever hoist pulling the running end
+Lever hoist (1.5T) through 4:1 block system = effective pull up to 6T (at 100% efficiency)
+Always calculate actual forces — do not assume MA is exact.
+
+📋 ASME B30.26 — Rigging hardware for block and tackle
+📋 BS EN 13135 — Sheave blocks for crane systems
+📋 ISO 12480-1 Sec.7.3 — Rigging force calculations
+📋 ASME BTH-1 — Below-hook device mechanical systems
+
+Warning — Related Considerations:
+• Vector analysis required for angled pulls — actual anchor and block loads differ from simple MA calculation
+• Each additional sheave in system increases setup time and inspection requirements
+• Rope management: in a 6:1 system you must haul 6m of rope to move load 1m — plan rope storage`},
+
+  // ── BEAM CLAMPS AND SUSPENSION ────────────────────────────────────────────
+  {tags:["beam clamp","girder clamp","hoist suspension","beam trolley","I-beam clamp","beam attachment","clamp hoist"],
+   q:"What are the requirements for beam clamps and hoist suspension from steelwork?",
+   a:`BEAM CLAMPS AND HOIST SUSPENSION FROM STEELWORK
+
+TYPES OF BEAM CLAMPS:
+• Screw-type universal beam clamp: adjustable jaw, fits range of flange widths
+• Rigid beam clamp: fixed jaw for specific flange width
+• Push-pull beam trolley: manual rolling on flange
+• Motor-driven trolley: electric or air powered
+• Girder clamp with swivel: rotating hook point
+
+RATED CAPACITY:
+• WLL marked on clamp body
+• Rating typically assumes load hanging VERTICAL
+• Horizontal pull component: reduces rating — consult manufacturer
+• Minimum flange thickness specified: clamp must not be used on thinner flange
+
+BEAM REQUIREMENTS (Receiving Structure):
+
+Beam Bending Check:
+M_beam = R x a (where a = distance to nearest support or stiffener)
+Compare to beam plastic moment capacity: M_p = Fy x Z_plastic
+FOS = 1.5 minimum for temporary lifting loads
+
+Local Flange Bending:
+Force per flange: F_flange = WLL/2 (if two-flange clamp)
+Flange bending stress at root: sigma = F x e / t^2 (simplified)
+Where e = eccentricity, t = flange thickness
+
+Web Buckling Check (for concentrated vertical loads):
+R_web = WLL / (t_web x (h/t_web + 2.5k))
+Where t_web = web thickness, h = web height, k = root radius factor
+Consult beam tables if load is near midspan without web stiffeners.
+
+CLAMPING REQUIREMENTS:
+• Clamp jaw engages BOTH top flanges (not just one)
+• Clamping screw torqued to manufacturer specification
+• Anti-displacement device: safety pin or chain must prevent vertical and horizontal movement
+• Minimum flange overhang beyond jaw: as per manufacturer (typically 20-40mm)
+
+LATERAL LOAD EFFECTS:
+Beam clamps are designed primarily for vertical loads.
+Any lateral/horizontal load significantly reduces capacity:
+• 5 deg horizontal: reduce WLL by 10-15%
+• 10 deg horizontal: reduce WLL by 25-30%
+• Greater than 15 deg: consult manufacturer — may not be rated
+
+BEAM TROLLEYS:
+
+Track Check:
+• Flange width within trolley range
+• Flange condition: no severe corrosion, no sharp edges that damage trolley wheels
+• Beam level tolerance: cross-fall less than 2 deg
+• Stops at beam ends: mandatory — prevent run-off
+
+Trolley WLL vs Beam Capacity:
+• Beam must be structurally adequate for the combined trolley + load weight
+• Dynamic factor for trolley acceleration: apply 10-15% increase to WLL for moving loads
+
+INSPECTION BEFORE EACH USE:
+• Clamping screw threads: condition and lubrication
+• Jaw faces: condition — no cracks, no severe wear
+• Anti-displacement: secure and functional
+• WLL marking: legible
+• Beam condition: visually sound — no severe corrosion, no visible damage
+
+DISCARD CRITERIA:
+• Jaw cracked — zero tolerance
+• Clamping screw thread stripped — cannot achieve rated torque
+• Anti-displacement pin/chain missing — remove from service
+• Jaw worn more than 10% of contact face
+• Trolley wheel flange worn more than 20% — risk of derailment
+• WLL marking not legible
+
+OFFSHORE / STRUCTURAL APPLICATIONS:
+• Beam clamps for offshore: typically require load test certificate and structural sign-off
+• FPSO/platform beams: check existing beam utilisation — crane load adds to permanent loads
+• Minimum flange grade: as required by structural engineer — not assumed adequate
+
+📋 BS EN 13157 Sec.6 — Hand-powered lifting equipment — suspension
+📋 ASME B30.16 Sec.16-1.2 — Hoist suspension requirements
+📋 BS EN 1993-1-1 — Structural steel beam design (Eurocode 3)
+📋 LOLER 1998 Reg 9 — Thorough examination of lifting equipment
+📋 LEEA COPSULE Sec.13 — Beam clamp guidance
+
+Warning — Related Considerations:
+• Flange-mounted clamps on deteriorated beams: scale rust hides section loss — probe with screwdriver before relying on visual
+• Swinging loads: pendulum effect creates horizontal force on clamp — check both vertical and horizontal capacity
+• Never assume a beam is adequate — always verify structural capacity before installing any hoist system`},
+
+  // ── WIRE ROPE DRUM HOISTS ─────────────────────────────────────────────────
+  {tags:["drum hoist","electric hoist","wire rope hoist","electric wire rope","monorail hoist","overhead hoist","drum winch"],
+   q:"What are the requirements for electric wire rope hoists?",
+   a:`ELECTRIC WIRE ROPE HOISTS — REQUIREMENTS
+
+TYPES:
+• Wire rope electric hoist: drum winds wire rope, used for higher capacities and longer lifts
+• Monorail hoist: travels on I-beam lower flange
+• Overhead crane hoist: bridge crane component
+• Personnel hoist: special category — stringent requirements
+
+COMPONENTS:
+• Electric motor: AC or DC, with integral thermal protection
+• Gearbox: multi-stage gear reduction
+• Drum: grooved or plain barrel for wire rope
+• Drum brake: fail-safe — spring applied, electrically released
+• Limit switches: upper (anti-two-block) and lower limit
+• Load limiter: overload protection device
+• Rope: typically 6x19 or 6x36 IWRC, zinc-galvanised offshore
+
+WIRE ROPE SPECIFICATIONS:
+• Size: minimum per manufacturer's specification for that WLL
+• Construction: as specified — do NOT substitute (affects drum groove fit)
+• Material: galvanised preferred for humid/outdoor environments
+• End termination: swage sleeve or wedge socket — no bulldog clips on hoists
+• Dead wraps: minimum 3 wraps on drum at lowest hook position
+
+BRAKE REQUIREMENTS:
+• Fail-safe brake: spring applies ON, power releases
+• Brake must hold 125% of rated load without slipping
+• Dynamic brake: motor regeneration when lowering
+• Lowering speed controlled: prevent freefall condition
+• Brake test: at installation and at every LOLER examination
+
+LIMIT SWITCHES:
+Upper limit (anti-two-block):
+• Cuts power to raise motor when hook reaches pre-set height
+• Must stop hook at least 300mm below drum/sheave (prevent two-blocking)
+• Test BEFORE each shift (run hook up slowly — confirm switch activates)
+
+Lower limit:
+• Prevents rope pay-out beyond minimum wraps
+• May not be fitted on all hoists — check manufacturer specification
+
+LOAD LIMITER:
+• Cuts power if load exceeds typically 110-125% of rated WLL
+• Not a substitute for correct load selection
+• Must be tested at installation and periodically per manufacturer
+
+DUTY CLASSIFICATION (FEM/ISO 4301):
+• M1-M2: light duty (low number of lifts per day)
+• M3-M4: medium duty (workshops, maintenance)
+• M5-M6: heavy duty (production, frequent cycling)
+• M7-M8: very heavy/continuous duty (paper mills, steel works)
+
+Using a light-duty hoist in heavy-duty service = premature failure.
+
+LOLER REQUIREMENTS:
+• 12-month thorough examination minimum
+• 6-monthly if used for man-riding
+• After any overload event
+• After significant repair or modification
+
+INSPECTION PROGRAMME:
+Daily (by operator):
+• Limit switch function test
+• Brake hold test (10% check lift, release, confirm hold)
+• Visual wire rope condition
+• Hook and latch condition
+• Unusual sounds during operation
+
+Weekly/Monthly:
+• Wire rope lubrication
+• Hook throat measurement
+• Control system function
+• All limit switches and safety devices
+
+Annual (LOLER Thorough Examination):
+• Full disassembly inspection by competent person
+• Wire rope measurement — all discards applied
+• Brake wear measurement — replace if worn
+• Load test 125% WLL (dynamic)
+• NDT on hook, drum, and structural members
+
+DISCARD CRITERIA — Electric Wire Rope Hoist:
+Wire rope: per ISO 4309 discard criteria — broken wires, kinks, birdcage, diameter reduction
+Drum: grooves worn more than 1mm below nominal — replace drum
+Drum: cracking in drum wall — immediate discard
+Brake: creep under static load — immediate discard
+Hook: per hook discard criteria — throat measurement, cracks, latch function
+Load limiter: inoperative — STOP use until repaired
+Upper limit switch: inoperative — STOP use
+
+📋 BS EN 14492-2 — Power-driven winches and hoists — wire rope hoists
+📋 ASME B30.16 — Overhead underhung and stationary hoists
+📋 ISO 4301 — Crane classification and duty cycles
+📋 LOLER 1998 Reg 9 — Thorough examination
+📋 BS 7121-1 Sec.10.9 — Electric hoist inspection
+
+Warning — Related Considerations:
+• Two-blocking: if upper limit fails and operator continues hoisting — wire rope may fail catastrophically — ALWAYS test limit switch before use
+• Variable frequency drives (VFD): allow smooth acceleration and deceleration — significantly reduces dynamic loads on structure and rope
+• Never bypass limit switches — even temporarily for rigging purposes`},
+
+  // ── RIGGING LOFT / STORAGE ────────────────────────────────────────────────
+  {tags:["rigging storage","sling storage","equipment storage","rigging loft","store equipment","storage requirements"],
+   q:"What are the correct storage requirements for lifting equipment?",
+   a:`LIFTING EQUIPMENT STORAGE REQUIREMENTS
+
+GENERAL PRINCIPLES:
+• Clean, dry, well-ventilated storage area
+• Protected from UV sunlight — particularly critical for synthetic slings
+• Segregated from damaged/condemned equipment
+• FIFO (First In First Out) stock rotation recommended
+• Temperature: 5 to 30 deg C ideal for synthetic equipment
+• Humidity: low — condensation on steel accelerates corrosion
+
+WIRE ROPE SLINGS:
+• Hang vertically on purpose-made sling hooks — do NOT coil tightly
+• Avoid contact with floor — acid/alkali contamination risk
+• Clean of mud, sand, concrete before storage
+• Light lubrication coat before long-term storage (over 3 months)
+• Protect from chemicals, fertilisers, battery acid
+• Separate from synthetic slings — avoid cross-contamination
+
+CHAIN SLINGS:
+• Hang on sling storage racks — do not pile on floor
+• Clean and dry before storage
+• Lubricate before extended storage (over 1 month)
+• Store in clean dry area — chains rust faster than wire rope
+
+SYNTHETIC SLINGS (Webbing and Round):
+• Hang from sling hooks or lay flat — do NOT twist or tightly coil
+• MUST be protected from UV light — cover if stored outside even briefly
+• Away from any heat source — welding areas, steam pipes
+• Away from chemicals — acids, solvents, bleach
+• Do NOT store near ozone sources (electric motors, UV lamps) — synthetic fibres degrade
+• Temperature: avoid extremes — below -40 or above +40 deg C long term
+
+HOOKS AND SHACKLES:
+• Store in bins or drawers — protected from falling
+• Apply light rust-preventive oil if storage is over 3 months
+• Keep pins with corresponding shackle body — do NOT mix pins between shackles
+
+CHAIN BLOCKS AND LEVER HOISTS:
+• Store on dedicated hoist racks — NEVER pile on floor
+• Bag or cover to prevent dust and moisture ingress
+• Load chain coiled loosely — not kinked
+• Leave in neutral position — brake engaged
+
+SNATCH BLOCKS:
+• Store on hooks or shelves — upright if possible
+• Side plate: leave open slightly to prevent moisture trap inside
+• Sheave: rotate to check still free before storing
+
+MARKING AND TAGGING SYSTEM:
+Green tag: In service, current thorough examination certificate
+Yellow tag: Due for examination — book in within specified period
+Red tag: Removed from service — CONDEMNED — awaiting disposal
+NEVER return red-tagged equipment to service area
+
+RECORD KEEPING IN STORE:
+• Equipment register: serial number, WLL, date manufactured, examination dates
+• Location log: know where each item is — prevent loss of traceability
+• Movement log: who removed, for which job, date returned
+• Examination records: current certificates held in store file
+
+CONDEMNED EQUIPMENT DISPOSAL:
+• Must be rendered unusable: cut slings into short lengths, crush hooks, deform shackles
+• Record disposal in register
+• NEVER donate or sell condemned equipment — legal liability
+
+PERIODIC STORE INSPECTION:
+• Monthly: visual check of all stored equipment
+• Annual: full inventory — confirm all items present and certificated
+• Check: no equipment stored with expired certificates — segregate immediately
+
+📋 LOLER 1998 Reg 9 — Examination and record keeping
+📋 BS 7121-1 Sec.10.1 — Equipment management
+📋 BS EN 1492-1 Sec.8 — Webbing sling storage
+📋 LEEA COPSULE Sec.3 — Equipment management
+
+Warning — Related Considerations:
+• Condemned equipment left in service area is a serious hazard — persons use it without knowing it is unsafe
+• Insurance inspectors and HSE can inspect equipment registers at any time — keep current
+• Offshore: equipment must be tracked offshore and onshore — no ad hoc substitution permitted`},
+
+  // ── SYNTHETIC ROUND SLING APPLICATIONS ────────────────────────────────────
+  {tags:["choker hitch","basket hitch","vertical hitch","hitch type","sling configuration","rigging hitch","sling use"],
+   q:"What are the different hitch configurations and when should each be used?",
+   a:`SLING HITCH CONFIGURATIONS — COMPLETE GUIDE
+
+DEFINITION:
+A hitch is the way a sling is connected to a load. Different hitches give different WLL utilisation and are suited to different load types.
+
+1. VERTICAL (STRAIGHT) HITCH:
+• One end to hook, other end to load — straight pull
+• WLL factor: x 1.0 (base rating)
+• Use: loads with engineered lift points (padeyes, shackles, flanges)
+• Advantage: maximum WLL, clear load control
+• Disadvantage: requires positive load attachment points
+
+2. CHOKER HITCH:
+• Sling loops around load, one end through the other eye (or uses choker hook)
+• WLL factor: x 0.75 (25% reduction)
+• Why reduced: sling bends sharply at choker point — stress concentration
+• Effective angle: contact angle should be greater than or equal to 120 deg for x0.75 to apply
+  If contact angle less than 120 deg: WLL factor further reduced
+• Use: cylindrical loads (pipes, bundles), where no lift points available
+• Advantage: self-tightening — sling grips load as it lifts
+• Risk: load can rotate and slip out if COG is not centred
+
+3. BASKET HITCH (CRADLE):
+• Sling forms loop under load, both eyes attached to hook
+• WLL factor: x 2.0 (when legs hang vertically — 0 deg included angle)
+• Why increased: two legs share load — each leg carries half
+• Angle reduction: as included angle increases, factor reduces:
+  0 deg included: x 2.0
+  30 deg included: x 1.93
+  60 deg included: x 1.73
+  90 deg included: x 1.41
+  120 deg included: x 1.0
+  150 deg included: x 0.52 (worse than single vertical!)
+• Use: balanced loads without engineered lift points, pipes, beams, boxes
+• Risk: load can tip or roll out of basket if COG is above sling contact
+
+4. DOUBLE BASKET HITCH:
+• Two basket hitches in same sling, creating three-point support
+• WLL: depends on geometry — calculate per basket angle
+• Use: long or flexible loads needing multiple support points
+
+5. DOUBLE CHOKER (CHOKE ON CHOKE):
+• Two choker hitches from same hook
+• NEVER do this with a single sling — PROHIBITED
+• Two separate slings may be used with proper hardware between them
+
+6. REVERSE CHOKER:
+• Hook end passes through the eye from below — creates more closing angle
+• May be stronger than standard choker at very tight angles
+• Check sling manufacturer guidance
+
+WHICH HITCH TO USE:
+
+Has engineered lift point: VERTICAL HITCH — always safest, most control
+Round/cylindrical load: CHOKER HITCH if no lift points
+Flat/block load, balanced COG: BASKET HITCH
+Multi-point lift: MULTIPLE VERTICAL HITCHES from spreader beam
+
+WLL COMPARISON TABLE (10T rated sling):
+Configuration              | Effective capacity
+Single vertical            | 10.0T
+Choker (>120 deg angle)    | 7.5T
+Basket at 0 deg            | 20.0T
+Basket at 60 deg included  | 17.3T
+Basket at 90 deg included  | 14.1T
+Basket at 120 deg included | 10.0T
+Basket at 150 deg included | 5.2T — LESS than vertical!
+
+CORNER PROTECTION:
+ALL hitches around sharp corners require corner protection:
+• Synthetic slings: corner padding mandatory — sharp corners cut slings instantly
+• Wire rope: thimbles recommended around bends over pins
+• Chain: chain links can bite into soft metal loads — use padding
+
+📋 ASME B30.9 Sec.9-1.6 — Sling hitch configurations
+📋 BS EN 1492-1 Table 1 — Hitch mode factors
+📋 ISO 12480-1 Sec.7.3 — Rigging configuration requirements
+📋 LEEA COPSULE Sec.5 — Hitch type guidance
+
+Warning — Related Considerations:
+• Choker hitch: load can spin — ensure COG below sling choke point or use two choker slings
+• Basket hitch: never use on a load that can roll (like a cylinder) without secondary retention
+• Always confirm which hitch WLL is marked on the sling tag — tags show straight pull, choker, and basket separately`},
+];
+
+// ── SEARCH ENGINE ──────────────────────────────────────────────────────────────
+const KnowledgeSearch = () => {
+  const [query, setQuery]     = useState("");
+  const [results, setResults] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [searched, setSearched] = useState(false);
+
+  const EXAMPLES = [
+    "What is the minimum sling angle?",
+    "When is a lift critical?",
+    "Pre-lift inspection checklist",
+    "Maximum wind speed for crane operations",
+    "Ground bearing pressure calculation",
+    "Wire rope discard criteria",
+    "Dynamic Amplification Factor (DAF)",
+    "Tandem lift requirements",
+    "Chain sling WLL determination",
+    "LOLER inspection frequencies",
+    "Webbing sling inspection criteria",
+    "Exclusion zone requirements",
+    "Proof load testing",
+    "Hook inspection criteria",
+    "Shackle discard criteria",
+  ];
+
+  const doSearch = (q) => {
+    if(!q.trim()){ setResults([]); setSearched(false); return; }
+    const words = q.toLowerCase().split(/\s+/).filter(w=>w.length>2);
+    const scored = KB.map(entry=>{
+      let score = 0;
+      const haystack = (entry.tags.join(" ")+" "+entry.q+" "+entry.a).toLowerCase();
+      words.forEach(w=>{
+        const tagHits = entry.tags.filter(t=>t.includes(w)).length;
+        const qHits   = (entry.q.toLowerCase().match(new RegExp(w,"g"))||[]).length;
+        const aHits   = (entry.a.toLowerCase().match(new RegExp(w,"g"))||[]).length;
+        score += tagHits*10 + qHits*5 + aHits*1;
+      });
+      return {...entry, score};
+    }).filter(e=>e.score>0).sort((a,b)=>b.score-a.score);
+    setResults(scored);
+    setSearched(true);
+    if(scored.length>0) setSelected(scored[0]);
+    else setSelected(null);
+  };
+
+  const renderAnswer = (text) => text.split("\n").map((line,i)=>{
+    if(!line.trim()) return <div key={i} style={{height:6}}/>;
+    if(line.startsWith("📋")) return (
+      <div key={i} style={{display:"flex",gap:8,background:"#eff6ff",
+        border:"1px solid #bfdbfe",borderLeft:"3px solid #2563eb",
+        borderRadius:4,padding:"7px 12px",margin:"6px 0",
+        fontFamily:"Arial,sans-serif",fontSize:12,color:"#1e40af",fontWeight:600,lineHeight:1.6}}>
+        {line}
+      </div>
+    );
+    if(line.startsWith("⚠")) return (
+      <div key={i} style={{background:"#fffbeb",border:"1px solid #fde68a",
+        borderLeft:"3px solid #d97706",borderRadius:4,padding:"8px 12px",margin:"10px 0",
+        fontFamily:"Arial,sans-serif",fontSize:13,color:"#78350f",fontWeight:600}}>
+        {line}
+      </div>
+    );
+    if(line.match(/^[A-Z][A-Z &\-\/]{4,}:?$/) || (line.endsWith(":") && line.length<60 && !line.startsWith(" "))) return (
+      <div key={i} style={{fontFamily:"Arial,sans-serif",fontSize:12,fontWeight:700,
+        color:"#c00000",marginTop:14,marginBottom:4,
+        borderBottom:"1px solid #f3f4f6",paddingBottom:3,textTransform:"uppercase",letterSpacing:"0.04em"}}>
+        {line.replace(/:$/,"")}
+      </div>
+    );
+    if(line.match(/^[-•▸]\s/)||line.match(/^\d+\.\s/)) return (
+      <div key={i} style={{display:"flex",gap:8,padding:"2px 0 2px 6px",
+        fontFamily:"Arial,sans-serif",fontSize:13,color:"#111827",lineHeight:1.7}}>
+        <span style={{color:"#c00000",flexShrink:0,marginTop:3}}>▸</span>
+        <span>{line.replace(/^[-•▸\d\.\s]+/,"")}</span>
+      </div>
+    );
+    return <div key={i} style={{fontFamily:"Arial,sans-serif",fontSize:13,color:"#111827",lineHeight:1.8}}>{line}</div>;
+  });
+
+  return (
+    <div>
+      <div className="module-card">
+        <div className="card-header">
+          <span className="module-title">🔍 Knowledge Search</span>
+          <span className="std-tag">ISO · BS · ASME · LOLER · CIRIA · DNVGL · EN · OSHA</span>
+        </div>
+        <div className="card-body">
+
+          <div className="info-box info-box-blue" style={{marginBottom:16}}>
+            Search the built-in lifting & rigging knowledge base covering <strong>ISO 12480, BS 7121, ASME B30.9, LOLER 1998, CIRIA C703, DNVGL-ST-N001</strong> and more.
+            Works offline — no internet connection required.
+          </div>
+
+          {/* Search box */}
+          <div style={{display:"flex",gap:8,marginBottom:14}}>
+            <input className="input-user no-unit" type="text" value={query}
+              onChange={e=>setQuery(e.target.value)}
+              onKeyDown={e=>e.key==="Enter"&&doSearch(query)}
+              placeholder="Search lifting & rigging standards..."
+              style={{flex:1,fontFamily:"Arial,sans-serif",fontSize:14,padding:"10px 14px"}}
+              autoFocus/>
+            <button className="btn btn-primary"
+              onClick={()=>doSearch(query)}
+              disabled={!query.trim()}
+              style={{fontFamily:"Arial,sans-serif",minWidth:100,padding:"10px 18px",
+                opacity:!query.trim()?0.5:1}}>
+              🔍 Search
+            </button>
+          </div>
+
+          {/* Quick search */}
+          <div style={{marginBottom:20}}>
+            <div style={{fontFamily:"Arial,sans-serif",fontSize:11,color:"#9ca3af",
+              marginBottom:8,fontWeight:600,textTransform:"uppercase",letterSpacing:"0.06em"}}>
+              Quick search:
+            </div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+              {EXAMPLES.map(q=>(
+                <button key={q}
+                  onClick={()=>{setQuery(q); doSearch(q);}}
+                  style={{background:"#fff",border:"1px solid #e5e7eb",borderRadius:20,
+                    padding:"5px 12px",cursor:"pointer",fontSize:12,color:"#374151",
+                    fontFamily:"Arial,sans-serif",transition:"all 150ms"}}
+                  onMouseOver={e=>{e.currentTarget.style.borderColor="#c00000";e.currentTarget.style.color="#c00000";e.currentTarget.style.background="#fff5f5";}}
+                  onMouseOut={e=>{e.currentTarget.style.borderColor="#e5e7eb";e.currentTarget.style.color="#374151";e.currentTarget.style.background="#fff";}}>
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Results */}
+          {searched && results.length===0 && (
+            <div className="info-box info-box-amber">
+              No results found for "{query}". Try different keywords or check spelling.
+            </div>
+          )}
+
+          {results.length>0 && (
+            <div style={{display:"flex",gap:16,alignItems:"flex-start"}}>
+
+              {/* Results list */}
+              <div style={{width:240,flexShrink:0}}>
+                <div style={{fontFamily:"Arial,sans-serif",fontSize:11,fontWeight:700,
+                  color:"#9ca3af",textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:8}}>
+                  {results.length} result{results.length>1?"s":""}
+                </div>
+                {results.map((r,i)=>(
+                  <div key={i} onClick={()=>setSelected(r)}
+                    style={{padding:"10px 12px",borderRadius:6,marginBottom:6,cursor:"pointer",
+                      background: selected?.q===r.q?"#fff3e0":"#f9fafb",
+                      border:`1px solid ${selected?.q===r.q?"#e8923a":"#e5e7eb"}`,
+                      borderLeft:`3px solid ${selected?.q===r.q?"#c00000":"#e5e7eb"}`,
+                      transition:"all 150ms"}}
+                    onMouseOver={e=>{ if(selected?.q!==r.q) e.currentTarget.style.borderColor="#e8923a"; }}
+                    onMouseOut={e=>{ if(selected?.q!==r.q) e.currentTarget.style.borderColor="#e5e7eb"; }}>
+                    <div style={{fontFamily:"Arial,sans-serif",fontSize:12,fontWeight:700,color:"#111827",lineHeight:1.4}}>
+                      {r.q}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Answer panel */}
+              {selected && (
+                <div style={{flex:1,background:"#fff",border:"1.5px solid #e5e7eb",
+                  borderRadius:10,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+                  <div style={{background:"linear-gradient(90deg,#fff7ed,#fff)",
+                    borderBottom:"2px solid #fed7aa",padding:"12px 18px",
+                    display:"flex",alignItems:"center",gap:10}}>
+                    <span style={{fontSize:20}}>💡</span>
+                    <div style={{flex:1}}>
+                      <div style={{fontFamily:"Arial,sans-serif",fontSize:13,fontWeight:700,color:"#92400e"}}>
+                        {selected.q}
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{padding:"18px 22px",lineHeight:1.8,maxHeight:"65vh",overflowY:"auto"}}>
+                    {renderAnswer(selected.a)}
+                  </div>
+                  <div style={{padding:"10px 18px",borderTop:"1px solid #f3f4f6",background:"#fafafa",
+                    fontFamily:"Arial,sans-serif",fontSize:10,color:"#9ca3af"}}>
+                    ⚠ For engineering guidance only. Always verify against current applicable standards before execution.
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+const COMPS = [ProjectInfo,WeightCalc,CraneSelection,GBP,RiggingCalc,WindLoad,COGCalc,Dashboard,RiggingEquipRef,DiscardCriteria,ProofLoad,CraneConfig,Weather,HumanFactor,LiftSequence,ExclusionZone,DroppedObject,Redundancy,PythagoreanCalc,UnitConverter,KnowledgeSearch];
 
 // ── ABOUT MODAL ───────────────────────────────────────────────────────────────
 const AboutModal = ({onClose}) => {
